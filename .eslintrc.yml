@@ -1,0 +1,26 @@
+root: true
+env:
+  browser: true
+  commonjs: true
+  es6: true
+  node: true
+  mocha: true
+extends:
+  - eslint:recommended
+  - standard
+  - standard-react
+plugins:
+  - react
+  - import
+  - pure
+globals:
+  __base: true,
+  __baseName: true
+rules:
+  semi: [ error, never ]
+  array-bracket-spacing: [ error, always ]
+  object-curly-spacing: [ error, always ]
+  comma-dangle: off
+  quotes: [ error, single, { allowTemplateLiterals: true } ]
+  space-before-function-paren: [ error, always ]
+  no-console: [ warn, { allow: [ warn, error ] } ]
