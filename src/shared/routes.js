@@ -1,17 +1,15 @@
 import React from 'react'
 
-import Home from './core-app/Home.react'
-import NoMatch from './core-app/NoMatch.react'
+import MainPage from './core-app/MainPage.react'
+// import NoMatch from './core-app/NoMatch.react'
 
 export default [
   {
     path: '/',
     exact: true,
-    component: Home,
+    component: MainPage,
   }, {
     path: '/test',
     component: () => <div>Test</div>
-  }, {
-    component: NoMatch,
   }
 ]

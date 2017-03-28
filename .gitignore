@@ -1,4 +1,5 @@
 node_modules
 static/build
+static/assets.json
 *.log
 .DS_Store

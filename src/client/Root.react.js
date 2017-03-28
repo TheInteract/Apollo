@@ -1,18 +1,31 @@
 import React from 'react'
-import { Provider } from 'react-redux'
+import {
+  ApolloClient,
+  ApolloProvider,
+  createNetworkInterface
+} from 'react-apollo'
 import { BrowserRouter } from 'react-router-dom'
 
 import App from '../shared/core-app/App.react'
-import createStore from '../shared/store/createStore'
+import config from '../shared/configs'
 
-const store = createStore()
+const networkInterface = createNetworkInterface({
+  uri: `http://${config.host}:${config.port}/graphql`,
+  opts: {
+    credentials: 'same-origin'
+  }
+})
+
+const client = new ApolloClient({
+  networkInterface: networkInterface
+})
 
 const Root = () => (
-  <Provider store={store}>
+  <ApolloProvider client={client}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Provider>
+  </ApolloProvider>
 )
 
 export default Root

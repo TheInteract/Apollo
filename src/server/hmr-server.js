@@ -25,7 +25,10 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 
 app.listen(config.wdsPort, err => {
+  const serverName = chalk.bgYellow.bold(' HMR Server ')
+  const url = chalk.yellow(`${config.host}:${config.wdsPort}`)
+
   console.log()
-  console.log(err || `${chalk.bgYellow.bold(' HMR Server ')} listening on ${chalk.yellow(`${config.host}:${config.wdsPort}`)}`)
+  console.log(err || `${serverName} listening on ${url}`)
   console.log()
 })

@@ -1,5 +1,6 @@
 import path from 'path'
 
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import webpack from 'webpack'
 
 import config from './src/shared/configs'
@@ -10,6 +11,7 @@ export default {
   entry: [
     'react-hot-loader/patch',
     `webpack-hot-middleware/client?path=http://${config.host}:${config.wdsPort}/__webpack_hmr&timeout=20000`,
+    path.join(__dirname, 'src/shared/styles/base.styl'),
     path.join(__dirname, 'src/client/client.dev.js'),
   ],
 
@@ -24,7 +26,7 @@ export default {
     rules: [
       {
         test: /\.js$/,
-        include: path.resolve(__dirname, './src'),
+        include: path.resolve(__dirname, 'src'),
         loader: 'babel-loader',
         options: {
           babelrc: false,
@@ -39,6 +41,28 @@ export default {
           cacheDirectory: true
         }
       },
+      {
+        test: /\.styl$/,
+        include: path.resolve(__dirname, 'src'),
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              module: true,
+              sourceMap: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'stylus-loader',
+            options: {
+              sourceMap: true,
+              includePaths: [ path.join(__dirname, 'src/shared/styles') ]
+            }
+          },
+        ],
+      }
     ],
   },
 
@@ -51,6 +75,10 @@ export default {
         NODE_ENV: JSON.stringify('development'),
         BROWSER: JSON.stringify(true),
       },
+    }),
+    new ExtractTextPlugin({
+      filename: '[name]-[contenthash].css',
+      allChunks: true,
     }),
   ],
 }

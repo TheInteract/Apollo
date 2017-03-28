@@ -18,5 +18,7 @@ const render = Component => {
 render(Root)
 
 if (module.hot) {
-  module.hot.accept('./Root.react', () => { render(Root) })
+  module.hot.accept('./Root.react', () => {
+    render(Root)
+  })
 }
