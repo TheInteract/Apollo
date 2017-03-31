@@ -1,17 +1,15 @@
 import {
-  // GraphQLEnumType,
-  // GraphQLFloat,
-  // GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
 } from 'graphql'
+import Mongodb from 'mongodb'
 
-import Features from '../mockData/Features'
+import * as Collections from '../mongodb/Collections'
 
-const Feature = new GraphQLObjectType({
+const FeatureType = new GraphQLObjectType({
   name: 'Feature',
   description: 'This represent an feature',
   fields: () => ({
@@ -24,13 +22,15 @@ const QueryRootType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     feature: {
-      type: new GraphQLList(Feature),
-      args: {
-        _id: { type: GraphQLString }
-      },
-      resolve: function () {
-        return Features
-      }
+      type: FeatureType,
+      args: { _id: { type: GraphQLString } },
+      resolve: async (_, { _id }) => await Collections.findOne('features', {
+        _id: Mongodb.ObjectId(_id)
+      })
+    },
+    features: {
+      type: new GraphQLList(FeatureType),
+      resolve: async () => await Collections.find('features')
     }
   })
 })
