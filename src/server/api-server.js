@@ -16,15 +16,8 @@ app.use(express.static(path.join(process.cwd(), 'static')))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql',
-}))
-
-app.use('/graphql', graphqlExpress((req, res) => {
-  return {
-    schema
-  }
-}))
+app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
+app.use('/graphql', graphqlExpress((req, res) => ({ schema })))
 
 app.listen(config.apiPort, err => {
   const serverName = chalk.bgYellow.bold(' GraphQL Server ')

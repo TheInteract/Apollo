@@ -20,9 +20,8 @@ const Feature = new GraphQLObjectType({
   })
 })
 
-const Query = new GraphQLObjectType({
-  name: 'TestSchema',
-  description: 'Root of the Test Schema',
+const QueryRootType = new GraphQLObjectType({
+  name: 'Query',
   fields: () => ({
     feature: {
       type: new GraphQLList(Feature),
@@ -37,7 +36,7 @@ const Query = new GraphQLObjectType({
 })
 
 const Schema = new GraphQLSchema({
-  query: Query
+  query: QueryRootType,
 })
 
 export default Schema
