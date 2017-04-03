@@ -5,10 +5,10 @@ import React from 'react'
 import { ApolloProvider, renderToStringWithData } from 'react-apollo'
 import ReactDOMServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
-import { combineReducers, createStore } from 'redux'
 
-import App from '../../shared/core-app/App.react'
+import App from '../../shared/nt-core/App.react'
 import config from '../../shared/configs'
+import createStore from '../../shared/nt-store/createStore'
 
 const wdsPath = `http://${config.host}:${config.wdsPort}/build/main.js`
 const assetsManifest = process.env.webpackAssets &&
@@ -30,9 +30,7 @@ export default function handleRender (req, res) {
     networkInterface: networkInterface,
   })
 
-  const store = createStore(
-    combineReducers({ apollo: client.reducer() })
-  )
+  const store = createStore(client)
 
   const app = (
     <ApolloProvider store={store} client={client}>

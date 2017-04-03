@@ -7,7 +7,7 @@ import webpack from 'webpack'
 
 export default {
   entry: [
-    path.join(__dirname, 'src/shared/styles/base.styl'),
+    path.join(__dirname, 'src/shared/nt-styles/base.styl'),
     path.join(__dirname, 'src/client/client.prod.js'),
   ],
 

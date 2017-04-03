@@ -14,6 +14,7 @@ plugins:
   - react
   - import
   - pure
+  - graphql
 globals:
   __base: true,
   __baseName: true

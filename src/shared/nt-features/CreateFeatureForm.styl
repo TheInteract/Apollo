@@ -1,0 +1,55 @@
+@require('../nt-design/colorsets')
+
+.form
+  display flex
+  margin 20px 0
+  padding 15px 25px
+  border solid 1px c-gray100
+  border-radius 5px
+
+.left
+  flex 1 0 auto
+
+.right
+  width 80px
+  height 80px
+  background-color c-gray50
+
+.proportionContainer
+  display flex
+  justify-content space-between
+  align-items center
+  margin-top 10px
+
+.name
+  font-size 16px
+  input
+    margin-left 10px
+    padding 5px 10px
+    font-size 16px
+
+.proportion
+  flex 1 0 auto
+  font-size 30px
+  line-height 30px
+  input
+    margin-left 10px
+    padding 5px 10px
+    width 80px
+    font-size 30px
+    line-height 30px
+
+.submit
+  width 80px
+  height 80px
+  background-color white
+
+  &:hover
+    background-color c-gray50
+
+input
+  border 1px solid c-gray100
+  border-radius 4px
+  font-size 14px
+  &:active, &:hover, &:focus, &:visited
+    outline none

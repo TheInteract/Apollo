@@ -1,4 +1,4 @@
-@require('../design/colorsets')
+@require('../nt-design/colorsets')
 
 $side-bar-size = 200px
 $horizontal-padding = 30px
@@ -7,25 +7,25 @@ $vertical-padding = 15px
 .layout
   position absolute
   top 0
-  left 0
   right 0
   bottom 0
+  left 0
 
 .sidebar, .content
   position absolute
   top 0
   bottom 0
-  padding $vertical-padding $horizontal-padding
   box-sizing border-box
+  padding $vertical-padding $horizontal-padding
 
 .sidebar
   left 0
-  width $side-bar-size
-  color white
-  background-color c-gray600
   z-index 1
+  width $side-bar-size
+  background-color c-gray600
+  color white
 
 .content
-  left $side-bar-size
   right 0
+  left $side-bar-size
   background-color white

@@ -11,7 +11,7 @@ export default {
   entry: [
     'react-hot-loader/patch',
     `webpack-hot-middleware/client?path=http://${config.host}:${config.wdsPort}/__webpack_hmr&timeout=20000`,
-    path.join(__dirname, 'src/shared/styles/base.styl'),
+    path.join(__dirname, 'src/shared/nt-styles/base.styl'),
     path.join(__dirname, 'src/client/client.dev.js'),
   ],
 
