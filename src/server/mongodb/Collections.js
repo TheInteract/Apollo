@@ -3,6 +3,7 @@ import CountCommand from './commands/Count'
 import FindCommand from './commands/Find'
 import FindOneCommand from './commands/FindOne'
 import InsertOneCommand from './commands/InsertOne'
+import UpdateCommand from './commands/Update'
 import withMongodb from './withMongodb'
 
 export const findOne = withMongodb(FindOneCommand)
@@ -10,3 +11,4 @@ export const find = withMongodb(FindCommand)
 export const insertOne = withMongodb(InsertOneCommand)
 export const count = withMongodb(CountCommand)
 export const aggregate = withMongodb(AggregateCommand)
+export const update = withMongodb(UpdateCommand)

@@ -1,5 +1,5 @@
-const FindItems = db => async (collectionName, query) => {
-  const result = await db.collection(collectionName).find(query)
+const FindItems = db => async (collectionName, query, sortOrder) => {
+  const result = await db.collection(collectionName).find(query).sort(sortOrder)
   return result.toArray()
 }
 

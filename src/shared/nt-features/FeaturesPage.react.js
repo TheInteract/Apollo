@@ -10,6 +10,7 @@ import FeatureCard from './FeatureCard.react'
 const queryFeatures = gql`
   query getFeatures($productId: String!) {
     features(productId: $productId) {
+      _id
       name
       proportion {
         A
@@ -37,6 +38,7 @@ class FeaturesPage extends React.Component {
     data: React.PropTypes.shape({
       features: React.PropTypes.arrayOf(
         React.PropTypes.shape({
+          _id: React.PropTypes.string.isRequired,
           name: React.PropTypes.string.isRequired,
           proportion: React.PropTypes.shape({
             A: React.PropTypes.number.isRequired,

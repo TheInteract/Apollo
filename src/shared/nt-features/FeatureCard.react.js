@@ -1,10 +1,25 @@
 import classNames from 'classnames'
+import gql from 'graphql-tag'
 import React from 'react'
+import { graphql } from 'react-apollo'
+import { compose } from 'recompose'
 
 import styles from './FeatureCard.styl'
 
+const closeFeature = gql`
+  mutation closeFeature($_id: String!) {
+    closeFeature(_id: $_id)
+  }
+`
+
+const enhance = compose(
+  graphql(closeFeature)
+)
+
 class FeatureCard extends React.Component {
   static propTypes = {
+    mutate: React.PropTypes.func.isRequired,
+    _id: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
     proportion: React.PropTypes.shape({
       A: React.PropTypes.number.isRequired,
@@ -17,18 +32,51 @@ class FeatureCard extends React.Component {
     active: React.PropTypes.bool,
   }
 
+  constructor (props) {
+    super(props)
+    this.state = { showCloseConfirmation: false }
+  }
+
+  hideCloseConfirmation = () => {
+    this.setState({ showCloseConfirmation: false })
+  }
+
+  showCloseConfirmation = () => {
+    this.setState({ showCloseConfirmation: true })
+  }
+
+  handleClose = () => {
+    this.props.mutate({ variables: { _id: this.props._id } })
+  }
+
   renderName = () => (
     <div className={styles.n__name}>
-      {this.props.name}
+      {this.props.name} {this.props._id} (Tempolary show id)
     </div>
   )
+
+  renderCloseButton = () => this.state.showCloseConfirmation ? (
+    <div className={styles.n__closeConfirmation}>
+      Do you want to close this experiment?
+      <div className={styles.n__closeButton} onClick={this.handleClose}>
+        Close
+      </div>
+      <div className={styles.n__closeButton} onClick={this.hideCloseConfirmation}>
+        Cancel
+      </div>
+    </div>
+  ) : (
+    <div className={styles.n__closeButton} onClick={this.showCloseConfirmation}>
+      Close
+    </div>
+  )
+
+  renderClosedLabel = () => <div>Closed</div>
 
   renderHeader = () => (
     <div className={styles.n__header}>
       {this.renderName()}
-      <div>
-        {this.props.active ? 'Active' : 'Closed'}
-      </div>
+      {this.props.active ? this.renderCloseButton() : this.renderClosedLabel()}
     </div>
   )
 
@@ -74,4 +122,4 @@ class FeatureCard extends React.Component {
   }
 }
 
-export default FeatureCard
+export default enhance(FeatureCard)

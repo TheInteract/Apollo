@@ -76,8 +76,8 @@ class CreateFeatureForm extends React.Component {
   }
 
   renderProportionInput = version => (
-    <div className={styles.proportion}>
-      {version}
+    <div className={styles[`n__${version}`]}>
+      Expected {version}:
       <input
         type='number'
         value={this.state[version]}
@@ -88,23 +88,21 @@ class CreateFeatureForm extends React.Component {
 
   render () {
     return (
-      <form className={styles.form} onSubmit={this.handleSubmit}>
-        <div className={styles.left}>
-          <div className={styles.name}>
-            Name
-            <input
-              type='text'
-              value={this.state.name}
-              onChange={this.handleNameChange}
-            />
-          </div>
-          <div className={styles.proportionContainer}>
-            {this.renderProportionInput('A')}
-            {this.renderProportionInput('B')}
-          </div>
+      <form className={styles.n} onSubmit={this.handleSubmit}>
+        <div className={styles.n__name}>
+          Name:
+          <input
+            type='text'
+            value={this.state.name}
+            onChange={this.handleNameChange}
+          />
         </div>
-        <div className={styles.right}>
-          <input className={styles.submit} type='submit' value='Submit' />
+        <div className={styles.n__proportion}>
+          {this.renderProportionInput('A')}
+          {this.renderProportionInput('B')}
+        </div>
+        <div className={styles.n__submit}>
+          <input type='submit' value='Submit' />
         </div>
       </form>
     )

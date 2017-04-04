@@ -2,19 +2,35 @@
 
 .n
   overflow hidden
-  box-sizing border-box
-  margin 20px 0
-  border solid 1px c-gray100
+  margin 20px 1px
+  border 1px solid c-gray200
   border-radius 5px
 
   &__header
     display flex
     justify-content space-between
-    align-items flex-end
+    align-items center
     padding 10px 25px
 
   &__name
     font-size 18px
+
+  &__closeConfirmation
+    display flex
+    align-items center
+    > *
+      margin-left 10px
+
+  &__closeButton
+    box-sizing border-box
+    padding 5px 10px
+    border 2px solid c-gray300
+    border-radius 3px
+    color c-gray400
+    cursor pointer
+    &:hover
+      border-color c-red200
+      color c-red300
 
   &__proportion
     display flex
@@ -22,7 +38,7 @@
     align-items center
 
   &__A, &__B
-    flex 1
+    flex 1 0 auto
     padding 10px 25px
 
   &__A
@@ -30,7 +46,7 @@
     color white
 
   &__B
-    background-color yellow
+    background-color c-yellow400
     color c-gray600
 
   &__actual
@@ -38,6 +54,9 @@
 
   &__expected
     font-size 30px
+
+  &.\\--closed
+    border-color c-gray100
 
   &.\\--closed &
     &__header

@@ -39,15 +39,11 @@ const FeatureType = new GraphQLObjectType({
         })
       }),
       resolve: async ({ _id, productId }) => {
-        const result = await Collections.aggregate('version', [
-          { $match: {
-            featureId: Mongodb.ObjectId(_id),
-            productId: Mongodb.ObjectId(productId),
-          } },
-          {
-            $group: { _id: '$name', count: { $sum: 1 } }
-          }
-        ])
+        const result = await Collections.aggregate('version', [ { $match: {
+          featureId: Mongodb.ObjectId(_id),
+          productId: Mongodb.ObjectId(productId),
+        } }, { $group: { _id: '$name', count: { $sum: 1 } } } ])
+
         return {
           A: (_.find(result, [ '_id', 'A' ]) || { count: 0 }).count,
           B: (_.find(result, [ '_id', 'B' ]) || { count: 0 }).count,
@@ -100,7 +96,7 @@ const QueryRootType = new GraphQLObjectType({
         return productId.match(/^[0-9a-fA-F]{24}$/)
           ? await Collections.find('feature', {
             productId: Mongodb.ObjectId(productId)
-          }) : []
+          }, { _id: -1 }) : []
       }
     }
   })
@@ -131,6 +127,18 @@ const MutationRootType = new GraphQLObjectType({
           productId: Mongodb.ObjectId(productId),
           ...args
         })
+      }
+    },
+    closeFeature: {
+      type: GraphQLBoolean,
+      description: 'Close a feature',
+      args: {
+        _id: { type: GraphQLString },
+      },
+      resolve: async (_, { _id }) => {
+        return await Collections.update('feature', {
+          _id: Mongodb.ObjectId(_id)
+        }, { $set: { active: false } })
       }
     }
   }
