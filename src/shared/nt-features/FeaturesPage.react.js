@@ -15,6 +15,11 @@ const queryFeatures = gql`
         A
         B
       }
+      count {
+        A
+        B
+      }
+      active
     }
   }
 `
@@ -37,6 +42,11 @@ class FeaturesPage extends React.Component {
             A: React.PropTypes.number.isRequired,
             B: React.PropTypes.number.isRequired,
           }).isRequired,
+          count: React.PropTypes.shape({
+            A: React.PropTypes.number.isRequired,
+            B: React.PropTypes.number.isRequired,
+          }).isRequired,
+          active: React.PropTypes.bool.isRequired,
         }).isRequired,
       ),
     }).isRequired

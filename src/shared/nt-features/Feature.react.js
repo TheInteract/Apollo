@@ -9,7 +9,11 @@ class Feature extends React.Component {
       proportion: React.PropTypes.shape({
         A: React.PropTypes.number.isRequired,
         B: React.PropTypes.number.isRequired,
-      }).isRequired
+      }).isRequired,
+      count: React.PropTypes.shape({
+        A: React.PropTypes.number.isRequired,
+        B: React.PropTypes.number.isRequired,
+      }).isRequired,
     }).isRequired
   }
 
@@ -20,12 +24,18 @@ class Feature extends React.Component {
         <div className={styles.proportionContainer}>
           <div className={styles.proportion}>
             <div>
-              A {this.props.feature.proportion.A}
+              Expected A: {this.props.feature.proportion.A}%
+            </div>
+            <div>
+              Actual A: {this.props.feature.count.A} users
             </div>
           </div>
           <div className={styles.proportion}>
             <div>
-              B {this.props.feature.proportion.B}
+              Expected B: {this.props.feature.proportion.B}%
+            </div>
+            <div>
+              Actual B: {this.props.feature.count.B} users
             </div>
           </div>
         </div>

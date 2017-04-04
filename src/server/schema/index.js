@@ -1,4 +1,5 @@
 import {
+  GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLInt,
   GraphQLList,
@@ -7,6 +8,7 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from 'graphql'
+import _ from 'lodash'
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
@@ -27,7 +29,32 @@ const FeatureType = new GraphQLObjectType({
         })
       }),
       resolve: (_) => _.proportion
-    }
+    },
+    count: {
+      type: new GraphQLObjectType({
+        name: 'Count',
+        fields: () => ({
+          A: { type: GraphQLInt },
+          B: { type: GraphQLInt },
+        })
+      }),
+      resolve: async ({ _id, productId }) => {
+        const result = await Collections.aggregate('version', [
+          { $match: {
+            featureId: Mongodb.ObjectId(_id),
+            productId: Mongodb.ObjectId(productId),
+          } },
+          {
+            $group: { _id: '$name', count: { $sum: 1 } }
+          }
+        ])
+        return {
+          A: (_.find(result, [ '_id', 'A' ]) || { count: 0 }).count,
+          B: (_.find(result, [ '_id', 'B' ]) || { count: 0 }).count,
+        }
+      }
+    },
+    active: { type: GraphQLBoolean },
   })
 })
 
@@ -97,6 +124,7 @@ const MutationRootType = new GraphQLObjectType({
             })
           })
         },
+        active: { type: GraphQLBoolean, defaultValue: true },
       },
       resolve: async (_, { productId, ...args }) => {
         return await Collections.insertOne('feature', {
