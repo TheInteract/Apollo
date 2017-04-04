@@ -18,8 +18,8 @@ const MainPageContainer = ({ match, data }) => data.product ? (
 MainPageContainer.propTypes = {
   match: React.PropTypes.object.isRequired,
   data: React.PropTypes.shape({
-    product: React.PropTypes.object.isRequired,
-  }),
+    product: React.PropTypes.object,
+  }).isRequired,
 }
 
 const queryProduct = gql`

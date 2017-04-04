@@ -1,8 +1,32 @@
+import gql from 'graphql-tag'
 import React from 'react'
+import { graphql } from 'react-apollo'
+import { compose } from 'recompose'
 
 import styles from './CreateFeatureForm.styl'
 
+const featureMutation = gql`
+  mutation createFeature($name: String!, $productId: String!, $proportion: InputProportion!) {
+    createFeature(name: $name, productId: $productId, proportion: $proportion) {
+      _id
+      name
+      proportion {
+        A
+        B
+      }
+    }
+  }
+`
+
+const enhance = compose(
+  graphql(featureMutation)
+)
+
 class CreateFeatureForm extends React.Component {
+  static propTypes = {
+    mutate: React.PropTypes.func.isRequired,
+    productId: React.PropTypes.string.isRequired,
+  }
 
   constructor (props) {
     super(props)
@@ -39,7 +63,16 @@ class CreateFeatureForm extends React.Component {
   }
 
   handleSubmit = () => {
-    console.log('submit')
+    this.props.mutate({
+      variables: {
+        name: this.state.name,
+        productId: this.props.productId,
+        proportion: {
+          A: this.state.A,
+          B: this.state.B,
+        }
+      },
+    })
   }
 
   renderProportionInput = version => (
@@ -78,4 +111,4 @@ class CreateFeatureForm extends React.Component {
   }
 }
 
-export default CreateFeatureForm
+export default enhance(CreateFeatureForm)

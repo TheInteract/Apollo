@@ -1,4 +1,5 @@
 import {
+  GraphQLInputObjectType,
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
@@ -15,7 +16,8 @@ const FeatureType = new GraphQLObjectType({
   description: 'Feature',
   fields: () => ({
     _id: { type: new GraphQLNonNull(GraphQLString) },
-    name: { type: GraphQLString },
+    productId: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
     proportion: {
       type: new GraphQLObjectType({
         name: 'Proportion',
@@ -34,11 +36,10 @@ const ProductType = new GraphQLObjectType({
   description: 'Product',
   fields: () => ({
     _id: { type: new GraphQLNonNull(GraphQLString) },
-    name: { type: GraphQLString },
-    API_KEY_PRIVATE: { type: GraphQLString },
-    API_KEY_PUBLIC: { type: GraphQLString },
-    ip: { type: GraphQLString },
-    domainName: { type: GraphQLString },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    API_KEY_PRIVATE: { type: new GraphQLNonNull(GraphQLString) },
+    API_KEY_PUBLIC: { type: new GraphQLNonNull(GraphQLString) },
+    domainName: { type: new GraphQLNonNull(GraphQLString) },
   })
 })
 
@@ -78,8 +79,38 @@ const QueryRootType = new GraphQLObjectType({
   })
 })
 
+const MutationRootType = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    createFeature: {
+      type: FeatureType,
+      description: 'Create a new feature',
+      args: {
+        productId: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        proportion: {
+          type: new GraphQLInputObjectType({
+            name: 'InputProportion',
+            fields: () => ({
+              A: { type: GraphQLInt, defaultValue: 50 },
+              B: { type: GraphQLInt, defaultValue: 50 },
+            })
+          })
+        },
+      },
+      resolve: async (_, { productId, ...args }) => {
+        return await Collections.insertOne('feature', {
+          productId: Mongodb.ObjectId(productId),
+          ...args
+        })
+      }
+    }
+  }
+})
+
 const Schema = new GraphQLSchema({
   query: QueryRootType,
+  mutation: MutationRootType,
 })
 
 export default Schema
