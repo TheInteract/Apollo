@@ -5,7 +5,7 @@ import { withRouter } from 'react-router'
 import { compose } from 'recompose'
 
 import CreateFeatureForm from './CreateFeatureForm.react'
-import Feature from './Feature.react'
+import FeatureCard from './FeatureCard.react'
 
 const queryFeatures = gql`
   query getFeatures($productId: String!) {
@@ -46,14 +46,14 @@ class FeaturesPage extends React.Component {
             A: React.PropTypes.number.isRequired,
             B: React.PropTypes.number.isRequired,
           }).isRequired,
-          active: React.PropTypes.bool.isRequired,
+          active: React.PropTypes.bool,
         }).isRequired,
       ),
     }).isRequired
   }
 
   renderFeatures = (features) => features ? features.map((feature, index) => (
-    <Feature key={index} feature={feature} />
+    <FeatureCard key={index} {...feature} />
   )) : null
 
   render () {

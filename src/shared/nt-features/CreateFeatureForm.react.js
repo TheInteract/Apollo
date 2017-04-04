@@ -82,7 +82,7 @@ class CreateFeatureForm extends React.Component {
         type='number'
         value={this.state[version]}
         onChange={this.handleProportionChange(version)}
-      />
+      /> %
     </div>
   )
 

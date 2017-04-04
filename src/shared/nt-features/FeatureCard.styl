@@ -1,0 +1,49 @@
+@require('../nt-design/colorsets')
+
+.n
+  overflow hidden
+  box-sizing border-box
+  margin 20px 0
+  border solid 1px c-gray100
+  border-radius 5px
+
+  &__header
+    display flex
+    justify-content space-between
+    align-items flex-end
+    padding 10px 25px
+
+  &__name
+    font-size 18px
+
+  &__proportion
+    display flex
+    justify-content space-between
+    align-items center
+
+  &__A, &__B
+    flex 1
+    padding 10px 25px
+
+  &__A
+    background-color c-red400
+    color white
+
+  &__B
+    background-color yellow
+    color c-gray600
+
+  &__actual
+    font-size 16px
+
+  &__expected
+    font-size 30px
+
+  &.\\--closed &
+    &__header
+      color c-gray200
+
+    &__A, &__B
+      border-top 1px solid c-gray100
+      background-color transparent
+      color c-gray200
