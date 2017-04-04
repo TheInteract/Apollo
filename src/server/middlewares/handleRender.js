@@ -64,7 +64,7 @@ const Html = ({ content, state }) => (
   <html>
     <head>
       <title>Interact</title>
-      <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' />
+      <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' />
       {process.env.NODE_ENV === 'production'
         ? <link rel='stylesheet' href={assetsManifest.main.css} /> : null}
     </head>
