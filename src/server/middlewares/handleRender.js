@@ -1,16 +1,16 @@
 import 'isomorphic-fetch'
 
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
+import config from 'config'
 import React from 'react'
 import { ApolloProvider, renderToStringWithData } from 'react-apollo'
 import ReactDOMServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
 import App from '../../shared/nt-core/App.react'
-import config from '../../shared/configs'
 import createStore from '../../shared/nt-store/createStore'
 
-const wdsPath = `http://${config.host}:${config.wdsPort}/build/main.js`
+const wdsPath = `http://${config.server.host}:${config.server.wdsPort}/build/main.js`
 const assetsManifest = process.env.webpackAssets &&
   JSON.parse(process.env.webpackAssets)
 
@@ -18,7 +18,7 @@ export default function handleRender (req, res) {
   const context = {}
 
   const networkInterface = createNetworkInterface({
-    uri: `http://${config.host}:${config.port}/graphql`,
+    uri: `http://${config.server.host}:${config.server.port}/graphql`,
     opts: {
       credentials: 'same-origin',
       headers: req.headers
@@ -71,7 +71,7 @@ const Html = ({ content, state }) => (
     <body>
       <div id='root' dangerouslySetInnerHTML={{ __html: content }} />
       <script dangerouslySetInnerHTML={{
-        __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};`
+        __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};window.__CONFIG__=${JSON.stringify(config.get('server'))}`
       }} />
       <script src={
         process.env.NODE_ENV === 'production' ? assetsManifest.main.js : wdsPath

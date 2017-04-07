@@ -7,11 +7,14 @@ import {
 import { BrowserRouter } from 'react-router-dom'
 
 import App from '../shared/nt-core/App.react'
-import config from '../shared/configs'
 import createStore from '../shared/nt-store/createStore'
 
+const configObj = {
+  server: process.env.BROWSER ? window.__CONFIG__ : require('config').server
+}
+
 const networkInterface = createNetworkInterface({
-  uri: `http://${config.host}:${config.port}/graphql`,
+  uri: `http://${configObj.server.host}:${configObj.server.port}/graphql`,
   opts: {
     credentials: 'same-origin'
   },
