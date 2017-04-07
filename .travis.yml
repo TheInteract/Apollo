@@ -14,3 +14,6 @@ after_success:
 - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER"
 - docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":latest
+before_install:
+- openssl aes-256-cbc -K $encrypted_02a30cc79da2_key -iv $encrypted_02a30cc79da2_iv
+  -in interact-4a4118c938d7.json.enc -out interact-4a4118c938d7.json -d
