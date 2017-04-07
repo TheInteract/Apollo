@@ -8,7 +8,7 @@ install:
 - npm i
 after_success:
 - npm run build
-- docker build -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER"
+- docker build -f Dockerfile -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER"
   .
 - docker tag "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER" "$DOCKER_USERNAME"/"$IMAGE_NAME":latest
 - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
