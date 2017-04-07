@@ -1,0 +1,11 @@
+server:
+  host: localhost
+  apiHost: localhost
+  port: 3000
+  wdsPort: 8080
+  apiPort: 3002
+mongo:
+  protocol: mongodb
+  host: localhost
+  port: 27017
+  db: Interact

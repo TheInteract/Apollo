@@ -4,10 +4,10 @@ import path from 'path'
 
 import bodyParser from 'body-parser'
 import chalk from 'chalk'
+import config from 'config'
 import express from 'express'
 import proxy from 'http-proxy-middleware'
 
-import config from '../shared/configs'
 import handleRender from './middlewares/handleRender'
 
 const app = express()
@@ -22,9 +22,9 @@ app.use(bodyParser.json())
 
 app.use(handleRender)
 
-app.listen(config.port, err => {
+app.listen(config.server.port, err => {
   const serverName = chalk.bgBlue.bold(' SSR Server ')
-  const url = chalk.yellow(`${config.host}:${config.port}`)
+  const url = chalk.yellow(`${config.server.host}:${config.server.port}`)
 
   console.log()
   console.log(err || `${serverName} listening on ${url}`)

@@ -89,6 +89,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "classnames": "^2.2.5",
+    "config": "^1.25.1",
     "css-loader": "^0.27.3",
     "css-modules-stylus": "^0.1.1",
     "express": "^4.15.2",
