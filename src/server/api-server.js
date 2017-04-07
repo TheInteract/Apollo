@@ -20,7 +20,7 @@ app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 app.use('/graphql', graphqlExpress((req, res) => ({ schema })))
 
 app.listen(config.apiPort, err => {
-  const serverName = chalk.bgYellow.bold(' GraphQL Server ')
+  const serverName = chalk.bgBlue.bold(' GraphQL Server ')
   const url = chalk.yellow(`${config.apiHost}:${config.apiPort}`)
 
   console.log()

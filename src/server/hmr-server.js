@@ -25,7 +25,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 
 app.listen(config.wdsPort, err => {
-  const serverName = chalk.bgYellow.bold(' HMR Server ')
+  const serverName = chalk.bgBlue.bold(' HMR Server ')
   const url = chalk.yellow(`${config.host}:${config.wdsPort}`)
 
   console.log()

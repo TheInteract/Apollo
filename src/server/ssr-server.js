@@ -23,7 +23,7 @@ app.use(bodyParser.json())
 app.use(handleRender)
 
 app.listen(config.port, err => {
-  const serverName = chalk.bgYellow.bold(' SSR Server ')
+  const serverName = chalk.bgBlue.bold(' SSR Server ')
   const url = chalk.yellow(`${config.host}:${config.port}`)
 
   console.log()
