@@ -51,7 +51,7 @@ class FeatureCard extends React.Component {
 
   renderName = () => (
     <div className={styles.n__name}>
-      {this.props.name} {this.props._id} (Tempolary show id)
+      {this.props.name}
     </div>
   )
 

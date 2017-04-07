@@ -5,10 +5,15 @@ import {
   createNetworkInterface,
 } from 'react-apollo'
 import { BrowserRouter } from 'react-router-dom'
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 
 import App from '../shared/nt-core/App.react'
 import config from '../shared/configs'
 import createStore from '../shared/nt-store/createStore'
+
+const wsClient = new SubscriptionClient('ws://localhost:8080', {
+  reconnect: true
+})
 
 const networkInterface = createNetworkInterface({
   uri: `http://${config.host}:${config.port}/graphql`,
@@ -17,8 +22,13 @@ const networkInterface = createNetworkInterface({
   },
 })
 
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient,
+)
+
 const client = new ApolloClient({
-  networkInterface: networkInterface,
+  networkInterface: networkInterfaceWithSubscriptions,
   ssrForceFetchDelay: 100,
 })
 
