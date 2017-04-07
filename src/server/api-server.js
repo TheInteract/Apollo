@@ -8,6 +8,7 @@ import config from 'config'
 import express from 'express'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 
+import routers from './routers'
 import schema from './schema'
 
 const app = express()
@@ -18,6 +19,8 @@ app.use(bodyParser.json())
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 app.use('/graphql', graphqlExpress((req, res) => ({ schema })))
+
+app.use(routers)
 
 app.listen(config.server.apiPort, err => {
   const serverName = chalk.bgBlue.bold(' GraphQL Server ')
