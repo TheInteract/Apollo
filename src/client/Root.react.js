@@ -11,7 +11,7 @@ import App from '../shared/nt-core/App.react'
 import config from '../shared/configs'
 import createStore from '../shared/nt-store/createStore'
 
-const wsClient = new SubscriptionClient('ws://localhost:8080', {
+const wsClient = new SubscriptionClient(`ws://localhost:${config.wsPort}`, {
   reconnect: true
 })
 

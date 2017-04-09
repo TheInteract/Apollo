@@ -74,8 +74,9 @@ class CreateFeatureForm extends React.Component {
           }
         },
       })
+    } else {
+      e.preventDefault()
     }
-    e.preventDefault()
   }
 
   renderError = () => this.state.name === '' ? (

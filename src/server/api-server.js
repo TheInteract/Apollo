@@ -11,7 +11,7 @@ import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 import config from '../shared/configs'
 import schema from './schema'
-import { subscriptionManager } from './subscriptions'
+import subscriptionManager from './subscriptions/subscriptionManager'
 
 const app = express()
 

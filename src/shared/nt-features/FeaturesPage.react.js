@@ -80,10 +80,12 @@ class FeaturesPage extends React.Component {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
 
-        // const newFeature = subscriptionData.data.featureAdded
+        const newFeature = subscriptionData.data.featureAdded
 
-        console.log(prev)
-        return prev
+        return {
+          ...prev,
+          features: [ newFeature, ...prev.features ]
+        }
       }
     })
   }

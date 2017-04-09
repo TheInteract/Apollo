@@ -9,7 +9,7 @@ import {
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
-import { pubsub } from '../subscriptions'
+import pubsub from '../subscriptions/pubsub'
 import { FeatureType } from './types'
 
 const ProportionInputType = new GraphQLInputObjectType({
