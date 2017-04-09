@@ -19,7 +19,7 @@ export const connectDB = () => {
 export default fn => async (...params) => {
   // HACK: void params is needed here since without it params has no value when
   // passing to the fn. This might be a bug because in Artemis project it works
-  // fine, but anyway I'm not sure which environment cause this bug
+  // fine. Anyway, I'm not sure which environment cause this bug
   // (babel or node 7.6 or something else)
   void params
   const db = await connectDB()

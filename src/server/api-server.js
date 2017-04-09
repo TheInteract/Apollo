@@ -10,7 +10,7 @@ import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 import config from '../shared/configs'
-import schema from './schema'
+import schema from './graphql/schema'
 import subscriptionManager from './subscriptions/subscriptionManager'
 
 const app = express()
