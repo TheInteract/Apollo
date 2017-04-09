@@ -11,7 +11,7 @@ import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 import schema from './graphql/schema'
-import healthzRouter from './healthzRouter'
+import healthzRouter from './middlewares/healthzRouter'
 import subscriptionManager from './subscriptions/subscriptionManager'
 
 const app = express()
