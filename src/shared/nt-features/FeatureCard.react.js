@@ -6,6 +6,14 @@ import { compose } from 'recompose'
 
 import styles from './FeatureCard.styl'
 
+// const FEATURE_SUBSCRIPTION = gql`
+//   subscription onFeatureClosed {
+//     featureClosed {
+//       active
+//     }
+//   }
+// `
+
 const closeFeature = gql`
   mutation closeFeature($_id: String!) {
     closeFeature(_id: $_id)
@@ -30,12 +38,17 @@ class FeatureCard extends React.Component {
       B: React.PropTypes.number.isRequired,
     }).isRequired,
     active: React.PropTypes.bool,
+    // subscribeToMore: React.PropTypes.func,
   }
 
   constructor (props) {
     super(props)
     this.state = { showCloseConfirmation: false }
   }
+
+  // componentDidMount () {
+  //   console.log('subscribeToMore', this.props.subscribeToMore)
+  // }
 
   hideCloseConfirmation = () => {
     this.setState({ showCloseConfirmation: false })
@@ -46,6 +59,7 @@ class FeatureCard extends React.Component {
   }
 
   handleClose = () => {
+    this.hideCloseConfirmation()
     this.props.mutate({ variables: { _id: this.props._id } })
   }
 

@@ -101,6 +101,7 @@
     "graphql-subscriptions": "^0.3.1",
     "graphql-tag": "^2.0.0",
     "http-proxy-middleware": "^0.17.4",
+    "immutability-helper": "^2.1.2",
     "isomorphic-fetch": "^2.2.1",
     "mongodb": "^2.2.25",
     "npm-run-all": "^4.0.2",

@@ -4,10 +4,10 @@ import MutationRootType from './MutationRootType'
 import QueryRootType from './QueryRootType'
 import SubscriptionRootType from './SubscriptionRootType'
 
-const Schema = new GraphQLSchema({
+const schema = new GraphQLSchema({
   query: QueryRootType,
   mutation: MutationRootType,
   subscription: SubscriptionRootType,
 })
 
-export default Schema
+export default schema

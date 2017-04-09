@@ -1,7 +1,5 @@
 import {
   GraphQLBoolean,
-  GraphQLInputObjectType,
-  GraphQLInt,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -10,15 +8,7 @@ import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
 import pubsub from '../subscriptions/pubsub'
-import { FeatureType } from './types'
-
-const ProportionInputType = new GraphQLInputObjectType({
-  name: 'InputProportion',
-  fields: () => ({
-    A: { type: GraphQLInt, defaultValue: 50 },
-    B: { type: GraphQLInt, defaultValue: 50 },
-  })
-})
+import { FeatureType, InputProportionType } from './types'
 
 const MutationRootType = new GraphQLObjectType({
   name: 'Mutation',
@@ -29,7 +19,7 @@ const MutationRootType = new GraphQLObjectType({
       args: {
         productId: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: new GraphQLNonNull(GraphQLString) },
-        proportion: { type: ProportionInputType },
+        proportion: { type: InputProportionType },
         active: { type: GraphQLBoolean, defaultValue: true },
       },
       resolve: async (_, { productId, ...args }) => {

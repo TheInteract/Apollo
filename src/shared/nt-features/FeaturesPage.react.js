@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import update from 'immutability-helper'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
@@ -8,8 +9,8 @@ import CreateFeatureForm from './CreateFeatureForm.react'
 import FeatureCard from './FeatureCard.react'
 
 const FEATURES_SUBSCRIPTION = gql`
-  subscription onFeatureAdded($productId: String!){
-    featureAdded(productId: $productId){
+  subscription onFeatureAdded ($productId: String!) {
+    featureAdded (productId: $productId) {
       _id
       name
       proportion {
@@ -26,8 +27,8 @@ const FEATURES_SUBSCRIPTION = gql`
 `
 
 const FEATURES_QUERY = gql`
-  query queryFeatures($productId: String!) {
-    features(productId: $productId) {
+  query queryFeatures ($productId: String!) {
+    features (productId: $productId) {
       _id
       name
       proportion {
@@ -82,10 +83,7 @@ class FeaturesPage extends React.Component {
 
         const newFeature = subscriptionData.data.featureAdded
 
-        return {
-          ...prev,
-          features: [ newFeature, ...prev.features ]
-        }
+        return update(prev, { features: { $unshift: [ newFeature ] } })
       }
     })
   }

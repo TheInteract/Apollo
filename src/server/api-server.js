@@ -12,6 +12,7 @@ import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 import routers from './routers'
 import schema from './schema'
+import config from 'config'
 import subscriptionManager from './subscriptions/subscriptionManager'
 
 const app = express()
