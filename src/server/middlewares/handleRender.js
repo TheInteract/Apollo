@@ -71,7 +71,9 @@ const Html = ({ content, state }) => (
     <body>
       <div id='root' dangerouslySetInnerHTML={{ __html: content }} />
       <script dangerouslySetInnerHTML={{
-        __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};`
+        __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};window.__CONFIG__=${JSON.stringify({
+          wsUrl: `ws://${config.ws.host}:${config.ws.port}/`
+        })}`
       }} />
       <script src={
         process.env.NODE_ENV === 'production' ? assetsManifest.main.js : wdsPath

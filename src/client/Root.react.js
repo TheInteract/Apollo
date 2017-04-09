@@ -10,15 +10,12 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 import App from '../shared/nt-core/App.react'
 import createStore from '../shared/nt-store/createStore'
 
-const configObj = {
-  server: process.env.BROWSER ? window.__CONFIG__ : require('config').server
-}
-const wsClient = new SubscriptionClient(`ws://localhost:${config.wsPort}`, {
+const wsClient = new SubscriptionClient(window.__CONFIG__.wsUrl, {
   reconnect: true
 })
 
 const networkInterface = createNetworkInterface({
-  uri: `http://${configObj.server.host}:${configObj.server.port}/graphql`,
+  uri: `/graphql`,
   opts: {
     credentials: 'same-origin'
   },
