@@ -1,9 +1,15 @@
-server:
+ssr:
   host: localhost
-  apiHost: localhost
   port: 3000
-  wdsPort: 8080
-  apiPort: 3002
+wds:
+  host: localhost
+  port: 3001
+api:
+  host: localhost
+  port: 3002
+ws: 
+  host: localhost
+  port: 8080
 mongo:
   protocol: mongodb
   host: localhost
