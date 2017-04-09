@@ -7,8 +7,26 @@ import { compose } from 'recompose'
 import CreateFeatureForm from './CreateFeatureForm.react'
 import FeatureCard from './FeatureCard.react'
 
-const queryFeatures = gql`
-  query getFeatures($productId: String!) {
+const FEATURES_SUBSCRIPTION = gql`
+  subscription onFeatureAdded($productId: String!){
+    featureAdded(productId: $productId){
+      _id
+      name
+      proportion {
+        A
+        B
+      }
+      count {
+        A
+        B
+      }
+      active
+    }
+  }
+`
+
+const FEATURES_QUERY = gql`
+  query queryFeatures($productId: String!) {
     features(productId: $productId) {
       _id
       name
@@ -27,7 +45,7 @@ const queryFeatures = gql`
 
 const enhance = compose(
   withRouter,
-  graphql(queryFeatures, {
+  graphql(FEATURES_QUERY, {
     options: ({ productId }) => ({ variables: { productId: productId } })
   })
 )
@@ -51,7 +69,25 @@ class FeaturesPage extends React.Component {
           active: React.PropTypes.bool,
         }).isRequired,
       ),
+      subscribeToMore: React.PropTypes.func,
     }).isRequired
+  }
+
+  componentDidMount () {
+    this.props.data.subscribeToMore({
+      document: FEATURES_SUBSCRIPTION,
+      variables: { productId: this.props.productId },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+
+        const newFeature = subscriptionData.data.featureAdded
+
+        return {
+          ...prev,
+          features: [ newFeature, ...prev.features ]
+        }
+      }
+    })
   }
 
   renderFeatures = (features) => features ? features.map((feature, index) => (

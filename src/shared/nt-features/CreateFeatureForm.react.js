@@ -5,10 +5,11 @@ import { compose } from 'recompose'
 
 import styles from './CreateFeatureForm.styl'
 
-const featureMutation = gql`
+const createFeature = gql`
   mutation createFeature($name: String!, $productId: String!, $proportion: InputProportion!) {
     createFeature(name: $name, productId: $productId, proportion: $proportion) {
       _id
+      productId
       name
       proportion {
         A
@@ -19,7 +20,7 @@ const featureMutation = gql`
 `
 
 const enhance = compose(
-  graphql(featureMutation)
+  graphql(createFeature)
 )
 
 class CreateFeatureForm extends React.Component {
@@ -31,7 +32,7 @@ class CreateFeatureForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      name: '',
+      name: undefined,
       A: 50,
       B: 50,
     }
@@ -62,18 +63,26 @@ class CreateFeatureForm extends React.Component {
     }
   }
 
-  handleSubmit = () => {
-    this.props.mutate({
-      variables: {
-        name: this.state.name,
-        productId: this.props.productId,
-        proportion: {
-          A: this.state.A,
-          B: this.state.B,
-        }
-      },
-    })
+  handleSubmit = e => {
+    if (this.state.name && this.state.name !== '') {
+      this.props.mutate({
+        variables: {
+          name: this.state.name,
+          productId: this.props.productId,
+          proportion: {
+            A: this.state.A,
+            B: this.state.B,
+          }
+        },
+      })
+    } else {
+      e.preventDefault()
+    }
   }
+
+  renderError = () => this.state.name === '' ? (
+    <span> Name is required</span>
+  ) : null
 
   renderProportionInput = version => (
     <div className={styles[`n__${version}`]}>
@@ -93,9 +102,9 @@ class CreateFeatureForm extends React.Component {
           Name:
           <input
             type='text'
-            value={this.state.name}
             onChange={this.handleNameChange}
           />
+          {this.renderError()}
         </div>
         <div className={styles.n__proportion}>
           {this.renderProportionInput('A')}
