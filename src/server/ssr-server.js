@@ -22,9 +22,9 @@ app.use(bodyParser.json())
 
 app.use(handleRender)
 
-app.listen(config.server.port, err => {
+app.listen(config.ssr.port, err => {
   const serverName = chalk.bgBlue.bold(' SSR Server ')
-  const url = chalk.yellow(`${config.server.host}:${config.server.port}`)
+  const url = chalk.yellow(`${config.ssr.host}:${config.ssr.port}`)
 
   console.log()
   console.log(err || `${serverName} listening on ${url}`)

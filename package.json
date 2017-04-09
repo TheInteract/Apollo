@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm-run-all --parallel dev:ssr dev:hmr dev:api",
+    "dev": "npm-run-all --parallel dev:api dev:ssr dev:hmr",
     "dev:ssr": "better-npm-run dev:ssr",
     "dev:hmr": "better-npm-run dev:hmr",
     "dev:api": "better-npm-run dev:api",

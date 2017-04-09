@@ -9,14 +9,14 @@ export default {
 
   entry: [
     'react-hot-loader/patch',
-    `webpack-hot-middleware/client?path=http://${config.server.host}:${config.server.wdsPort}/__webpack_hmr&timeout=20000`,
+    `webpack-hot-middleware/client?path=http://${config.wds.host}:${config.wds.port}/__webpack_hmr&timeout=20000`,
     path.join(__dirname, 'src/shared/nt-styles/base.styl'),
     path.join(__dirname, 'src/client/client.dev.js'),
   ],
 
   output: {
     path: path.join(__dirname, 'static', 'build'),
-    publicPath: `http://${config.server.host}:${config.server.wdsPort}/build/`,
+    publicPath: `http://${config.wds.host}:${config.wds.port}/build/`,
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
   },

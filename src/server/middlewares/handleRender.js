@@ -10,7 +10,7 @@ import { StaticRouter } from 'react-router'
 import App from '../../shared/nt-core/App.react'
 import createStore from '../../shared/nt-store/createStore'
 
-const wdsPath = `http://${config.server.host}:${config.server.wdsPort}/build/main.js`
+const wdsPath = `http://${config.wds.host}:${config.wds.port}/build/main.js`
 const assetsManifest = process.env.webpackAssets &&
   JSON.parse(process.env.webpackAssets)
 
@@ -18,7 +18,7 @@ export default function handleRender (req, res) {
   const context = {}
 
   const networkInterface = createNetworkInterface({
-    uri: `http://${config.server.host}:${config.server.port}/graphql`,
+    uri: `http://${config.ssr.host}:${config.ssr.port}/graphql`,
     opts: {
       credentials: 'same-origin',
       headers: req.headers
@@ -71,7 +71,7 @@ const Html = ({ content, state }) => (
     <body>
       <div id='root' dangerouslySetInnerHTML={{ __html: content }} />
       <script dangerouslySetInnerHTML={{
-        __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};window.__CONFIG__=${JSON.stringify(config.get('server'))}`
+        __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};`
       }} />
       <script src={
         process.env.NODE_ENV === 'production' ? assetsManifest.main.js : wdsPath
