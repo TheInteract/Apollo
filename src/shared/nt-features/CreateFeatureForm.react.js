@@ -9,6 +9,7 @@ const createFeature = gql`
   mutation createFeature($name: String!, $productId: String!, $proportion: InputProportion!) {
     createFeature(name: $name, productId: $productId, proportion: $proportion) {
       _id
+      productId
       name
       proportion {
         A

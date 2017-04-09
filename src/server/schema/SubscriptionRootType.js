@@ -8,10 +8,7 @@ const SubscriptionRootType = new GraphQLObjectType({
     featureAdded: {
       type: FeatureType,
       args: { productId: { type: GraphQLString } },
-      resolve: (_) => {
-        console.log('_', _)
-        return _
-      }
+      resolve: (_) => _
     }
   }
 })
