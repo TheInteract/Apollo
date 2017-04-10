@@ -6,6 +6,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import webpack from 'webpack'
 
 export default {
+  bail: true,
   entry: [
     path.join(__dirname, 'src/shared/nt-styles/base.styl'),
     path.join(__dirname, 'src/client/client.prod.js'),

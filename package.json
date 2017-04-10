@@ -39,7 +39,8 @@
       "command": "webpack --config webpack.config.prod.babel.js",
       "env": {
         "NODE_ENV": "production",
-        "NODE_PATH": "./src"
+        "NODE_PATH": "./src",
+        "NODE_CONFIG_STRICT_MODE": false
       }
     },
     "start:ssr": {
