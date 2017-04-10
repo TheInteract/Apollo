@@ -8,5 +8,5 @@ COPY /.babelrc /app
 COPY /*.js /app/
 COPY /package.json /app
 WORKDIR /app
-EXPOSE 3000 30002
+EXPOSE 3000 3002
 ENTRYPOINT ["npm", "run", "start"]
