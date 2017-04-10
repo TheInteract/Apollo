@@ -23,7 +23,7 @@ const wsClient = new SubscriptionClient(url.format({
 })
 
 const networkInterface = createNetworkInterface({
-  uri: `/graphql`,
+  uri: '/graphql',
   opts: {
     credentials: 'same-origin'
   },
