@@ -36,7 +36,7 @@
       }
     },
     "build": {
-      "command": "webpack --config webpack.config.prod.babel.js",
+      "command": "webpack --config webpack.config.prod.babel.js --bail",
       "env": {
         "NODE_ENV": "production",
         "NODE_PATH": "./src"
