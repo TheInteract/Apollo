@@ -14,8 +14,15 @@ const app = express()
 
 app.use(express.static(path.join(process.cwd(), 'static')))
 
-app.use('/graphiql', proxy({ target: 'http://localhost:3002/graphiql' }))
-app.use('/graphql', proxy({ target: 'http://localhost:3002/graphql' }))
+app.use(proxy('/graphiql', {
+  target: `http://${config.api.host}:${config.api.port}/graphiql`
+}))
+
+app.use(proxy('/graphql', {
+  target: `http://${config.api.host}:${config.api.port}/graphql`
+}))
+
+app.use(proxy('/ws', { target: `ws://${config.ws.host}:${config.ws.port}`, ws: true }))
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())

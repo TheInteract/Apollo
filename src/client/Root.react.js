@@ -1,3 +1,5 @@
+import url from 'url'
+
 import React from 'react'
 import {
   ApolloClient,
@@ -10,8 +12,14 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 import App from '../shared/nt-core/App.react'
 import createStore from '../shared/nt-store/createStore'
 
-const wsClient = new SubscriptionClient(window.__CONFIG__.wsUrl, {
-  reconnect: true
+const wsClient = new SubscriptionClient(url.format({
+  slashes: true,
+  protocol: 'ws',
+  host: window.location.host,
+  pathname: 'ws'
+}), {
+  reconnect: true,
+  timeout: 10000
 })
 
 const networkInterface = createNetworkInterface({
@@ -31,7 +39,7 @@ const client = new ApolloClient({
   ssrForceFetchDelay: 100,
 })
 
-const store = createStore(client, window.__APOLLO_STATE__)
+const store = createStore(client, window.__PRELOADED_STATE__)
 
 const Root = () => (
   <ApolloProvider store={store} client={client}>
