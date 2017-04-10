@@ -9,10 +9,13 @@ import express from 'express'
 import proxy from 'http-proxy-middleware'
 
 import handleRender from './middlewares/handleRender'
+import healthzRouter from './middlewares/healthzRouter'
 
 const app = express()
 
 app.use(express.static(path.join(process.cwd(), 'static')))
+
+app.use(healthzRouter)
 
 app.use(proxy('/graphiql', {
   target: `http://${config.api.host}:${config.api.port}/graphiql`
@@ -21,6 +24,7 @@ app.use(proxy('/graphiql', {
 app.use(proxy('/graphql', {
   target: `http://${config.api.host}:${config.api.port}/graphql`
 }))
+
 
 app.use(proxy('/ws', { target: `ws://${config.ws.host}:${config.ws.port}`, ws: true }))
 
