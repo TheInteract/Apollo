@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm-run-all --parallel dev:ssr dev:hmr dev:api",
+    "dev": "npm-run-all --parallel dev:api dev:ssr dev:hmr",
     "dev:ssr": "better-npm-run dev:ssr",
     "dev:hmr": "better-npm-run dev:hmr",
     "dev:api": "better-npm-run dev:api",
@@ -90,6 +90,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "classnames": "^2.2.5",
+    "config": "^1.25.1",
     "css-loader": "^0.28.0",
     "css-modules-stylus": "^0.1.1",
     "express": "^4.15.2",

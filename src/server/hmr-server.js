@@ -3,13 +3,13 @@
 import path from 'path'
 
 import chalk from 'chalk'
+import config from 'config'
 import express from 'express'
 import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from '../../webpack.config.dev.babel.js'
-import config from '../shared/configs'
 
 const app = express()
 
@@ -24,9 +24,9 @@ app.use(webpackDevMiddleware(compiler, {
 }))
 app.use(webpackHotMiddleware(compiler))
 
-app.listen(config.wdsPort, err => {
-  const serverName = chalk.bgYellow.bold(' HMR Server ')
-  const url = chalk.yellow(`${config.host}:${config.wdsPort}`)
+app.listen(config.wds.port, err => {
+  const serverName = chalk.bgBlue.bold(' HMR Server ')
+  const url = chalk.yellow(`${config.wds.host}:${config.wds.port}`)
 
   console.log()
   console.log(err || `${serverName} listening on ${url}`)

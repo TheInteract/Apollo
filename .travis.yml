@@ -1,0 +1,33 @@
+sudo: required
+language: node_js
+services:
+- docker
+node_js:
+- '7.8'
+install:
+- npm i
+after_success:
+- npm run build
+- docker build -f Dockerfile -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER"
+  .
+- docker tag "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER" "$DOCKER_USERNAME"/"$IMAGE_NAME":latest
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER"
+- docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":latest
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: kubectl --namespace default patch deployment apollo -p'{"spec":{"template":{"spec":{"containers":[{"name":"apollo","image":"chinclubi/apollo:'$TRAVIS_BUILD_NUMBER'"}]}}}}'
+  on:
+    branch: master
+before_install:
+- openssl aes-256-cbc -K $encrypted_02a30cc79da2_key -iv $encrypted_02a30cc79da2_iv
+  -in interact-4a4118c938d7.json.enc -out interact-4a4118c938d7.json -d
+- if [ ! -d ${HOME}/google-cloud-sdk ]; then export CLOUDSDK_CORE_DISABLE_PROMPTS=1;
+  curl https://sdk.cloud.google.com | bash; fi
+- source /home/travis/google-cloud-sdk/path.bash.inc
+- gcloud components install kubectl
+- gcloud auth activate-service-account --key-file=interact-4a4118c938d7.json
+- gcloud config set project "$PROJECT_ID"
+- gcloud config set container/use_client_certificate True
+- gcloud container clusters get-credentials cluster-interact -z asia-east1-a

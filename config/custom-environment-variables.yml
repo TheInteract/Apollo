@@ -1,0 +1,13 @@
+ssr:
+  host: APOLLO_SSR_HOST
+  port: APOLLO_SSR_PORT
+api:
+  host: APOLLO_API_HOST
+  port: APOLLO_API_PORT
+ws: 
+  host: APOLLO_WS_HOST
+  port: APOLLO_WS_PORT
+mongo:
+  protocol: MONGO_PROTOCOL
+  host: MONGO_HOST
+  port: MONGO_PORT

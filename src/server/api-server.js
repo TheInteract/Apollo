@@ -5,12 +5,13 @@ import path from 'path'
 
 import bodyParser from 'body-parser'
 import chalk from 'chalk'
+import config from 'config'
 import express from 'express'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
-import config from '../shared/configs'
 import schema from './graphql/schema'
+import healthzRouter from './middlewares/healthzRouter'
 import subscriptionManager from './subscriptions/subscriptionManager'
 
 const app = express()
@@ -22,9 +23,11 @@ app.use(bodyParser.json())
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 app.use('/graphql', graphqlExpress((req, res) => ({ schema })))
 
-app.listen(config.apiPort, err => {
-  const serverName = chalk.bgYellow.bold(' GraphQL Server ')
-  const url = chalk.yellow(`${config.apiHost}:${config.apiPort}`)
+app.use(healthzRouter)
+
+app.listen(config.api.port, err => {
+  const serverName = chalk.bgBlue.bold(' GraphQL Server ')
+  const url = chalk.yellow(`${config.api.host}:${config.api.port}`)
 
   console.log()
   console.log(err || `${serverName} listening on ${url}`)
@@ -36,9 +39,9 @@ const webSocketServer = createServer((req, res) => {
   res.end()
 })
 
-webSocketServer.listen(config.wsPort, () => {
-  const serverName = chalk.bgYellow.bold(' Websocket Server ')
-  const url = chalk.yellow(`http://localhost:${config.wsPort}`)
+webSocketServer.listen(config.ws.port, () => {
+  const serverName = chalk.bgBlue.bold(' Websocket Server ')
+  const url = chalk.yellow(`http://localhost:${config.ws.port}`)
 
   console.log()
   console.log(`${serverName} is now running on ${url}`)

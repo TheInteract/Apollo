@@ -1,15 +1,16 @@
 import url from 'url'
 
 import Promise from 'bluebird'
+import config from 'config'
 import { MongoClient } from 'mongodb'
 
 export const connectDB = () => {
   const URL = url.format({
     slashes: true,
-    protocol: 'mongodb',
-    hostname: 'localhost',
-    port: 27017,
-    pathname: 'Interact',
+    protocol: config.mongo.protocol,
+    hostname: config.mongo.host,
+    port: config.mongo.port,
+    pathname: config.mongo.db,
     // Note: mongo.auth FORMAT => String admin:pwd
     auth: undefined,
   })
