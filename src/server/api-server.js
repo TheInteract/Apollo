@@ -11,7 +11,6 @@ import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 import schema from './graphql/schema'
-import healthzRouter from './middlewares/healthzRouter'
 import subscriptionManager from './subscriptions/subscriptionManager'
 
 const app = express()
@@ -22,8 +21,6 @@ app.use(bodyParser.json())
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 app.use('/graphql', graphqlExpress((req, res) => ({ schema })))
-
-app.use(healthzRouter)
 
 app.listen(config.api.port, err => {
   const serverName = chalk.bgBlue.bold(' GraphQL Server ')

@@ -5,9 +5,9 @@ services:
 node_js:
 - '7.8'
 install:
-- npm i
+- yarn
 after_success:
-- npm run build
+- yarn build
 - docker build -f Dockerfile -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER"
   .
 - docker tag "$DOCKER_USERNAME"/"$IMAGE_NAME":"$TRAVIS_BUILD_NUMBER" "$DOCKER_USERNAME"/"$IMAGE_NAME":latest
@@ -19,7 +19,7 @@ deploy:
   skip_cleanup: true
   script: kubectl --namespace default patch deployment apollo -p'{"spec":{"template":{"spec":{"containers":[{"name":"apollo","image":"chinclubi/apollo:'$TRAVIS_BUILD_NUMBER'"}]}}}}'
   on:
-    branch: system/ci
+    branch: master
 before_install:
 - openssl aes-256-cbc -K $encrypted_02a30cc79da2_key -iv $encrypted_02a30cc79da2_iv
   -in interact-4a4118c938d7.json.enc -out interact-4a4118c938d7.json -d
@@ -31,3 +31,4 @@ before_install:
 - gcloud config set project "$PROJECT_ID"
 - gcloud config set container/use_client_certificate True
 - gcloud container clusters get-credentials cluster-interact -z asia-east1-a
+- npm i -g yarn
