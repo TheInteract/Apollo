@@ -22,16 +22,8 @@ const wsClient = new SubscriptionClient(url.format({
   timeout: 10000
 })
 
-if (process.env.BROWSER) {
-  console.log('Browser')
-} else {
-  console.log('NotBrowser')
-}
-
-console.log('url.resolve', window.location.origin, url.resolve(window.location.origin, 'graphql'))
-
 const networkInterface = createNetworkInterface({
-  uri: url.resolve(window.location.origin, 'graphql'),
+  uri: '/graphql',
   opts: {
     credentials: 'same-origin'
   },
