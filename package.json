@@ -72,7 +72,7 @@
     "eslint-plugin-promise": "^3.4.2",
     "eslint-plugin-pure": "github:purely-functional/eslint-plugin-pure",
     "eslint-plugin-react": "^6.10.0",
-    "eslint-plugin-standard": "^2.0.1",
+    "eslint-plugin-standard": "^3.0.1",
     "import-sort-style-module": "^2.4.0",
     "nodemon": "^1.11.0",
     "prettier": "^0.22.0"
