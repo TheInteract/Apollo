@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Route } from 'react-router'
 import { NavLink } from 'react-router-dom'
@@ -9,14 +10,14 @@ import styles from './MainPage.styl'
 
 class MainPage extends React.Component {
   static propTypes = {
-    match: React.PropTypes.shape({
-      url: React.PropTypes.string.isRequired,
-      params: React.PropTypes.object.isRequired,
-      isExact: React.PropTypes.bool.isRequired,
+    match: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      params: PropTypes.object.isRequired,
+      isExact: PropTypes.bool.isRequired,
     }).isRequired,
-    product: React.PropTypes.shape({
-      _id: React.PropTypes.string.isRequired,
-      name: React.PropTypes.string.isRequired,
+    product: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     }).isRequired
   }
 

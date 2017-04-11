@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
@@ -16,9 +17,9 @@ const MainPageContainer = ({ match, data }) => data.product ? (
 )
 
 MainPageContainer.propTypes = {
-  match: React.PropTypes.object.isRequired,
-  data: React.PropTypes.shape({
-    product: React.PropTypes.object,
+  match: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    product: PropTypes.object,
   }).isRequired,
 }
 

@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
@@ -53,24 +54,24 @@ const enhance = compose(
 
 class FeaturesPage extends React.Component {
   static propTypes = {
-    productId: React.PropTypes.string.isRequired,
-    data: React.PropTypes.shape({
-      features: React.PropTypes.arrayOf(
-        React.PropTypes.shape({
-          _id: React.PropTypes.string.isRequired,
-          name: React.PropTypes.string.isRequired,
-          proportion: React.PropTypes.shape({
-            A: React.PropTypes.number.isRequired,
-            B: React.PropTypes.number.isRequired,
+    productId: PropTypes.string.isRequired,
+    data: PropTypes.shape({
+      features: PropTypes.arrayOf(
+        PropTypes.shape({
+          _id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          proportion: PropTypes.shape({
+            A: PropTypes.number.isRequired,
+            B: PropTypes.number.isRequired,
           }).isRequired,
-          count: React.PropTypes.shape({
-            A: React.PropTypes.number.isRequired,
-            B: React.PropTypes.number.isRequired,
+          count: PropTypes.shape({
+            A: PropTypes.number.isRequired,
+            B: PropTypes.number.isRequired,
           }).isRequired,
-          active: React.PropTypes.bool,
+          active: PropTypes.bool,
         }).isRequired,
       ),
-      subscribeToMore: React.PropTypes.func,
+      subscribeToMore: PropTypes.func,
     }).isRequired
   }
 
