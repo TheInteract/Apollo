@@ -19,7 +19,7 @@ deploy:
   skip_cleanup: true
   script: kubectl --namespace default patch deployment apollo -p'{"spec":{"template":{"spec":{"containers":[{"name":"apollo","image":"chinclubi/apollo:'$TRAVIS_BUILD_NUMBER'"}]}}}}'
   on:
-    branch: system/ci-2
+    branch: master
 before_install:
 - openssl aes-256-cbc -K $encrypted_02a30cc79da2_key -iv $encrypted_02a30cc79da2_iv
   -in interact-4a4118c938d7.json.enc -out interact-4a4118c938d7.json -d
