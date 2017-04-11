@@ -15,7 +15,7 @@ import createStore from '../shared/nt-store/createStore'
 const wsClient = new SubscriptionClient(url.format({
   slashes: true,
   protocol: 'ws',
-  host: process.env.BROWSER ? window.location.host : 'localhost',
+  host: window.location.host,
   pathname: 'ws'
 }), {
   reconnect: true,
@@ -29,7 +29,7 @@ if (process.env.BROWSER) {
 }
 
 const networkInterface = createNetworkInterface({
-  uri: process.env.BROWSER ? '/graphql' : 'http://localhost:3000/graphql',
+  uri: url.resolve(window.location.origin, 'graphql'),
   opts: {
     credentials: 'same-origin'
   },
