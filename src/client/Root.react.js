@@ -28,6 +28,8 @@ if (process.env.BROWSER) {
   console.log('NotBrowser')
 }
 
+console.log('url.resolve', window.location.origin, url.resolve(window.location.origin, 'graphql'))
+
 const networkInterface = createNetworkInterface({
   uri: url.resolve(window.location.origin, 'graphql'),
   opts: {
