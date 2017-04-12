@@ -6,7 +6,7 @@ import {
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
-import { FeatureType, ProductType } from './types'
+import { FeatureType, ProductType, SessionType } from './types'
 
 const QueryRootType = new GraphQLObjectType({
   name: 'Query',
@@ -40,7 +40,19 @@ const QueryRootType = new GraphQLObjectType({
             productId: Mongodb.ObjectId(productId)
           }, { _id: -1 }) : []
       }
-    }
+    },
+    sessions: {
+      type: new GraphQLList(SessionType),
+      args: { sessionTypeId: { type: GraphQLString } },
+      resolve: async (_, { sessionTypeId }) => {
+        const sessions = await sessionTypeId.match(/^[0-9a-fA-F]{24}$/)
+          ? Collections.find('session', {
+            sessionTypeId: Mongodb.ObjectId(sessionTypeId)
+          }) : []
+
+        return sessions
+      }
+    },
   })
 })
 

@@ -94,6 +94,7 @@
     "config": "^1.25.1",
     "css-loader": "^0.28.0",
     "css-modules-stylus": "^0.1.1",
+    "d3": "^4.7.4",
     "express": "^4.15.2",
     "express-graphql": "^0.6.3",
     "extract-text-webpack-plugin": "^2.1.0",
