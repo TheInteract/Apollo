@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import gql from 'graphql-tag'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
@@ -26,19 +27,19 @@ const enhance = compose(
 
 class FeatureCard extends React.Component {
   static propTypes = {
-    mutate: React.PropTypes.func.isRequired,
-    _id: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    proportion: React.PropTypes.shape({
-      A: React.PropTypes.number.isRequired,
-      B: React.PropTypes.number.isRequired,
+    mutate: PropTypes.func.isRequired,
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    proportion: PropTypes.shape({
+      A: PropTypes.number.isRequired,
+      B: PropTypes.number.isRequired,
     }).isRequired,
-    count: React.PropTypes.shape({
-      A: React.PropTypes.number.isRequired,
-      B: React.PropTypes.number.isRequired,
+    count: PropTypes.shape({
+      A: PropTypes.number.isRequired,
+      B: PropTypes.number.isRequired,
     }).isRequired,
-    active: React.PropTypes.bool,
-    // subscribeToMore: React.PropTypes.func,
+    active: PropTypes.bool,
+    // subscribeToMore: PropTypes.func,
   }
 
   constructor (props) {
