@@ -1,0 +1,49 @@
+@require('../nt-design/colorsets')
+
+.column
+    padding 0.75rem
+ 
+    &__half
+        -webkit-box-flex 0
+        -ms-flex none
+        flex none
+        width 50%
+
+    &__offset-one-quarter
+        margin-left 25%
+
+.panel
+    font-size 1rem
+
+    &__head
+        background-color whitesmoke
+        border-radius 3px 3px 0 0
+        color #363636
+        font-size 1.25em
+        font-weight 300
+        line-height 1.25
+        padding 10px 25px
+
+        &:first-child
+            border-top 1px solid #dbdbdb
+    &__block
+        cursor pointer
+        -webkit-box-align center
+        -ms-flex-align center
+        align-items center
+        color #363636
+        display -webkit-box
+        display -ms-flexbox
+        display flex
+        -webkit-box-pack start
+        -ms-flex-pack start
+        justify-content flex-start
+        padding 10px 25px
+
+        &:hover
+            background-color whitesmoke
+    
+    &__head, &__block
+        border-bottom 1px solid #dbdbdb
+        border-left 1px solid #dbdbdb
+        border-right 1px solid #dbdbdb
