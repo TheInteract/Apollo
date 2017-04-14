@@ -1,25 +1,28 @@
 import gql from 'graphql-tag'
-import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { compose } from 'recompose'
 
-import LoginPage from '../nt-login/LoginPage.react'
+import ProductListPage from '../nt-products/ProductListPage.react'
 import MainPage from './MainPage.react'
 import NoMatch from './NoMatch.react'
 
+// import LoginPage from '../nt-login/LoginPage.react'
 const MainPageContainer = ({ match, data }) => data.product ? (
   <MainPage match={match} product={data.product} />
 ) : (
   <NoMatch />
 )
 
+// const MainPageContainer = ({ match, data }) => <MainPage match={match} product={data.product} />
+
+
 MainPageContainer.propTypes = {
-  match: PropTypes.object.isRequired,
-  data: PropTypes.shape({
-    product: PropTypes.object,
+  match: React.PropTypes.object.isRequired,
+  data: React.PropTypes.shape({
+    product: React.PropTypes.object,
   }).isRequired,
 }
 
@@ -41,7 +44,8 @@ const enhance = compose(
 
 const App = () => (
   <Switch>
-    <Route path='/login' component={LoginPage} />
+    <Redirect from='/' to='/products' exact />
+    <Route path='/products' component={ProductListPage} />
     <Route path='/:productId' render={enhance(MainPageContainer)} />
     <Route component={NoMatch} />
   </Switch>
