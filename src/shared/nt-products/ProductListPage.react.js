@@ -7,6 +7,7 @@ import { withRouter } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import { compose } from 'recompose'
 
+import { withLoader } from '../nt-core/withLoader.react'
 import styles from './ProductListPage.styl'
 
 const PRODUCTS_QUERY = gql`
@@ -20,7 +21,8 @@ const PRODUCTS_QUERY = gql`
 
 const enhance = compose(
   withRouter,
-  graphql(PRODUCTS_QUERY)
+  graphql(PRODUCTS_QUERY),
+  withLoader
 )
 
 class ResultsPage extends React.Component {
@@ -41,19 +43,9 @@ class ResultsPage extends React.Component {
     return (
       <div className={classNames(styles.column, styles.column__half, styles['column__offset-one-quarter'])}>
         <div className={styles.panel__head}>Project List</div>
-        {
-          (this.props.data.loading) ? (
-            <div className={classNames(styles.panel__block, styles.loader)}>
-              <p>fetching data...</p>
-            </div>
-          ) : (
-            this.props.data.products.map(
-              (p, index) => (
-                <NavLink to={`${p._id}/features`} className={styles.panel__block} key={index}>{p.name}</NavLink>
-              )
-            )
-          )
-        }
+        {this.props.data.products.map(
+            (p, index) => <NavLink to={`${p._id}/features`} className={styles.panel__block} key={index}>{p.name}</NavLink>
+        )}
       </div>
     )
   }

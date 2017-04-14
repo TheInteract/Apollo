@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
@@ -14,6 +15,11 @@ const ValidateRouter = ({ component: Component, computedMatch, ...rest }) => (
     )
   } />
 )
+
+ValidateRouter.propTypes = {
+  component: PropTypes.func.isRequired,
+  computedMatch: PropTypes.object.isRequired
+}
 
 const App = () => (
   <Switch>
