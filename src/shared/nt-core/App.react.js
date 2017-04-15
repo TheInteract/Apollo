@@ -10,7 +10,8 @@ const App = () => (
     <Redirect exact path='/' to={{ pathname: '/products' }} />
     <Route exact path='/products' component={ProductListPageContainer} />
     <Route path='/products/:productId' component={MainPageContainer} />
-    <Route component={NoMatch} />
+    <Route path='/404' component={NoMatch} />
+    <Redirect path='*' to={{ pathname: '/404' }} />
   </Switch>
 )
 
