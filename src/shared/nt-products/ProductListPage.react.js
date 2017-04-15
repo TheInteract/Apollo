@@ -44,7 +44,7 @@ class ResultsPage extends React.Component {
       <div className={classNames(styles.column, styles.column__half, styles['column__offset-one-quarter'])}>
         <div className={styles.panel__head}>Project List</div>
         {this.props.data.products.map(
-            (p, index) => <NavLink to={`${p._id}/features`} className={styles.panel__block} key={index}>{p.name}</NavLink>
+            (p, index) => <NavLink to={`/products/${p._id}`} className={styles.panel__block} key={index}>{p.name}</NavLink>
         )}
       </div>
     )

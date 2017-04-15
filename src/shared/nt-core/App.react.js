@@ -8,7 +8,7 @@ import NoMatch from './NoMatch.react'
 
 const MainRouter = ({ component: Component, computedMatch, ...rest }) => (
   <Route {...Object.assign(computedMatch, rest)} render={props =>
-    (computedMatch.params.productId && computedMatch.params.productId.match(/^[0-9a-fA-F]{24}$/)) ? (
+    (computedMatch.params.productId) ? (
       <Component {...props} />
     ) : (
       <Redirect to={{ pathname: '/products' }} />
@@ -24,8 +24,8 @@ MainRouter.propTypes = {
 const App = () => (
   <Switch>
     <Redirect exact path='/' to={{ pathname: '/products' }} />
-    <Route path='/products' component={ProductListPage} />
-    <MainRouter path='/:productId' component={MainPage} />
+    <Route exact path='/products' component={ProductListPage} />
+    <MainRouter path='/products/:productId' component={MainPage} />
     <Route component={NoMatch} />
   </Switch>
 )

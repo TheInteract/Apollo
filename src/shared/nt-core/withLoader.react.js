@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 
 import styles from './withLoader.styl'
 
-const redirect = () => <Redirect to={{ pathname: '/product' }} />
+const redirect = () => <Redirect to={{ pathname: '/404' }} />
 
 function handleError (isError = () => false, HandleError = redirect) {
   return function (Component) {
