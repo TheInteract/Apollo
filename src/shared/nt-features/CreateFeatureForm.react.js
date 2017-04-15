@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
@@ -25,8 +26,8 @@ const enhance = compose(
 
 class CreateFeatureForm extends React.Component {
   static propTypes = {
-    mutate: React.PropTypes.func.isRequired,
-    productId: React.PropTypes.string.isRequired,
+    mutate: PropTypes.func.isRequired,
+    productId: PropTypes.string.isRequired,
   }
 
   constructor (props) {

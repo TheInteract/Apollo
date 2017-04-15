@@ -2,6 +2,7 @@ import 'isomorphic-fetch'
 
 import { ApolloClient, createNetworkInterface } from 'apollo-client'
 import config from 'config'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { ApolloProvider, renderToStringWithData } from 'react-apollo'
 import ReactDOMServer from 'react-dom/server'
@@ -81,6 +82,6 @@ const Html = ({ content, state }) => (
 )
 
 Html.propTypes = {
-  content: React.PropTypes.string.isRequired,
-  state: React.PropTypes.object
+  content: PropTypes.string.isRequired,
+  state: PropTypes.object
 }
