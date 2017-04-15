@@ -5,7 +5,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
 
-// import styles from './ResultsByLoad.styl'
+import styles from './ResultsByLoad.styl'
 
 const SESSIONS_QUERY = gql`
   query querySessions ($sessionTypeId: String!) {
@@ -33,7 +33,7 @@ class ResultsByLoad extends React.Component {
 
   static defaultProps = {
     width: 1100,
-    height: 500,
+    height: 600,
   }
 
   constructor (props) {
@@ -43,7 +43,7 @@ class ResultsByLoad extends React.Component {
         return session.actions.map(action => {
           if (action.type === 'load') {
             return { id: action.actionTypeId, type: action.type, data: action.actionTypeId, fx: 100, fy: 300 }
-          } else if (action.type === 'out') {
+          } else if (action.type === 'blur') {
             return { id: action.actionTypeId, type: action.type, data: action.actionTypeId, fx: 1000, fy: 300 }
           } else {
             return { id: action.actionTypeId, type: action.type, data: action.actionTypeId }
@@ -55,7 +55,9 @@ class ResultsByLoad extends React.Component {
         const temp = []
         if (actions.length > 1) {
           for (let i = 0; i < actions.length - 1; i++) {
-            temp.push({ source: actions[i].actionTypeId, target: actions[i + 1].actionTypeId })
+            if (actions[i].type !== 'focus' && actions[i + 1].type !== 'blur') {
+              temp.push({ source: actions[i].actionTypeId, target: actions[i + 1].actionTypeId })
+            }
           }
         }
         return temp
@@ -97,15 +99,15 @@ class ResultsByLoad extends React.Component {
                 x2={link.target.x}
                 y2={link.target.y}
                 stroke={`#f${index * 9345 % 100000}`}
+                markerEnd={`url('https://cdn1.iconfinder.com/data/icons/mini-solid-icons-vol-1/16/27-512.png')`}
               />
-              <circle r={10} fill={`#f${index * 9345 % 100000}`} cx={link.target.x - 10} cy={link.target.y - 10} />
+              {/* <circle r={10} fill={`#f${index * 9345 % 100000}`} cx={link.target.x - 10} cy={link.target.y - 10} /> */}
             </g>
           ))}
           {this.state.nodes.map((node, index) => (
             <g key={index} transform={`translate(${node.x || 0},${node.y || 0})`}>
               <circle r={5} fill='#f56' />
-              {/* <text dx='10' dy='10'>{node.type}</text> */}
-              <text dx='10' dy='20'>{node.data}</text>
+              <text dx='10' dy='10'>{node.type}</text>
             </g>
           ))}
         </g>

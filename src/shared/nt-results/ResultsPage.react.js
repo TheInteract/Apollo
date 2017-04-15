@@ -3,7 +3,5 @@ import React from 'react'
 import ResultsByLoad from './ResultsByLoad.react'
 
 export default () => (
-  <ResultsByLoad sessionTypeId='58ed15fcedb5f19b0fe0f23e' />
+  <ResultsByLoad sessionTypeId='58ef57fcedb5f19b0fe785f9' />
 )
-
-// 58ed1598edb5f19b0fe0f047

@@ -8,17 +8,8 @@ import {
 const ActionType = new GraphQLObjectType({
   name: 'Action',
   fields: () => ({
-    type: {
-      type: GraphQLString,
-      resolve: _ => _.type === 'focus' || _.type === 'blur' ? 'out' : _.type
-    },
-    actionTypeId: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve: _ => {
-        const type = _.type === 'focus' || _.type === 'blur' ? 'out' : _.type
-        return type + '.' + (_.url || _.target || _.endpoint)
-      }
-    },
+    type: { type: GraphQLString },
+    actionTypeId: { type: new GraphQLNonNull(GraphQLString) },
     url: { type: GraphQLString },
     target: { type: GraphQLString },
     endpoint: { type: GraphQLString },
