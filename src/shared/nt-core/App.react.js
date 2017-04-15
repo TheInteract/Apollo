@@ -18,11 +18,12 @@ const MainRouter = ({ component: Component, computedMatch, ...rest }) => (
 
 MainRouter.propTypes = {
   component: PropTypes.func.isRequired,
-  computedMatch: PropTypes.object.isRequired
+  computedMatch: PropTypes.object
 }
 
 const App = () => (
   <Switch>
+    <Redirect exact path='/' to={{ pathname: '/products' }} />
     <Route path='/products' component={ProductListPage} />
     <MainRouter path='/:productId' component={MainPage} />
     <Route component={NoMatch} />
