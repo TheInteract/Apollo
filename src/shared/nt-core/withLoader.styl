@@ -1,38 +1,37 @@
 @require('../nt-design/colorsets')
 
-l-size = 5em
-l-border = 5px
-l-spin-time = 1000ms
+$l-size = 5em
+$l-border = 5px
+$l-spin-time = 1000ms
 
 @keyframes spinAround 
-    from 
-        transform rotate(0deg)
-    to
-        transform rotate(360deg)
+  from 
+      transform rotate(0deg)
+  to
+      transform rotate(360deg)
 
 .loader
-    display flex
-    flex-direction row
-    justify-content center
-    align-items center
-    position absolute
-    top 0
-    left 0
-    height 100%
-    width 100%
+  position absolute
+  top 0
+  left 0
+  display flex
+  flex-direction row
+  justify-content center
+  align-items center
+  height 100%
+  width 100%
 
-    &:before
-        -webkit-animation spinAround l-spin-time infinite linear
-        animation spinAround l-spin-time infinite linear
-        border l-border solid c-gray50
-        border-top l-border solid c-gray500
-        border-radius 50%
-        content ""
-        display block
-        height l-size
-        width l-size
-        margin-top -5em
-    
-    p
-        position absolute
-        font-size 2rem
+  &:before
+    display block
+    margin-top -5em
+    height $l-size
+    width $l-size
+    border $l-border solid c-gray50
+    border-top $l-border solid c-gray500
+    border-radius 50%
+    content ""
+    animation spinAround $l-spin-time infinite linear
+  
+  p
+    position absolute
+    font-size 2rem
