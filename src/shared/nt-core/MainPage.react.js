@@ -1,34 +1,12 @@
-import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { graphql } from 'react-apollo'
-import { Route, withRouter } from 'react-router'
+import { Route } from 'react-router'
 import { NavLink } from 'react-router-dom'
-import { compose } from 'recompose'
 
 import FeaturesPage from '../nt-features/FeaturesPage.react'
 import HomePage from '../nt-home/HomePage.react'
 import ResultsPage from '../nt-results/ResultsPage.react'
-import { handleError, withLoader } from '../nt-utils/withLoader.react'
 import styles from './MainPage.styl'
-
-const queryProduct = gql`
-  query getProduct($productId: String!) {
-    product(_id: $productId) {
-      _id
-      name
-    }
-  }
-`
-
-const enhance = compose(
-  withRouter,
-  graphql(queryProduct, {
-    options: ({ match }) => ({ variables: { productId: match.params.productId } })
-  }),
-  handleError(({ data }) => (!data.product && !data.loading)),
-  withLoader
-)
 
 class MainPage extends React.Component {
   static propTypes = {
@@ -37,19 +15,15 @@ class MainPage extends React.Component {
       params: PropTypes.object.isRequired,
       isExact: PropTypes.bool.isRequired,
     }).isRequired,
-    data: PropTypes.shape({
-      product: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-      loading: PropTypes.bool,
-      error: PropTypes.bool
-    })
+    product: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
   renderName = () => (
     <div className={styles.name}>
-      {this.props.data.product.name}
+      {this.props.product.name}
     </div>
   )
 
@@ -91,4 +65,4 @@ class MainPage extends React.Component {
   }
 }
 
-export default enhance(MainPage)
+export default MainPage
