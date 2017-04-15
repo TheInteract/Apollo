@@ -24,4 +24,4 @@ function withLoader (Component) {
   }
 }
 
-export { withLoader }
+export default withLoader

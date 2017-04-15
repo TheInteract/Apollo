@@ -6,7 +6,7 @@ import { Route, withRouter } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import { compose } from 'recompose'
 
-import { withLoader } from '../nt-core/withLoader.react'
+import withLoader from '../nt-core/withLoader.react'
 import FeaturesPage from '../nt-features/FeaturesPage.react'
 import HomePage from '../nt-home/HomePage.react'
 import ResultsPage from '../nt-results/ResultsPage.react'
