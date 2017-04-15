@@ -24,7 +24,7 @@ const QueryRootType = new GraphQLObjectType({
     products: {
       type: new GraphQLList(ProductType),
       resolve: async (_) => {
-        return Collections.find('product', {}, { _id: 1 })
+        return Collections.find('product')
       }
     },
     feature: {
