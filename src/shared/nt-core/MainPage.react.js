@@ -6,7 +6,7 @@ import { Route, withRouter } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import { compose } from 'recompose'
 
-import withLoader from '../nt-core/withLoader.react'
+import { handleError, withLoader } from '../nt-core/withLoader.react'
 import FeaturesPage from '../nt-features/FeaturesPage.react'
 import HomePage from '../nt-home/HomePage.react'
 import ResultsPage from '../nt-results/ResultsPage.react'
@@ -26,6 +26,7 @@ const enhance = compose(
   graphql(queryProduct, {
     options: ({ match }) => ({ variables: { productId: match.params.productId } })
   }),
+  handleError((props) => (!props.data.product)),
   withLoader
 )
 

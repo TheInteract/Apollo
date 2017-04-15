@@ -15,15 +15,10 @@ const QueryRootType = new GraphQLObjectType({
       type: ProductType,
       args: { _id: { type: GraphQLString } },
       resolve: async (_, { _id }) => {
-        if (_id.match(/^[0-9a-fA-F]{24}$/)) {
-          return null
-        }
-        const result = Collections.findOne('product', { _id: Mongodb.ObjectId(_id) })
-        console.log(`result`, result)
-        if (!result) {
-          throw Error('Product ID not found')
-        }
-        return result
+        return _id.match(/^[0-9a-fA-F]{24}$/)
+          ? Collections.findOne('product', {
+            _id: Mongodb.ObjectId(_id)
+          }) : null
       }
     },
     products: {

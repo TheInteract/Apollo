@@ -1,7 +1,16 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 
 import styles from './withLoader.styl'
+
+const redirect = () => <Redirect to={{ pathname: '/product' }} />
+
+function handleError (isError = () => false, HandleError = redirect) {
+  return function (Component) {
+    return (props) => isError(props) ? <HandleError /> : <Component {...props} />
+  }
+}
 
 function withLoader (Component) {
   return class extends React.Component {
@@ -24,4 +33,4 @@ function withLoader (Component) {
   }
 }
 
-export default withLoader
+export { withLoader, handleError }

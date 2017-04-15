@@ -7,7 +7,7 @@ import { withRouter } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import { compose } from 'recompose'
 
-import withLoader from '../nt-core/withLoader.react'
+import { withLoader } from '../nt-core/withLoader.react'
 import styles from './ProductListPage.styl'
 
 const PRODUCTS_QUERY = gql`
