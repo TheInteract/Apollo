@@ -6,10 +6,10 @@ import { Route, withRouter } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import { compose } from 'recompose'
 
-import { handleError, withLoader } from '../nt-core/withLoader.react'
 import FeaturesPage from '../nt-features/FeaturesPage.react'
 import HomePage from '../nt-home/HomePage.react'
 import ResultsPage from '../nt-results/ResultsPage.react'
+import { handleError, withLoader } from '../nt-utils/withLoader.react'
 import styles from './MainPage.styl'
 
 const queryProduct = gql`
