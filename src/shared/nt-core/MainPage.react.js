@@ -26,7 +26,7 @@ const enhance = compose(
   graphql(queryProduct, {
     options: ({ match }) => ({ variables: { productId: match.params.productId } })
   }),
-  handleError((props) => (!props.data.product)),
+  handleError(({ data }) => (!data.product && !data.loading)),
   withLoader
 )
 
