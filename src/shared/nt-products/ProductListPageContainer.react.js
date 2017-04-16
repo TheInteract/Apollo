@@ -5,7 +5,6 @@ import { graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { compose } from 'recompose'
 
-import { withLoader } from '../nt-utils/withLoader.react'
 import ProductListPage from './ProductListPage.react'
 
 const PRODUCTS_QUERY = gql`
@@ -16,8 +15,14 @@ const PRODUCTS_QUERY = gql`
     }
   }
 `
+const enhance = compose(
+  withRouter,
+  graphql(PRODUCTS_QUERY),
+)
 
-const ResultsPageContainer = ({ data }) => <ProductListPage products={data.products} />
+const ResultsPageContainer = ({ data }) => (
+  <ProductListPage data={data} />
+)
 
 ResultsPageContainer.propTypes = {
   data: PropTypes.shape({
@@ -31,11 +36,5 @@ ResultsPageContainer.propTypes = {
     error: PropTypes.bool
   })
 }
-
-const enhance = compose(
-  withRouter,
-  graphql(PRODUCTS_QUERY),
-  withLoader
-)
 
 export default enhance(ResultsPageContainer)

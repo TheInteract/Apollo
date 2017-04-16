@@ -6,6 +6,7 @@ import { graphql } from 'react-apollo'
 import { withRouter } from 'react-router'
 import { compose } from 'recompose'
 
+import { Loading } from '../nt-uikit'
 import CreateFeatureForm from './CreateFeatureForm.react'
 import FeatureCard from './FeatureCard.react'
 
@@ -71,6 +72,7 @@ class FeaturesPage extends React.Component {
           active: PropTypes.bool,
         }).isRequired,
       ),
+      loading: PropTypes.bool,
       subscribeToMore: PropTypes.func,
     }).isRequired
   }
@@ -89,16 +91,21 @@ class FeaturesPage extends React.Component {
     })
   }
 
+  renderLoadingState = () => (
+    <Loading />
+  )
+
   renderFeatures = (features) => features ? features.map((feature, index) => (
     <FeatureCard key={index} {...feature} />
   )) : null
 
   render () {
+    const { features, loading } = this.props.data
     return (
       <div>
         Features Page
         <CreateFeatureForm productId={this.props.productId} />
-        {this.renderFeatures(this.props.data.features)}
+        {loading ? this.renderLoadingState() : this.renderFeatures(features)}
       </div>
     )
   }

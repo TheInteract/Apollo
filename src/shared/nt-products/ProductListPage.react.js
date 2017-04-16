@@ -1,27 +1,43 @@
-import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
+import { Loading } from '../nt-uikit'
 import styles from './ProductListPage.styl'
 
 class ResultsPage extends React.Component {
   static propTypes = {
-    products: PropTypes.arrayOf(
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired
-      })
-    ).isRequired
+    data: PropTypes.shape({
+      products: PropTypes.arrayOf(
+        PropTypes.shape({
+          _id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired
+        })
+      ).isRequired,
+      loading: PropTypes.bool,
+      error: PropTypes.bool
+    })
   }
 
+  renderLoadingState = () => (
+    <Loading />
+  )
+
+  renderProducts = () => this.props.data.products.map((product, index) => (
+    <Link key={index} to={`/${product._id}`}>
+      <div className={styles.nt__link}>{product.name}</div>
+    </Link>
+  ))
+
   render () {
+    const loading = this.props.data.loading
+
     return (
-      <div className={classNames(styles.column, styles.column__half, styles['column__offset-one-quarter'])}>
-        <div className={styles.panel__head}>Project List</div>
-        {this.props.products.map(
-            (p, index) => <NavLink to={`/products/${p._id}`} className={styles.panel__block} key={index}>{p.name}</NavLink>
-        )}
+      <div className={styles.nt}>
+        <div className={styles.nt__products}>
+          <div className={styles.nt__header}>Project List</div>
+          {loading ? this.renderLoadingState() : this.renderProducts()}
+        </div>
       </div>
     )
   }

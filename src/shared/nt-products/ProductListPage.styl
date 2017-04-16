@@ -1,46 +1,31 @@
 @require('../nt-design/colorsets')
 @require('../nt-styles/global')
 
-.column
-    padding 0.75rem
- 
-    &__half
-        -webkit-box-flex 0
-        -ms-flex none
-        flex none
-        width 50%
+.nt
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  display flex
+  justify-content center
+  align-items flex-start
+  overflow hidden
+  padding 20px
 
-    &__offset-one-quarter
-        margin-left 25%
+  &__products
+    max-width 600px
+    width 50%
+    border 1px solid c-gray200
+    border-radius 5px
 
-.panel
-    font-size 1rem
+  &__header
+    padding 15px 25px
+    background-color c-gray50
 
-    &__head
-        background-color whitesmoke
-        border-radius 3px 3px 0 0
-        color #363636
-        font-size 1.25em
-        font-weight 300
-        line-height 1.25
-        padding 10px 25px
+  &__link
+    padding 10px 25px
+    border-top 1px solid c-gray200
 
-        &:first-child
-            border-top 1px solid c-gray300
-    &__block
-        cursor pointer
-        align-items center
-        color #363636
-        display -webkit-box
-        display -ms-flexbox
-        display flex
-        justify-content flex-start
-        padding 10px 25px
-
-        &:hover
-            background-color whitesmoke
-    
-    &__head, &__block
-        border-bottom 1px solid c-gray300
-        border-left 1px solid c-gray300
-        border-right 1px solid c-gray300
+    &:hover
+      background-color c-gray50
