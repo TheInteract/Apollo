@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Loading } from '../nt-uikit'
 import styles from './ProductListPage.styl'
 
-class ResultsPage extends React.Component {
+class ProductListPage extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
       products: PropTypes.arrayOf(
@@ -16,7 +16,7 @@ class ResultsPage extends React.Component {
       ).isRequired,
       loading: PropTypes.bool,
       error: PropTypes.bool
-    })
+    }).isRequired
   }
 
   renderLoadingState = () => (
@@ -43,4 +43,4 @@ class ResultsPage extends React.Component {
   }
 }
 
-export default ResultsPage
+export default ProductListPage
