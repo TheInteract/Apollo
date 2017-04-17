@@ -40,13 +40,13 @@ class MainPage extends React.Component {
     </NavLink>
   )
 
-  renderSubRoutes = (to, Component, props) => {
+  renderSubRoutes = (to, Component) => {
     const productId = this.props.match.params.productId
 
     return (
       <Route
-        path={`${this.props.match.url}/features`}
-        render={() => <FeaturesPage productId={productId} />}
+        path={`${this.props.match.url}/${to}`}
+        render={() => <Component productId={productId} />}
       />
     )
   }

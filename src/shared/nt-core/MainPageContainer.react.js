@@ -36,7 +36,7 @@ class MainPageContainer extends React.Component {
       product: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-      }).isRequired,
+      }),
       loading: PropTypes.bool,
       error: PropTypes.bool
     })

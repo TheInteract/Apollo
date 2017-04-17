@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, Route, Switch } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
 import ProductListPageContainer from '../nt-products/ProductListPageContainer.react'
 import MainPageContainer from './MainPageContainer.react'
