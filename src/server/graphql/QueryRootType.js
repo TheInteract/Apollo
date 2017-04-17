@@ -21,6 +21,12 @@ const QueryRootType = new GraphQLObjectType({
           }) : null
       }
     },
+    products: {
+      type: new GraphQLList(ProductType),
+      resolve: async (_) => {
+        return Collections.find('product')
+      }
+    },
     feature: {
       type: FeatureType,
       args: { _id: { type: GraphQLString } },

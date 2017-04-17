@@ -1,0 +1,31 @@
+@require('../nt-design/colorsets')
+@require('../nt-styles/global')
+
+.nt
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  display flex
+  justify-content center
+  align-items flex-start
+  overflow hidden
+  padding 20px
+
+  &__products
+    max-width 600px
+    width 50%
+    border 1px solid c-gray200
+    border-radius 5px
+
+  &__header
+    padding 15px 25px
+    background-color c-gray50
+
+  &__link
+    padding 10px 25px
+    border-top 1px solid c-gray200
+
+    &:hover
+      background-color c-gray50

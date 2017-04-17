@@ -75,7 +75,8 @@
     "eslint-plugin-standard": "^3.0.1",
     "import-sort-style-module": "^2.4.0",
     "nodemon": "^1.11.0",
-    "prettier": "^0.22.0"
+    "prettier": "^0.22.0",
+    "stylint": "^1.5.9"
   },
   "dependencies": {
     "apollo-client": "^1.0.2",

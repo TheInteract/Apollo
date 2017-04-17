@@ -5,6 +5,9 @@ services:
 node_js:
 - '7.8'
 install:
+- curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+- echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+- sudo apt-get update && sudo apt-get install yarn
 - yarn
 after_success:
 - yarn build
@@ -31,4 +34,3 @@ before_install:
 - gcloud config set project "$PROJECT_ID"
 - gcloud config set container/use_client_certificate True
 - gcloud container clusters get-credentials cluster-interact -z asia-east1-a
-- npm i -g yarn
