@@ -10,6 +10,8 @@ import { Loading } from '../nt-uikit'
 import CreateFeatureForm from './CreateFeatureForm.react'
 import FeatureCard from './FeatureCard.react'
 
+import styles from './FeaturesPage.styl'
+
 const FEATURES_SUBSCRIPTION = gql`
   subscription onFeatureAdded ($productId: String!) {
     featureAdded (productId: $productId) {
@@ -102,7 +104,7 @@ class FeaturesPage extends React.Component {
   render () {
     const { features, loading } = this.props.data
     return (
-      <div>
+      <div className={styles.nt}>
         Features Page
         <CreateFeatureForm productId={this.props.productId} />
         {loading ? this.renderLoadingState() : this.renderFeatures(features)}
