@@ -18,7 +18,7 @@ class MainPage extends React.Component {
     product: PropTypes.shape({
       _id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-    }).isRequired
+    }).isRequired,
   }
 
   renderName = () => (
@@ -40,6 +40,17 @@ class MainPage extends React.Component {
     </NavLink>
   )
 
+  renderSubRoutes = (to, Component) => {
+    const productId = this.props.match.params.productId
+
+    return (
+      <Route
+        path={`${this.props.match.url}/${to}`}
+        render={() => <Component productId={productId} />}
+      />
+    )
+  }
+
   render () {
     return (
       <div className={styles.layout}>
@@ -51,14 +62,8 @@ class MainPage extends React.Component {
         </div>
         <div className={styles.content}>
           <Route exact path={this.props.match.url} component={HomePage} />
-          <Route
-            path={`${this.props.match.url}/features`}
-            render={() => <FeaturesPage productId={this.props.match.params.productId} />}
-          />
-          <Route
-            path={`${this.props.match.url}/results`}
-            render={() => <ResultsPage productId={this.props.match.params.productId} />}
-          />
+          {this.renderSubRoutes('features', FeaturesPage)}
+          {this.renderSubRoutes('results', ResultsPage)}
         </div>
       </div>
     )

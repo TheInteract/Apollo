@@ -1,49 +1,14 @@
-import gql from 'graphql-tag'
-import PropTypes from 'prop-types'
 import React from 'react'
-import { graphql } from 'react-apollo'
-import { withRouter } from 'react-router'
-import { Route, Switch } from 'react-router-dom'
-import { compose } from 'recompose'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
-import LoginPage from '../nt-login/LoginPage.react'
-import MainPage from './MainPage.react'
-import NoMatch from './NoMatch.react'
-
-const MainPageContainer = ({ match, data }) => data.product ? (
-  <MainPage match={match} product={data.product} />
-) : (
-  <NoMatch />
-)
-
-MainPageContainer.propTypes = {
-  match: PropTypes.object.isRequired,
-  data: PropTypes.shape({
-    product: PropTypes.object,
-  }).isRequired,
-}
-
-const queryProduct = gql`
-  query getProduct($productId: String!) {
-    product(_id: $productId) {
-      _id
-      name
-    }
-  }
-`
-
-const enhance = compose(
-  withRouter,
-  graphql(queryProduct, {
-    options: ({ match }) => ({ variables: { productId: match.params.productId } })
-  })
-)
+import ProductListPageContainer from '../nt-products/ProductListPageContainer.react'
+import MainPageContainer from './MainPageContainer.react'
 
 const App = () => (
   <Switch>
-    <Route path='/login' component={LoginPage} />
-    <Route path='/:productId' render={enhance(MainPageContainer)} />
-    <Route component={NoMatch} />
+    <Redirect exact from='/' to='/products' />
+    <Route path='/products' component={ProductListPageContainer} />
+    <Route path='/:productId' component={MainPageContainer} />
   </Switch>
 )
 

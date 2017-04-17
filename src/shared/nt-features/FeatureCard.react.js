@@ -7,14 +7,6 @@ import { compose } from 'recompose'
 
 import styles from './FeatureCard.styl'
 
-// const FEATURE_SUBSCRIPTION = gql`
-//   subscription onFeatureClosed {
-//     featureClosed {
-//       active
-//     }
-//   }
-// `
-
 const closeFeature = gql`
   mutation closeFeature($_id: String!) {
     closeFeature(_id: $_id)
@@ -39,17 +31,12 @@ class FeatureCard extends React.Component {
       B: PropTypes.number.isRequired,
     }).isRequired,
     active: PropTypes.bool,
-    // subscribeToMore: PropTypes.func,
   }
 
   constructor (props) {
     super(props)
     this.state = { showCloseConfirmation: false }
   }
-
-  // componentDidMount () {
-  //   console.log('subscribeToMore', this.props.subscribeToMore)
-  // }
 
   hideCloseConfirmation = () => {
     this.setState({ showCloseConfirmation: false })
@@ -65,23 +52,23 @@ class FeatureCard extends React.Component {
   }
 
   renderName = () => (
-    <div className={styles.n__name}>
+    <div className={styles.nt__name}>
       {this.props.name}
     </div>
   )
 
   renderCloseButton = () => this.state.showCloseConfirmation ? (
-    <div className={styles.n__closeConfirmation}>
+    <div className={styles.nt__closeConfirmation}>
       Do you want to close this experiment?
-      <div className={styles.n__closeButton} onClick={this.handleClose}>
+      <div className={styles.nt__closeButton} onClick={this.handleClose}>
         Close
       </div>
-      <div className={styles.n__closeButton} onClick={this.hideCloseConfirmation}>
+      <div className={styles.nt__closeButton} onClick={this.hideCloseConfirmation}>
         Cancel
       </div>
     </div>
   ) : (
-    <div className={styles.n__closeButton} onClick={this.showCloseConfirmation}>
+    <div className={styles.nt__closeButton} onClick={this.showCloseConfirmation}>
       Close
     </div>
   )
@@ -89,14 +76,14 @@ class FeatureCard extends React.Component {
   renderClosedLabel = () => <div>Closed</div>
 
   renderHeader = () => (
-    <div className={styles.n__header}>
+    <div className={styles.nt__header}>
       {this.renderName()}
       {this.props.active ? this.renderCloseButton() : this.renderClosedLabel()}
     </div>
   )
 
   renderExpected = version => (
-    <div className={styles.n__expected}>
+    <div className={styles.nt__expected}>
       Expected {version}: {this.props.proportion[version]}%
     </div>
   )
@@ -104,19 +91,19 @@ class FeatureCard extends React.Component {
   renderActual = version => {
     const count = this.props.count[version]
     return (
-      <div className={styles.n__actual}>
+      <div className={styles.nt__actual}>
         Actual: {count} user{count > 1 ? 's' : ''}
       </div>
     )
   }
 
   renderProportion = () => (
-    <div className={styles.n__proportion}>
-      <div className={styles.n__A}>
+    <div className={styles.nt__proportion}>
+      <div className={styles.nt__A}>
         {this.renderExpected('A')}
         {this.renderActual('A')}
       </div>
-      <div className={styles.n__B}>
+      <div className={styles.nt__B}>
         {this.renderExpected('B')}
         {this.renderActual('B')}
       </div>
@@ -124,7 +111,7 @@ class FeatureCard extends React.Component {
   )
 
   render () {
-    const className = classNames(styles.n, {
+    const className = classNames(styles.nt, {
       [styles['--closed']]: !this.props.active,
     })
 
