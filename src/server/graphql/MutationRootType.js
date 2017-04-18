@@ -32,12 +32,15 @@ const MutationRootType = new GraphQLObjectType({
       }
     },
     closeFeature: {
-      type: GraphQLBoolean,
+      type: FeatureType,
       description: 'Close a feature',
       args: { _id: { type: GraphQLString } },
-      resolve: async (_, { _id }) => Collections.update('feature', {
-        _id: Mongodb.ObjectId(_id)
-      }, { $set: { active: false } })
+      resolve: async (_, { _id }) => {
+        const updatedFeature = await Collections.update('feature', {
+          _id: Mongodb.ObjectId(_id)
+        }, { $set: { active: false } })
+        return updatedFeature.value
+      }
     }
   })
 })
