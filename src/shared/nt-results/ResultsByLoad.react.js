@@ -37,13 +37,10 @@ export const mapActionsToLinks = session => {
 
   if (actions.length > 1) {
     for (let i = 0; i < actions.length - 1; i++) {
-      // TODO: In the near future, please do the line for target is source
-      if (actions[i].actionTypeId !== actions[i + 1].actionTypeId) {
-        links.push({
-          source: actions[i].actionTypeId,
-          target: actions[i + 1].actionTypeId
-        })
-      }
+      links.push({
+        source: actions[i].actionTypeId,
+        target: actions[i + 1].actionTypeId
+      })
     }
   }
   return links
@@ -62,7 +59,7 @@ export const generateLinks = sessions => _.flow([
 ])(sessions)
 
 export const generatePaths = sessions => sessions.map(session => {
-  return session.actions.map(action => ({ id: action.actionTypeId }))
+  return _.compact(session.actions.map(action => action.actionTypeId))
 })
 
 class ResultsByLoad extends React.Component {
@@ -86,7 +83,7 @@ class ResultsByLoad extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody().strength(-1000))
       .force('link', d3.forceLink()
@@ -108,9 +105,10 @@ class ResultsByLoad extends React.Component {
   }
 
   renderPaths = () => {
+    console.log(this.state.nodes)
     const line = d3.line()
-      .x(d => _.find(this.state.nodes, { id: d.id }).x)
-      .y(d => _.find(this.state.nodes, { id: d.id }).y)
+      .x(d => _.find(this.state.nodes, { id: d }).x)
+      .y(d => _.find(this.state.nodes, { id: d }).y)
       .curve(d3.curveCardinal.tension(0))
 
     return this.state.paths.map((path, index) => (
@@ -172,6 +170,7 @@ class ResultsByLoad extends React.Component {
   ))
 
   render () {
+    console.log(this.state.paths)
     return (
       <svg width={this.props.width} height={this.props.height}>
         <linearGradient id='gradient'>
