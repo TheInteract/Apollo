@@ -30,7 +30,7 @@ class ProductListPage extends React.Component {
   ))
 
   render () {
-    const loading = this.props.data.loading
+    const { loading } = this.props.data
 
     return (
       <div className={styles.nt}>

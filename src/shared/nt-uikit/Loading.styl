@@ -8,6 +8,7 @@ $l-spin-time = 1000ms
 @keyframes spinAround
   from
     transform rotate(0deg)
+
   to
     transform rotate(360deg)
 
@@ -20,9 +21,11 @@ $l-spin-time = 1000ms
   &--hide
     color transparent
 
-  &__loading-big
+  &__big
     padding 10px 25px
 
+  &__loading-big
+  
     &:before
       display block
       margin-bottom 20px

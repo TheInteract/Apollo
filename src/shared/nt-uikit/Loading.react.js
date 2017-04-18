@@ -20,9 +20,12 @@ class Loading extends React.Component {
   render () {
     const { size, message, loading } = this.props
     return (
-      <div className={classNames(styles.nt, {
-        [styles['nt--hide']]: loading
-      })}>
+      <div className={classNames(
+          styles.nt, {
+            [styles['nt__big']]: size === 'big',
+            [styles['nt--hide']]: loading && size === 'small'
+          }
+      )}>
         {loading && <div className={[ styles[`nt__loading-${size}`] ]} />}
         {message}
       </div>
