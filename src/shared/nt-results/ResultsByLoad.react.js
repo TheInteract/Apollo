@@ -105,7 +105,6 @@ class ResultsByLoad extends React.Component {
   }
 
   renderPaths = () => {
-    console.log(this.state.nodes)
     const line = d3.line()
       .x(d => _.find(this.state.nodes, { id: d }).x)
       .y(d => _.find(this.state.nodes, { id: d }).y)
@@ -170,7 +169,6 @@ class ResultsByLoad extends React.Component {
   ))
 
   render () {
-    console.log(this.state.paths)
     return (
       <svg width={this.props.width} height={this.props.height}>
         <linearGradient id='gradient'>
