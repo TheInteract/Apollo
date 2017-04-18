@@ -1,6 +1,8 @@
+import classNames from 'classnames'
 import * as d3 from 'd3'
 import gql from 'graphql-tag'
 import _ from 'lodash'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
@@ -46,27 +48,27 @@ export const mapActionsToLinks = session => {
   return links
 }
 
-export const generateNodes = sessions => _.flow([
+export const generateNodes = (sessions = []) => _.flow([
   sessions => _.map(sessions, mapActionsToNodes),
   nodes => _.flattenDeep(nodes),
   nodes => _.uniqBy(nodes, 'id'),
 ])(sessions)
 
-export const generateLinks = sessions => _.flow([
+export const generateLinks = (sessions = []) => _.flow([
   sessions => _.map(sessions, mapActionsToLinks),
   links => _.flattenDeep(links),
   links => _.uniqWith(links, _.isEqual)
 ])(sessions)
 
-export const generatePaths = sessions => sessions.map(session => {
+export const generatePaths = (sessions = []) => sessions.map(session => {
   return _.compact(session.actions.map(action => action.actionTypeId))
 })
 
 class ResultsByLoad extends React.Component {
   static propTypes = {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    data: React.PropTypes.object,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    data: PropTypes.object,
   }
 
   static defaultProps = {
@@ -79,7 +81,8 @@ class ResultsByLoad extends React.Component {
     this.state = {
       nodes: generateNodes(this.props.data.sessions),
       links: generateLinks(this.props.data.sessions),
-      paths: generatePaths(this.props.data.sessions)
+      paths: generatePaths(this.props.data.sessions),
+      selectedNodeId: undefined,
     }
   }
 
@@ -93,7 +96,9 @@ class ResultsByLoad extends React.Component {
       )
       .force('x', d3.forceX(this.props.width / 2))
       .force('y', d3.forceY(this.props.height / 2))
+  }
 
+  componentDidMount () {
     this.force.on('tick', () => this.setState({
       links: this.state.links,
       nodes: this.state.nodes
@@ -104,24 +109,44 @@ class ResultsByLoad extends React.Component {
     this.force.stop()
   }
 
-  renderPaths = () => {
-    const line = d3.line()
-      .x(d => _.find(this.state.nodes, { id: d }).x)
-      .y(d => _.find(this.state.nodes, { id: d }).y)
-      .curve(d3.curveCardinal.tension(0))
-
-    return this.state.paths.map((path, index) => (
-      <path
-        key={`path-${index}`}
-        className={styles.path}
-        d={line(path)}
-        strokeLinecap='round'
-        fill='none'
-      />
-    ))
+  getCurveData = ({ source, target }) => {
+    return `M ${source.x}, ${source.y}
+      C ${source.x + 150},${source.y}
+        ${target.x - 150}, ${target.y}
+        ${target.x}, ${target.y}`
   }
 
-  renderGradient = (id, source, target) => {
+  handleMouseEnterNode = id => () => {
+    this.setState({ selectedNodeId: id })
+  }
+
+  handleMouseLeaveNode = () => {
+    this.setState({ selectedNodeId: undefined })
+  }
+
+  isSelected = id => this.state.selectedNodeId === id
+
+  renderLinearGradientRef = () => (
+    <linearGradient id='gradient'>
+      <stop className={styles.nt__gradientStart} offset='10%' />
+      <stop className={styles.nt__gradientEnd} offset='90%' />
+    </linearGradient>
+  )
+
+  renderArrowMarker = () => (
+    <marker
+      id='arrowHead'
+      viewBox='0 -5 10 10'
+      refX='12'
+      orient='auto'
+      markerWidth='10'
+      markerHeight='10'
+    >
+      <path d='M 0,-5 L 8,0 L 0,5' className={styles.nt__arrowHead} />
+    </marker>
+  )
+
+  renderGradient = (id, { source, target }) => {
     const angle = Math.atan2(source.y - target.y, source.x - target.x)
 
     function angleToPoints (angle) {
@@ -144,48 +169,76 @@ class ResultsByLoad extends React.Component {
     )
   }
 
+  renderPaths = () => {
+    const line = d3.line()
+      .x(d => _.find(this.state.nodes, { id: d }).x)
+      .y(d => _.find(this.state.nodes, { id: d }).y)
+      .curve(d3.curveCardinal.tension(0))
+
+    return this.state.paths.map((path, index) => (
+      <path
+        key={`path-${index}`}
+        className={styles.nt__path}
+        d={line(path)}
+        strokeLinecap='round'
+        fill='none'
+      />
+    ))
+  }
+
   renderLinks = () => this.state.links.map((link, index) => {
+    const selected = this.isSelected(link.source.id) ||
+      this.isSelected(link.target.id)
+
+    const stroke = {
+      stroke: `url(#gradient-${index})`
+    }
+
+    const className = classNames(styles.nt__line, {
+      [styles['--selected']]: selected,
+      [styles['--not-selected']]: this.state.selectedNodeId && !selected,
+    })
+
     return (
       <g key={`link-${index}`}>
-        {this.renderGradient(`gradient-${index}`, link.source, link.target)}
+        {this.renderGradient(`gradient-${index}`, link)}
         <path
-          className={styles.line}
-          d={`M ${link.source.x}, ${link.source.y}
-            C ${link.source.x + 100},${link.source.y}
-              ${link.target.x - 100}, ${link.target.y}
-              ${link.target.x}, ${link.target.y}`}
+          className={className}
+          d={this.getCurveData(link)}
           markerEnd='url(#arrowHead)'
-          stroke={`url(#gradient-${index})`}
+          {...stroke}
         />
       </g>
     )
   })
 
-  renderNodes = () => this.state.nodes.map((node, index) => (
-    <g key={index} transform={`translate(${node.x || 0},${node.y || 0})`}>
-      <rect className={styles.node} x={-5} y={-8} width={10} height={16} />
-      <text x={-5} dy={25}>{node.type}</text>
-    </g>
-  ))
+  renderNodes = () => this.state.nodes.map((node, index) => {
+    const className = classNames(styles.nt__node, {
+      [styles['--not-selected']]: this.state.selectedNodeId && !this.isSelected(node.id)
+    })
+    const translate = `translate(${node.x || 0},${node.y || 0})`
+
+    return (
+      <g key={index} className={className} transform={translate}>
+        <rect
+          x={-5}
+          y={-8}
+          width={10}
+          height={16}
+          onMouseEnter={this.handleMouseEnterNode(node.id)}
+          onMouseLeave={this.handleMouseLeaveNode}
+        />
+        <text x={-5} dy={25}>{node.type}</text>
+      </g>
+    )
+  })
 
   render () {
     return (
       <svg width={this.props.width} height={this.props.height}>
-        <linearGradient id='gradient'>
-          <stop className={styles.from} offset='10%' />
-          <stop className={styles.to} offset='90%' />
-        </linearGradient>
-        <marker
-          id='arrowHead'
-          viewBox='0 -5 10 10'
-          refX='12'
-          orient='auto'
-          markerWidth='10'
-          markerHeight='10'
-        >
-          <path d='M 0,-5 L 8,0 L 0,5' className={styles.arrow} />
-        </marker>
-        {this.renderPaths()}
+        {this.renderLinearGradientRef()}
+        {this.renderArrowMarker()}
+        {!this.state.selectedNodeId && this.renderPaths()}
         {this.renderLinks()}
         {this.renderNodes()}
       </svg>
