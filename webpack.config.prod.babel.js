@@ -7,10 +7,19 @@ import webpack from 'webpack'
 
 export default {
   bail: true,
-  entry: [
-    path.join(__dirname, 'src/shared/nt-styles/base.styl'),
-    path.join(__dirname, 'src/client/client.prod.js'),
-  ],
+  // entry: [
+  //   path.join(__dirname, 'src/shared/nt-styles/base.styl'),
+  //   path.join(__dirname, 'src/client/client.prod.js'),
+  // ],
+  entry: {
+    app: [
+      path.join(__dirname, 'src/shared/nt-styles/base.styl'),
+      path.join(__dirname, 'src/client/client.prod.js'),
+    ],
+    vendor: [
+      'lodash'
+    ]
+  },
 
   output: {
     path: path.join(__dirname, 'static', 'build'),
@@ -105,6 +114,10 @@ export default {
           autoprefixer({ browsers: [ '> 5%', 'IE > 10', 'last 2 versions' ] })
         ]
       }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      chunks: [ 'vendor' ]
     })
   ],
 }

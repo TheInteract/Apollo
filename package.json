@@ -11,7 +11,9 @@
     "build": "better-npm-run build",
     "start": "npm-run-all --parallel start:ssr start:api",
     "start:ssr": "better-npm-run start:ssr",
-    "start:api": "better-npm-run start:api"
+    "start:api": "better-npm-run start:api",
+    "stats": "webpack --config ./webpack.config.dev.babel.js --profile --json > stats.json",
+    "stats:prod": "webpack --config ./webpack.config.prod.babel.js --profile --json > stats.prod.json"
   },
   "betterScripts": {
     "dev:ssr": {

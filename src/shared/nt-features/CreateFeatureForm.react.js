@@ -40,7 +40,7 @@ class CreateFeatureForm extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = Object.assign({}, initialState)
+    this.state = { ...initialState }
   }
 
   validateProportion = value => (
@@ -84,7 +84,7 @@ class CreateFeatureForm extends React.Component {
           }
         })
         .then(() => {
-          this.setState(Object.assign({}, initialState))
+          this.setState({ ...initialState })
         })
         .catch(e => {
           console.error(e)
@@ -127,7 +127,9 @@ class CreateFeatureForm extends React.Component {
           <button
             type='submit'
             className={
-              classNames({ [styles['--loading']]: this.state.loading })
+              classNames({
+                [styles['--loading']]: this.state.loading
+              })
             }
             disabled={this.state.loading}
           >

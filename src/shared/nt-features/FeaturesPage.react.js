@@ -29,9 +29,9 @@ const FEATURE_ADDED_SUBSCRIPTION = gql`
   }
 `
 
-const FEATURE_CHANGED_SUBSCRIPTION = gql`
-  subscription onFeatureChanged ($productId: String!) {
-    featureChanged (productId: $productId) {
+const FEATURE_UPDATED_SUBSCRIPTION = gql`
+  subscription onFeatureUpdated ($productId: String!) {
+    featureUpdated (productId: $productId) {
       _id
       active
     }
@@ -100,7 +100,7 @@ class FeaturesPage extends React.Component {
       }
     })
     this.props.data.subscribeToMore({
-      document: FEATURE_CHANGED_SUBSCRIPTION,
+      document: FEATURE_UPDATED_SUBSCRIPTION,
       variables: { productId: this.props.productId },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
@@ -108,7 +108,13 @@ class FeaturesPage extends React.Component {
         const updatedFeature = subscriptionData.data.featureChanged
 
         const index = findIndex(prev.features, { _id: updatedFeature._id })
-        return update(prev, { features: { [index]: { active: { $set: updatedFeature.active } } } })
+        return update(prev, {
+          features: {
+            [index]: {
+              active: { $set: updatedFeature.active }
+            }
+          }
+        })
       }
     })
   }

@@ -36,11 +36,11 @@ const MutationRootType = new GraphQLObjectType({
       description: 'Close a feature',
       args: { _id: { type: GraphQLString } },
       resolve: async (_, { _id }) => {
-        const updatedFeature = await Collections.update('feature', {
+        const result = await Collections.update('feature', {
           _id: Mongodb.ObjectId(_id)
         }, { $set: { active: false } })
-        pubsub.publish('featureChanged', updatedFeature.value)
-        return updatedFeature.value
+        pubsub.publish('featureChanged', result.value)
+        return result.value
       }
     }
   })
