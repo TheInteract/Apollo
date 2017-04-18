@@ -225,7 +225,7 @@ class ResultsByLoad extends React.Component {
           onMouseEnter={this.handleMouseEnterNode(node.id)}
           onMouseLeave={this.handleMouseLeaveNode}
         />
-        <text x={-5} dy={25}>{node.type}</text>
+        <text dy={25} textAnchor='middle'>{node.type}</text>
       </g>
     )
   })
