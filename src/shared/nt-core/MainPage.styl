@@ -1,5 +1,5 @@
-@require('../nt-design/colorsets')
-@require('../nt-styles/global')
+@require '../nt-design/colorsets'
+@require '../nt-styles/global'
 
 $side-bar-size = 200px
 $horizontal-padding = 30px
@@ -26,13 +26,16 @@ $vertical-padding = 15px
   z-index 1
   width $side-bar-size
   background-color c-gray600
+  box-shadow 2px 0 11px 0 rgba(c-gray600, 0.5)
   color c-gray200
 
 .content
   right 0
   left $side-bar-size
+  display flex
+  justify-content center
   padding $vertical-padding $horizontal-padding
-  background-color c-gray20
+  background-color c-gray50
 
 .name
   margin-bottom 15px
@@ -45,8 +48,8 @@ $vertical-padding = 15px
   box-sizing border-box
   padding 10px 15px
   width 100%
-  background-color
-  &:hover
+
+  background-color, &:hover
     background-color c-gray550
     color white
 
