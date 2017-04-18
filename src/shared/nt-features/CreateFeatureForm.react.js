@@ -1,10 +1,10 @@
-import classNames from 'classnames'
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
 
+import LoadingComponent from '../nt-uikit/Loading.react'
 import styles from './CreateFeatureForm.styl'
 
 const createFeature = gql`
@@ -126,14 +126,13 @@ class CreateFeatureForm extends React.Component {
         <div className={styles.nt__submit}>
           <button
             type='submit'
-            className={
-              classNames({
-                [styles['--loading']]: this.state.loading
-              })
-            }
             disabled={this.state.loading}
           >
-            Submit
+            <LoadingComponent
+              message='Submit'
+              size='small'
+              loading={this.state.loading}
+            />
           </button>
         </div>
       </form>

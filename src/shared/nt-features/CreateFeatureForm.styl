@@ -69,20 +69,3 @@ $l-spin-time = 1000ms
 
     &:focus
       border-color c-gray300
-
-    &.\\--loading
-      color transparent
-      pointer-events none
-
-      &:after
-        position absolute
-        top 'calc(50% - (%s / 2))' % $l-size
-        left 'calc(50% - (%s / 2))' % $l-size
-        display block
-        width $l-size
-        height $l-size
-        border $l-border solid c-gray50
-        border-top $l-border solid c-gray500
-        border-radius 50%
-        content ''
-        animation spinAround $l-spin-time infinite linear

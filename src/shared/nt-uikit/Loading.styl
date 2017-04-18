@@ -1,6 +1,7 @@
-@require('../nt-design/colorsets')
+@require '../nt-design/colorsets'
 
-$l-size = 50px
+$l-size-big = 50px
+$l-size-small = 1em
 $l-border = 5px
 $l-spin-time = 1000ms
 
@@ -14,16 +15,42 @@ $l-spin-time = 1000ms
   display flex
   flex-direction column
   align-items center
-  padding 10px 25px
   font-size 14px
 
-  &__loading:before
-    display block
-    margin-bottom 20px
-    width $l-size
-    height $l-size
-    border $l-border solid c-gray50
-    border-top $l-border solid c-gray500
-    border-radius 50%
-    content ''
-    animation spinAround $l-spin-time infinite linear
+  &--hide
+    color transparent
+
+  &__loading-big
+    padding 10px 25px
+
+    &:before
+      display block
+      margin-bottom 20px
+      width $l-size-big
+      height $l-size-big
+      border $l-border solid c-gray50
+      border-top $l-border solid c-gray500
+      border-radius 50%
+      content ''
+      animation spinAround $l-spin-time infinite linear
+
+  &__loading-small
+    position absolute
+    top 0
+    left 0
+    display flex
+    justify-content center
+    align-items center
+    width 100%
+    height 100%
+    pointer-events none
+
+    &:after
+      display block
+      width $l-size-small
+      height $l-size-small
+      border $l-border solid c-gray50
+      border-top $l-border solid c-gray500
+      border-radius 50%
+      content ''
+      animation spinAround $l-spin-time infinite linear
