@@ -39,6 +39,7 @@ const MutationRootType = new GraphQLObjectType({
         const updatedFeature = await Collections.update('feature', {
           _id: Mongodb.ObjectId(_id)
         }, { $set: { active: false } })
+        pubsub.publish('featureChanged', updatedFeature.value)
         return updatedFeature.value
       }
     }
