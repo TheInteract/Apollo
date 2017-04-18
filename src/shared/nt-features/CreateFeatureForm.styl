@@ -1,30 +1,25 @@
 @require '../nt-design/colorsets'
 
-$l-size = 1em
-$l-border = 2px
-$l-spin-time = 1000ms
-
-@keyframes spinAround
-  from
-    transform rotate(0deg)
-
-  to
-    transform rotate(360deg)
-
 .nt
-  margin 20px 0
+  box-sizing border-box
+  max-width 800px
   border 2px dashed c-gray200
   border-radius 5px
+  background-color white
 
   &__proportion
     display flex
     justify-content space-between
     align-items center
+    margin 0 -5px
+    box-shadow 0 1px 3px 0 rgba(c-gray600, 0.35)
     font-size 30px
     line-height 30px
 
   &__name
     padding 10px 25px
+    color c-gray500
+    font-weight 600
     font-size 16px
 
     input
@@ -57,6 +52,8 @@ $l-spin-time = 1000ms
     input, button
       padding 10px 20px
       background-color white
+      color c-gray500
+      font-weight 600
       font-size 16px
 
       &:hover

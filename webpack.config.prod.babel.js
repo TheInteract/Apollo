@@ -4,6 +4,7 @@ import AssetsPlugin from 'assets-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import webpack from 'webpack'
+import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
 
 export default {
   bail: true,
@@ -97,6 +98,7 @@ export default {
         BROWSER: JSON.stringify(true),
       },
     }),
+    new UglifyJSPlugin(),
     new ExtractTextPlugin({
       filename: '[name]-[contenthash].css',
       allChunks: true,

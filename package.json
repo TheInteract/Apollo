@@ -97,6 +97,7 @@
     "config": "^1.25.1",
     "css-loader": "^0.28.0",
     "css-modules-stylus": "^0.1.1",
+    "d3": "^4.7.4",
     "express": "^4.15.2",
     "express-graphql": "^0.6.3",
     "extract-text-webpack-plugin": "^2.1.0",
@@ -126,6 +127,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "subscriptions-transport-ws": "^0.5.5-alpha.0",
+    "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^2.3.3",
     "webpack-dev-middleware": "^1.10.1",
     "webpack-hot-middleware": "^2.17.1"
