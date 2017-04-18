@@ -101,14 +101,77 @@ class ResultsByLoad extends React.Component {
     this.force.stop()
   }
 
-  render () {
+  renderPaths = () => {
     const line = d3.line()
       .x(d => _.find(this.state.nodes, { id: d.id }).x)
       .y(d => _.find(this.state.nodes, { id: d.id }).y)
       .curve(d3.curveCardinal.tension(0))
 
+    return this.state.paths.map((path, index) => (
+      <path
+        key={`path-${index}`}
+        className={styles.path}
+        d={line(path)}
+        strokeLinecap='round'
+        fill='none'
+      />
+    ))
+  }
+
+  renderGradient = (id, source, target) => {
+    const angle = Math.atan2(source.y - target.y, source.x - target.x)
+
+    function angleToPoints (angle) {
+      var segment = Math.floor(angle / Math.PI * 2) + 2
+      var diagonal = (1 / 2 * segment + 1 / 4) * Math.PI
+      var op = Math.cos(Math.abs(diagonal - angle)) * Math.sqrt(2)
+      var x = op * Math.cos(angle)
+      var y = op * Math.sin(angle)
+
+      return {
+        x1: x < 0 ? 1 : 0,
+        y1: y < 0 ? 1 : 0,
+        x2: x >= 0 ? x : x + 1,
+        y2: y >= 0 ? y : y + 1
+      }
+    }
+
+    return (
+      <linearGradient id={id} xlinkHref='#gradient' {...angleToPoints(angle)} />
+    )
+  }
+
+  renderLinks = () => this.state.links.map((link, index) => {
+    return (
+      <g key={`link-${index}`}>
+        {this.renderGradient(`gradient-${index}`, link.source, link.target)}
+        <path
+          className={styles.line}
+          d={`M ${link.source.x}, ${link.source.y}
+            C ${link.source.x + 100},${link.source.y}
+              ${link.target.x - 100}, ${link.target.y}
+              ${link.target.x}, ${link.target.y}`}
+          markerEnd='url(#arrowHead)'
+          stroke={`url(#gradient-${index})`}
+        />
+      </g>
+    )
+  })
+
+  renderNodes = () => this.state.nodes.map((node, index) => (
+    <g key={index} transform={`translate(${node.x || 0},${node.y || 0})`}>
+      <rect className={styles.node} x={-5} y={-8} width={10} height={16} />
+      <text x={-5} dy={25}>{node.type}</text>
+    </g>
+  ))
+
+  render () {
     return (
       <svg width={this.props.width} height={this.props.height}>
+        <linearGradient id='gradient'>
+          <stop className={styles.from} offset='10%' />
+          <stop className={styles.to} offset='90%' />
+        </linearGradient>
         <marker
           id='arrowHead'
           viewBox='0 -5 10 10'
@@ -119,43 +182,9 @@ class ResultsByLoad extends React.Component {
         >
           <path d='M 0,-5 L 8,0 L 0,5' className={styles.arrow} />
         </marker>
-        <g>
-          {this.state.paths.map((path, index) => (
-            <path
-              key={`path-${index}`}
-              className={styles.path}
-              d={line(path)}
-              strokeLinecap='round'
-              fill='none'
-            />
-          ))}
-          {this.state.links.map((link, index) => {
-            const angle = Math.atan2(link.target.y - link.source.y, link.target.x - link.source.x) * 180 / Math.PI
-            return (
-              <g key={`link-${index}`}>
-                <linearGradient id={`gradient-${index}`} gradientTransform={`rotate(${angle})`}>
-                  <stop className={styles.from} offset='10%' />
-                  <stop className={styles.to} offset='90%' />
-                </linearGradient>
-                <path
-                  className={styles.line}
-                  d={`M ${link.source.x}, ${link.source.y}
-                    C ${link.source.x + 100},${link.source.y}
-                      ${link.target.x - 100}, ${link.target.y}
-                      ${link.target.x}, ${link.target.y}`}
-                  markerEnd='url(#arrowHead)'
-                  stroke={`url(#gradient-${index})`}
-                />
-              </g>
-            )
-          })}
-          {this.state.nodes.map((node, index) => (
-            <g key={index} transform={`translate(${node.x || 0},${node.y || 0})`}>
-              <rect className={styles.node} x={-5} y={-8} width={10} height={16} />
-              <text x={-5} dy={25}>{node.type}</text>
-            </g>
-          ))}
-        </g>
+        {this.renderPaths()}
+        {this.renderLinks()}
+        {this.renderNodes()}
       </svg>
     )
   }
