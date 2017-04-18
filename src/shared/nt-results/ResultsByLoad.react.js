@@ -20,12 +20,14 @@ const SESSIONS_QUERY = gql`
 
 const enhance = compose(
   graphql(SESSIONS_QUERY, {
-    options: ({ sessionTypeId }) => ({ variables: { sessionTypeId: sessionTypeId } })
+    options: ({ sessionTypeId }) => ({
+      variables: { sessionTypeId: sessionTypeId }
+    })
   })
 )
 
-export const mapActionsToNodes = ({ x, y }) => session => session.actions.map(action => {
-  const node = { id: action.actionTypeId, type: action.type, x: x, y: y }
+export const mapActionsToNodes = session => session.actions.map(action => {
+  const node = { id: action.actionTypeId, type: action.type, x: 100, y: 300 }
   return action.type === 'load' ? { ...node, fx: 100, fy: 300 } : node
 })
 
@@ -47,8 +49,8 @@ export const mapActionsToLinks = session => {
   return links
 }
 
-export const generateNodes = (sessions, { x, y }) => _.flow([
-  sessions => _.map(sessions, mapActionsToNodes({ x, y })),
+export const generateNodes = sessions => _.flow([
+  sessions => _.map(sessions, mapActionsToNodes),
   nodes => _.flattenDeep(nodes),
   nodes => _.uniqBy(nodes, 'id'),
 ])(sessions)
@@ -59,7 +61,7 @@ export const generateLinks = sessions => _.flow([
   links => _.uniqWith(links, _.isEqual)
 ])(sessions)
 
-export const generatePaths = (sessions, { x, y }) => sessions.map(session => {
+export const generatePaths = sessions => sessions.map(session => {
   return session.actions.map(action => ({ id: action.actionTypeId }))
 })
 
@@ -77,18 +79,21 @@ class ResultsByLoad extends React.Component {
 
   constructor (props) {
     super(props)
-    const center = { x: this.props.width / 2, y: this.props.height / 2 }
     this.state = {
-      nodes: generateNodes(this.props.data.sessions, center),
+      nodes: generateNodes(this.props.data.sessions),
       links: generateLinks(this.props.data.sessions),
-      paths: generatePaths(this.props.data.sessions, center)
+      paths: generatePaths(this.props.data.sessions)
     }
   }
 
   componentDidMount () {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody().strength(-1000))
-      .force('link', d3.forceLink().id(d => d.id).distance(200).links(this.state.links))
+      .force('link', d3.forceLink()
+        .id(d => d.id)
+        .distance(200)
+        .links(this.state.links)
+      )
       .force('x', d3.forceX(this.props.width / 2))
       .force('y', d3.forceY(this.props.height / 2))
 

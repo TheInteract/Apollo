@@ -8,7 +8,7 @@ import {
 const ActionType = new GraphQLObjectType({
   name: 'Action',
   fields: () => ({
-    type: { type: GraphQLString },
+    type: { type: new GraphQLNonNull(GraphQLString) },
     actionTypeId: { type: new GraphQLNonNull(GraphQLString) },
     url: { type: GraphQLString },
     target: { type: GraphQLString },
