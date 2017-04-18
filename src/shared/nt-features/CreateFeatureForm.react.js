@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -20,6 +21,13 @@ const createFeature = gql`
   }
 `
 
+const initialState = {
+  name: '',
+  A: 50,
+  B: 50,
+  loading: false
+}
+
 const enhance = compose(
   graphql(createFeature)
 )
@@ -32,11 +40,7 @@ class CreateFeatureForm extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {
-      name: undefined,
-      A: 50,
-      B: 50,
-    }
+    this.state = Object.assign({}, initialState)
   }
 
   validateProportion = value => (
@@ -65,19 +69,26 @@ class CreateFeatureForm extends React.Component {
   }
 
   handleSubmit = e => {
+    e.preventDefault()
     if (this.state.name && this.state.name !== '') {
-      this.props.mutate({
-        variables: {
-          name: this.state.name,
-          productId: this.props.productId,
-          proportion: {
-            A: this.state.A,
-            B: this.state.B,
+      this.setState({ loading: true })
+      this.props
+        .mutate({
+          variables: {
+            name: this.state.name,
+            productId: this.props.productId,
+            proportion: {
+              A: this.state.A,
+              B: this.state.B,
+            }
           }
-        },
-      })
-    } else {
-      e.preventDefault()
+        })
+        .then(() => {
+          this.setState(Object.assign({}, initialState))
+        })
+        .catch(e => {
+          console.error(e)
+        })
     }
   }
 
@@ -102,6 +113,7 @@ class CreateFeatureForm extends React.Component {
         <div className={styles.nt__name}>
           Name:
           <input
+            value={this.state.name}
             type='text'
             onChange={this.handleNameChange}
           />
@@ -112,7 +124,15 @@ class CreateFeatureForm extends React.Component {
           {this.renderProportionInput('B')}
         </div>
         <div className={styles.nt__submit}>
-          <input type='submit' value='Submit' />
+          <button
+            type='submit'
+            className={
+              classNames({ [styles['--loading']]: this.state.loading })
+            }
+            disabled={this.state.loading}
+          >
+            Submit
+          </button>
         </div>
       </form>
     )

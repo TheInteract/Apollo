@@ -1,4 +1,15 @@
-@require('../nt-design/colorsets')
+@require '../nt-design/colorsets'
+
+$l-size = 1em
+$l-border = 2px
+$l-spin-time = 1000ms
+
+@keyframes spinAround
+  from
+    transform rotate(0deg)
+
+  to
+    transform rotate(360deg)
 
 .nt
   margin 20px 0
@@ -43,7 +54,7 @@
   &__submit
     padding 10px 25px
 
-    input
+    input, button
       padding 10px 20px
       background-color white
       font-size 16px
@@ -51,9 +62,27 @@
       &:hover
         border-color c-gray300
 
-  input
+  input, button
+    position relative
     border 2px solid c-gray200
     border-radius 4px
 
     &:focus
       border-color c-gray300
+
+    &.\\--loading
+      color transparent
+      pointer-events none
+
+      &:after
+        position absolute
+        top 'calc(50% - (%s / 2))' % $l-size
+        left 'calc(50% - (%s / 2))' % $l-size
+        display block
+        width $l-size
+        height $l-size
+        border $l-border solid c-gray50
+        border-top $l-border solid c-gray500
+        border-radius 50%
+        content ''
+        animation spinAround $l-spin-time infinite linear
