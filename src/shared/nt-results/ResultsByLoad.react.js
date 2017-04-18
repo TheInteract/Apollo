@@ -190,10 +190,6 @@ class ResultsByLoad extends React.Component {
     const selected = this.isSelected(link.source.id) ||
       this.isSelected(link.target.id)
 
-    const stroke = {
-      stroke: `url(#gradient-${index})`
-    }
-
     const className = classNames(styles.nt__line, {
       [styles['--selected']]: selected,
       [styles['--not-selected']]: this.state.selectedNodeId && !selected,
@@ -206,7 +202,7 @@ class ResultsByLoad extends React.Component {
           className={className}
           d={this.getCurveData(link)}
           markerEnd='url(#arrowHead)'
-          {...stroke}
+          stroke={`url(#gradient-${index})`}
         />
       </g>
     )
@@ -214,7 +210,8 @@ class ResultsByLoad extends React.Component {
 
   renderNodes = () => this.state.nodes.map((node, index) => {
     const className = classNames(styles.nt__node, {
-      [styles['--not-selected']]: this.state.selectedNodeId && !this.isSelected(node.id)
+      [styles['--not-selected']]: this.state.selectedNodeId &&
+        !this.isSelected(node.id)
     })
     const translate = `translate(${node.x || 0},${node.y || 0})`
 
