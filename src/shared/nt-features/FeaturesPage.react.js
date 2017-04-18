@@ -105,8 +105,9 @@ class FeaturesPage extends React.Component {
     const { features, loading } = this.props.data
     return (
       <div className={styles.nt}>
-        Features Page
-        <CreateFeatureForm productId={this.props.productId} />
+        <div className={styles.nt__create}>
+          <CreateFeatureForm productId={this.props.productId} />
+        </div>
         {loading ? this.renderLoadingState() : this.renderFeatures(features)}
       </div>
     )

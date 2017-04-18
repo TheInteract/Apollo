@@ -1,9 +1,11 @@
 @require '../nt-design/colorsets'
 
 .nt
-  margin 20px 0
+  box-sizing border-box
+  max-width 800px
   border 2px dashed c-gray200
   border-radius 5px
+  background-color white
 
   &__proportion
     display flex
@@ -11,10 +13,14 @@
     align-items center
     font-size 30px
     line-height 30px
+    margin 0 -5px
+    box-shadow 0 1px 3px 0 rgba(c-gray600, 0.35)
 
   &__name
     padding 10px 25px
     font-size 16px
+    font-weight 600
+    color c-gray500
 
     input
       margin-left 10px
@@ -45,8 +51,10 @@
 
     input
       padding 10px 20px
+      color c-gray500
       background-color white
       font-size 16px
+      font-weight 600
 
       &:hover
         border-color c-gray300

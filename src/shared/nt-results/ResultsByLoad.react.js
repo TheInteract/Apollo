@@ -24,6 +24,45 @@ const enhance = compose(
   })
 )
 
+export const mapActionsToNodes = ({ x, y }) => session => session.actions.map(action => {
+  const node = { id: action.actionTypeId, type: action.type, x: x, y: y }
+  return action.type === 'load' ? { ...node, fx: 100, fy: 300 } : node
+})
+
+export const mapActionsToLinks = session => {
+  const actions = session.actions
+  const links = []
+
+  if (actions.length > 1) {
+    for (let i = 0; i < actions.length - 1; i++) {
+      // TODO: In the near future, please do the line for target is source
+      if (actions[i].actionTypeId !== actions[i + 1].actionTypeId) {
+        links.push({
+          source: actions[i].actionTypeId,
+          target: actions[i + 1].actionTypeId
+        })
+      }
+    }
+  }
+  return links
+}
+
+export const generateNodes = (sessions, { x, y }) => _.flow([
+  sessions => _.map(sessions, mapActionsToNodes({ x, y })),
+  nodes => _.flattenDeep(nodes),
+  nodes => _.uniqBy(nodes, 'id'),
+])(sessions)
+
+export const generateLinks = sessions => _.flow([
+  sessions => _.map(sessions, mapActionsToLinks),
+  links => _.flattenDeep(links),
+  links => _.uniqWith(links, _.isEqual)
+])(sessions)
+
+export const generatePaths = (sessions, { x, y }) => sessions.map(session => {
+  return session.actions.map(action => ({ id: action.actionTypeId }))
+})
+
 class ResultsByLoad extends React.Component {
   static propTypes = {
     width: React.PropTypes.number,
@@ -38,56 +77,18 @@ class ResultsByLoad extends React.Component {
 
   constructor (props) {
     super(props)
+    const center = { x: this.props.width / 2, y: this.props.height / 2 }
     this.state = {
-      nodes: _.uniqBy(_.flattenDeep(this.props.data.sessions.map(session => {
-        return session.actions.map(action => {
-          const node = {
-            id: action.actionTypeId,
-            type: action.type,
-            x: this.props.width / 2,
-            y: this.props.height / 2
-          }
-          if (action.type === 'load') {
-            return { ...node, fx: 100, fy: 300 }
-          } else {
-            return node
-          }
-        })
-      })), 'id'),
-      links: _.uniqWith(_.flattenDeep(this.props.data.sessions.map(session => {
-        const actions = session.actions
-        const temp = []
-        if (actions.length > 1) {
-          for (let i = 0; i < actions.length - 1; i++) {
-            if (actions[i].type !== 'focus' && actions[i + 1].type !== 'blur') {
-              if (actions[i].actionTypeId !== actions[i + 1].actionTypeId) {
-                temp.push({ source: actions[i].actionTypeId, target: actions[i + 1].actionTypeId })
-              }
-              // TODO: In the near future, please do the line for target is source
-            }
-          }
-        }
-        return temp
-      })), _.isEqual),
-      paths: this.props.data.sessions.map(session => {
-        return _.compact(session.actions.map(action => {
-          if (action.type !== 'focus' && action.type !== 'blur') {
-            return {
-              id: action.actionTypeId,
-              type: action.type,
-              x: this.props.width / 2,
-              y: this.props.height / 2
-            }
-          }
-        }))
-      })
+      nodes: generateNodes(this.props.data.sessions, center),
+      links: generateLinks(this.props.data.sessions),
+      paths: generatePaths(this.props.data.sessions, center)
     }
   }
 
   componentDidMount () {
     this.force = d3.forceSimulation(this.state.nodes)
-      .force('charge', d3.forceManyBody().strength(-500))
-      .force('link', d3.forceLink().id(d => d.id).distance(150).links(this.state.links))
+      .force('charge', d3.forceManyBody().strength(-1000))
+      .force('link', d3.forceLink().id(d => d.id).distance(200).links(this.state.links))
       .force('x', d3.forceX(this.props.width / 2))
       .force('y', d3.forceY(this.props.height / 2))
 
