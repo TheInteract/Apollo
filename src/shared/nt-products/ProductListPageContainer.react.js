@@ -20,11 +20,11 @@ const enhance = compose(
   graphql(PRODUCTS_QUERY),
 )
 
-const ResultsPageContainer = ({ data }) => (
+const ProductListPageContainer = ({ data }) => (
   <ProductListPage data={data} />
 )
 
-ResultsPageContainer.propTypes = {
+ProductListPageContainer.propTypes = {
   data: PropTypes.shape({
     products: PropTypes.arrayOf(
       PropTypes.shape({
@@ -37,4 +37,4 @@ ResultsPageContainer.propTypes = {
   })
 }
 
-export default enhance(ResultsPageContainer)
+export default enhance(ProductListPageContainer)
