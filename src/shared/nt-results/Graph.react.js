@@ -67,7 +67,7 @@ class Graph extends React.Component {
   }
 
   getNodeSize = node => {
-    const max = _.maxBy(this.state.nodes, node => node.count).count
+    const max = _.maxBy(this.state.nodes, node => node.count).count + 1
     const width = node.count / max * 16 + 10
     const height = node.count / max * 20 + 16
 
@@ -163,6 +163,7 @@ class Graph extends React.Component {
           d={this.props.getCurveData(link, this.getNodeSize, ARROW_WIDTH)}
           markerEnd='url(#arrowHead)'
           stroke={`url(#gradient-${index})`}
+          data={link.target.id + ', ' + link.source.id}
         />
       </g>
     )
