@@ -29,6 +29,7 @@ export default function handleRender (req, res) {
   const client = new ApolloClient({
     ssrMode: true,
     networkInterface: networkInterface,
+    dataIdFromObject: o => o._id
   })
 
   const store = createStore(client)

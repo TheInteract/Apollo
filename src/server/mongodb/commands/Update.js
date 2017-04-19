@@ -1,4 +1,6 @@
-const FindItems = db => async (collectionName, query, update) =>
-  db.collection(collectionName).update(query, update)
+const UpdateItem = db => async (collectionName, query, update) =>
+  db.collection(collectionName).findOneAndUpdate(query, update, {
+    returnOriginal: false
+  })
 
-export default FindItems
+export default UpdateItem

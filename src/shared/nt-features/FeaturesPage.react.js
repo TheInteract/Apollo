@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import update from 'immutability-helper'
+import findIndex from 'lodash/findIndex'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { graphql } from 'react-apollo'
@@ -11,7 +12,7 @@ import CreateFeatureForm from './CreateFeatureForm.react'
 import FeatureCard from './FeatureCard.react'
 import styles from './FeaturesPage.styl'
 
-const FEATURES_SUBSCRIPTION = gql`
+const FEATURE_ADDED_SUBSCRIPTION = gql`
   subscription onFeatureAdded ($productId: String!) {
     featureAdded (productId: $productId) {
       _id
@@ -24,6 +25,15 @@ const FEATURES_SUBSCRIPTION = gql`
         A
         B
       }
+      active
+    }
+  }
+`
+
+const FEATURE_UPDATED_SUBSCRIPTION = gql`
+  subscription onFeatureUpdated ($productId: String!) {
+    featureUpdated (productId: $productId) {
+      _id
       active
     }
   }
@@ -74,13 +84,13 @@ class FeaturesPage extends React.Component {
         }).isRequired,
       ),
       loading: PropTypes.bool,
-      subscribeToMore: PropTypes.func,
+      subscribeToMore: PropTypes.func
     }).isRequired
   }
 
   componentDidMount () {
     this.props.data.subscribeToMore({
-      document: FEATURES_SUBSCRIPTION,
+      document: FEATURE_ADDED_SUBSCRIPTION,
       variables: { productId: this.props.productId },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
@@ -90,10 +100,31 @@ class FeaturesPage extends React.Component {
         return update(prev, { features: { $unshift: [ newFeature ] } })
       }
     })
+
+    this.props.data.subscribeToMore({
+      document: FEATURE_UPDATED_SUBSCRIPTION,
+      variables: { productId: this.props.productId },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+
+        const updatedFeature = subscriptionData.data.featureUpdated
+
+        const index = findIndex(prev.features, { _id: updatedFeature._id })
+        return update(prev, {
+          features: {
+            [index]: {
+              active: { $set: updatedFeature.active }
+            }
+          }
+        })
+      }
+    })
   }
 
   renderLoadingState = () => (
-    <Loading />
+    <div className={styles.nt__loadingState}>
+      <Loading message='data fetching...' />
+    </div>
   )
 
   renderFeatures = (features) => features ? features.map((feature, index) => (

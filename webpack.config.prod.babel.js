@@ -3,8 +3,8 @@ import path from 'path'
 import AssetsPlugin from 'assets-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import webpack from 'webpack'
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
+import webpack from 'webpack'
 
 export default {
   bail: true,

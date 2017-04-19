@@ -47,19 +47,30 @@
     color c-gray600
 
   &__submit
-    padding 10px 25px
+    display flex
+    justify-content center
+    margin 10px 25px
+    padding 5px 10px
+    min-width 80px
+    border 2px solid c-gray300
+    border-radius 3px
+    background-color transparent
+    color c-gray400
+    font-size 16px
+    line-height 24px
+    cursor pointer
 
-    input
-      padding 10px 20px
-      background-color white
-      color c-gray500
-      font-weight 600
-      font-size 16px
+    &:hover
+      border-color c-red200
+      color c-red300
 
-      &:hover
-        border-color c-gray300
+    &:disabled
+      border-color c-gray200
+      color c-gray300
+      cursor auto
 
   input
+    position relative
     border 2px solid c-gray200
     border-radius 4px
 
