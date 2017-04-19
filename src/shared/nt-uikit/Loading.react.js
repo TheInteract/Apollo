@@ -14,11 +14,15 @@ class Loading extends React.Component {
     size: 'big',
   }
 
+  renderMessage = () => this.props.message ? (
+    <div className={styles.nt__message}>{this.props.message}</div>
+  ) : null
+
   render () {
     return (
       <div className={classNames(styles.nt, styles[`--${this.props.size}`])}>
         <div className={styles.nt__loading} />
-        {this.props.message}
+        {this.renderMessage()}
       </div>
     )
   }

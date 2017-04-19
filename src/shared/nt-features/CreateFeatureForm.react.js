@@ -43,6 +43,8 @@ class CreateFeatureForm extends React.Component {
     this.state = { ...initialState }
   }
 
+  isNameValid = () => this.state.name && this.state.name !== ''
+
   validateProportion = value => (
     value > 100 ? 100 : value < 0 ? 0 : value
   )
@@ -70,7 +72,7 @@ class CreateFeatureForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    if (this.state.name && this.state.name !== '') {
+    if (this.isNameValid()) {
       this.setState({ loading: true })
       this.props.mutate({ variables: {
         name: this.state.name,
@@ -120,7 +122,7 @@ class CreateFeatureForm extends React.Component {
     <button
       className={styles.nt__submit}
       type='submit'
-      disabled={this.state.loading}
+      disabled={this.state.loading || !this.isNameValid()}
     >
       {this.state.loading ? <Loading size='small' /> : 'Submit'}
     </button>

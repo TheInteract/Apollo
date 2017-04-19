@@ -100,6 +100,7 @@ class FeaturesPage extends React.Component {
         return update(prev, { features: { $unshift: [ newFeature ] } })
       }
     })
+
     this.props.data.subscribeToMore({
       document: FEATURE_UPDATED_SUBSCRIPTION,
       variables: { productId: this.props.productId },
@@ -121,7 +122,9 @@ class FeaturesPage extends React.Component {
   }
 
   renderLoadingState = () => (
-    <Loading />
+    <div className={styles.nt__loadingState}>
+      <Loading message='data fetching...' />
+    </div>
   )
 
   renderFeatures = (features) => features ? features.map((feature, index) => (
