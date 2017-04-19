@@ -3,24 +3,15 @@ import path from 'path'
 import AssetsPlugin from 'assets-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import webpack from 'webpack'
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
+import webpack from 'webpack'
 
 export default {
   bail: true,
-  // entry: [
-  //   path.join(__dirname, 'src/shared/nt-styles/base.styl'),
-  //   path.join(__dirname, 'src/client/client.prod.js'),
-  // ],
-  entry: {
-    app: [
-      path.join(__dirname, 'src/shared/nt-styles/base.styl'),
-      path.join(__dirname, 'src/client/client.prod.js'),
-    ],
-    vendor: [
-      'lodash'
-    ]
-  },
+  entry: [
+    path.join(__dirname, 'src/shared/nt-styles/base.styl'),
+    path.join(__dirname, 'src/client/client.prod.js'),
+  ],
 
   output: {
     path: path.join(__dirname, 'static', 'build'),
@@ -116,10 +107,6 @@ export default {
           autoprefixer({ browsers: [ '> 5%', 'IE > 10', 'last 2 versions' ] })
         ]
       }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      chunks: [ 'vendor' ]
     })
   ],
 }

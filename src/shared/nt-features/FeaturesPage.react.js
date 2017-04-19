@@ -107,7 +107,7 @@ class FeaturesPage extends React.Component {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
 
-        const updatedFeature = subscriptionData.data.featureChanged
+        const updatedFeature = subscriptionData.data.featureUpdated
 
         const index = findIndex(prev.features, { _id: updatedFeature._id })
         return update(prev, {
