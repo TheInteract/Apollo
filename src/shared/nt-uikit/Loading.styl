@@ -1,9 +1,11 @@
 @require '../nt-design/colorsets'
 
-$l-size-big = 50px
-$l-size-small = 1em
-$l-border = 5px
-$l-spin-time = 1000ms
+$size = 50px
+$small-size = 18px
+$border-size = 5px
+$small-border-size = 3px
+
+$duration = 1000ms
 
 @keyframes spinAround
   from
@@ -13,47 +15,23 @@ $l-spin-time = 1000ms
     transform rotate(360deg)
 
 .nt
-  display flex
-  flex-direction column
-  align-items center
   font-size 14px
 
-  &--hide
-    color transparent
-
-  &__big
-    padding 10px 25px
-
-  &__loading-big
-  
-    &:before
-      display block
-      margin-bottom 20px
-      width $l-size-big
-      height $l-size-big
-      border $l-border solid c-gray50
-      border-top $l-border solid c-gray500
-      border-radius 50%
-      content ''
-      animation spinAround $l-spin-time infinite linear
-
-  &__loading-small
-    position absolute
-    top 0
-    left 0
-    display flex
-    justify-content center
-    align-items center
-    width 100%
-    height 100%
+  &__loading:before
+    display block
+    margin 10px
+    width $size
+    height $size
+    border $border-size solid c-gray50
+    border-top-color c-gray500
+    border-radius 50%
+    content ''
+    animation spinAround $duration infinite linear
     pointer-events none
 
-    &:after
-      display block
-      width $l-size-small
-      height $l-size-small
-      border $l-border solid c-gray50
-      border-top $l-border solid c-gray500
-      border-radius 50%
-      content ''
-      animation spinAround $l-spin-time infinite linear
+  &.\\--small &
+    &__loading:before
+      margin 0
+      width $small-size
+      height $small-size
+      border-width $small-border-size

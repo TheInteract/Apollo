@@ -4,7 +4,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
 
-import LoadingComponent from '../nt-uikit/Loading.react'
+import { Loading } from '../nt-uikit'
 import styles from './CreateFeatureForm.styl'
 
 const createFeature = gql`
@@ -72,27 +72,17 @@ class CreateFeatureForm extends React.Component {
     e.preventDefault()
     if (this.state.name && this.state.name !== '') {
       this.setState({ loading: true })
-      this.props
-        .mutate({
-          variables: {
-            name: this.state.name,
-            productId: this.props.productId,
-            proportion: {
-              A: this.state.A,
-              B: this.state.B,
-            }
-          }
-        })
-        .then(() => {
-          this.setState({ ...initialState })
-        })
-        .catch(e => {
-          console.error(e)
-        })
+      this.props.mutate({ variables: {
+        name: this.state.name,
+        productId: this.props.productId,
+        proportion: { A: this.state.A, B: this.state.B }
+      } })
+        .then(() => { this.setState({ ...initialState }) })
+        .catch(e => { console.error(e) })
     }
   }
 
-  renderError = () => this.state.name === '' ? (
+  renderErrorMessage = () => this.state.name === '' ? (
     <span> Name is required</span>
   ) : null
 
@@ -107,34 +97,41 @@ class CreateFeatureForm extends React.Component {
     </div>
   )
 
+  renderNameInput = () => (
+    <div className={styles.nt__name}>
+      Name:
+      <input
+        value={this.state.name}
+        type='text'
+        onChange={this.handleNameChange}
+      />
+      {this.renderErrorMessage()}
+    </div>
+  )
+
+  renderProportionInputs = () => (
+    <div className={styles.nt__proportion}>
+      {this.renderProportionInput('A')}
+      {this.renderProportionInput('B')}
+    </div>
+  )
+
+  renderSubmitButton = () => (
+    <button
+      className={styles.nt__submit}
+      type='submit'
+      disabled={this.state.loading}
+    >
+      {this.state.loading ? <Loading size='small' /> : 'Submit'}
+    </button>
+  )
+
   render () {
     return (
       <form className={styles.nt} onSubmit={this.handleSubmit}>
-        <div className={styles.nt__name}>
-          Name:
-          <input
-            value={this.state.name}
-            type='text'
-            onChange={this.handleNameChange}
-          />
-          {this.renderError()}
-        </div>
-        <div className={styles.nt__proportion}>
-          {this.renderProportionInput('A')}
-          {this.renderProportionInput('B')}
-        </div>
-        <div className={styles.nt__submit}>
-          <button
-            type='submit'
-            disabled={this.state.loading}
-          >
-            <LoadingComponent
-              message='Submit'
-              size='small'
-              loading={this.state.loading}
-            />
-          </button>
-        </div>
+        {this.renderNameInput()}
+        {this.renderProportionInputs()}
+        {this.renderSubmitButton()}
       </form>
     )
   }
