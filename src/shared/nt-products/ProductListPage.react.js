@@ -20,7 +20,9 @@ class ProductListPage extends React.Component {
   }
 
   renderLoadingState = () => (
-    <Loading />
+    <div className={styles.nt__loadingState}>
+      <Loading message='data fetching...' />
+    </div>
   )
 
   renderProducts = () => this.props.data.products.map((product, index) => (

@@ -9,7 +9,10 @@ import styles from './FeatureCard.styl'
 
 const closeFeature = gql`
   mutation closeFeature($_id: String!) {
-    closeFeature(_id: $_id)
+    closeFeature(_id: $_id) {
+      _id
+      active
+    }
   }
 `
 

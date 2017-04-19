@@ -3,3 +3,6 @@ static/build
 static/assets.json
 *.log
 .DS_Store
+
+stats.prod.json
+stats.json

@@ -37,6 +37,7 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
   ssrForceFetchDelay: 100,
+  dataIdFromObject: o => o._id
 })
 
 const store = createStore(client, window.__PRELOADED_STATE__)
