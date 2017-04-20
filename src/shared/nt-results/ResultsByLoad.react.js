@@ -4,6 +4,7 @@ import React from 'react'
 import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
 
+import { Loading } from '../nt-uikit'
 import Graph from './Graph.react'
 import styles from './ResultsByLoad.styl'
 import {
@@ -39,6 +40,15 @@ class ResultsByLoad extends React.Component {
     data: PropTypes.object,
   }
 
+  constructor (props) {
+    super(props)
+    this.state = { mode: 'graph' }
+  }
+
+  handleModeChange = (mode = 'graph') => () => {
+    this.setState({ mode: mode })
+  }
+
   getData = () => ({
     nodes: generateNodes(this.props.data.sessions),
     links: generateLinks(this.props.data.sessions),
@@ -69,10 +79,45 @@ class ResultsByLoad extends React.Component {
     }
   }
 
+  renderLoadingState = () => (
+    <div className={styles.nt__loadingState}>
+      <Loading message='data fetching...' />
+    </div>
+  )
+
+  renderGraph = () => {
+    let data
+    switch (this.state.mode) {
+      case 'graph':
+        data = this.getData()
+        break
+      case 'waterfall':
+        data = this.getWaterfallData()
+    }
+
+    return <Graph width={MIN_WIDTH} height={MIN_HEIGHT} {...data} />
+  }
+
   render () {
+    const loading = this.props.data.loading
+
     return (
       <div className={styles.nt}>
-        <Graph width={MIN_WIDTH} height={MIN_HEIGHT} {...this.getWaterfallData()} />
+        <div className={styles.nt__menu}>
+          <div
+            className={styles.nt__menuItem}
+            onClick={this.handleModeChange()}
+          >
+            Graph
+          </div>
+          <div
+            className={styles.nt__menuItem}
+            onClick={this.handleModeChange('waterfall')}
+          >
+            Waterfall
+          </div>
+        </div>
+        {loading ? this.renderLoadingState() : this.renderGraph()}
       </div>
     )
   }

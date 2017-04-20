@@ -87,7 +87,8 @@ class Graph extends React.Component {
   renderLinearGradientRef = () => (
     <linearGradient id='gradient'>
       <stop className={styles.nt__gradientStart} offset='10%' />
-      <stop className={styles.nt__gradientEnd} offset='90%' />
+      <stop className={styles.nt__gradientEnd} offset='50%' />
+      <stop className={styles.nt__gradientStart} offset='90%' />
     </linearGradient>
   )
 
@@ -187,7 +188,7 @@ class Graph extends React.Component {
           onMouseEnter={this.handleMouseEnterNode(node.id)}
           onMouseLeave={this.handleMouseLeaveNode}
         />
-        <text y={height / 2} dy={15} textAnchor='middle'>{node.type}</text>
+        <text y={height / 2} dy={18} textAnchor='middle'>{node.type}</text>
       </g>
     )
   })
@@ -201,7 +202,7 @@ class Graph extends React.Component {
         {this.renderArrowMarker()}
         <rect width='100%' height='100%' fill='none' />
         <g transform={`translate(${x},${y}) scale(${k})`}>
-          {!this.state.selectedNodeId && this.renderPaths()}
+          {/* !this.state.selectedNodeId && this.renderPaths() */}
           {this.renderLinks()}
           {this.renderNodes()}
         </g>

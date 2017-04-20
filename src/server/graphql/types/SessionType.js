@@ -9,7 +9,10 @@ const ActionType = new GraphQLObjectType({
   name: 'Action',
   fields: () => ({
     type: { type: new GraphQLNonNull(GraphQLString) },
-    actionTypeId: { type: new GraphQLNonNull(GraphQLString) },
+    actionTypeId: {
+      type: GraphQLString,
+      resolve: _ => _.actionTypeId || 'null'
+    },
     url: { type: GraphQLString },
     target: { type: GraphQLString },
     endpoint: { type: GraphQLString },

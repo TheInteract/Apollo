@@ -2,10 +2,10 @@
 
 .nt
   &__gradientStart
-    stop-color c-red300
+    stop-color c-gray600
 
   &__gradientEnd
-    stop-color c-gray700
+    stop-color c-red300
 
   &__path
     stroke highlight
@@ -16,15 +16,19 @@
     fill none
 
     &.\\--not-selected
-      opacity 0.15
+      opacity 0.1
 
   &__arrowHead
-    fill c-gray700
+    fill c-gray600
 
   &__node
+    text
+      fill c-gray300
+  
     rect
-      fill c-red500
+      fill c-red400
+      transition fill 0.2s ease
 
     &.\\--not-selected
       rect
-        fill c-yellow500
+        fill c-yellow400
