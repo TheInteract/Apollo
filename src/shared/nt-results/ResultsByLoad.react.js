@@ -83,7 +83,7 @@ class ResultsByLoad extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody().strength(-1000))
       .force('link', d3.forceLink()
