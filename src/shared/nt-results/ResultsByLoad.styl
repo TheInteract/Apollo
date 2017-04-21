@@ -6,7 +6,11 @@
   right 0
   bottom 0
   left 0
-  background-color c-gray700
+  // background-color c-gray700
+  cursor grab
+
+  &:active
+    cursor grabbing
 
   &__loadingState
     display flex
@@ -16,13 +20,29 @@
 
   &__menu
     position absolute
-    top 25%
+    top 30px
     right 20px
-    min-width 60px
-    min-height 200px
-    transform translateY(-50%)
 
   &__menuItem
     margin 5px 0
     padding 5px 20px
     background-color white
+    cursor pointer
+
+    &:hover
+      background-color c-yellow400
+
+  &__pathSelector
+    position absolute
+    top 30px
+    right 140px
+
+  &__path
+    margin 5px 0
+    padding 5px 20px
+    background-color c-yellow400
+    cursor pointer
+
+    &:hover
+      color c-gray50
+      background-color c-gray600

@@ -19,6 +19,7 @@ import {
 const SESSIONS_QUERY = gql`
   query querySessions ($sessionTypeId: String!) {
     sessions (sessionTypeId: $sessionTypeId) {
+      _id
       actions {
         actionTypeId,
         type,
@@ -79,6 +80,27 @@ class ResultsByLoad extends React.Component {
     }
   }
 
+  renderMenuItem = (type, content) => (
+    <div className={styles.nt__menuItem} onClick={this.handleModeChange(type)}>
+      {content}
+    </div>
+  )
+
+  renderMenu = () => (
+    <div className={styles.nt__menu}>
+      {this.renderMenuItem('graph', 'Graph')}
+      {this.renderMenuItem('waterfall', 'Waterfall')}
+    </div>
+  )
+
+  renderPathSelector = () => this.props.data.sessions ? (
+    <div className={styles.nt__pathSelector}>
+      {this.props.data.sessions.map((sessions, index) => {
+        return <div key={index} className={styles.nt__path}>{sessions._id}</div>
+      })}
+    </div>
+  ) : null
+
   renderLoadingState = () => (
     <div className={styles.nt__loadingState}>
       <Loading message='data fetching...' />
@@ -103,20 +125,8 @@ class ResultsByLoad extends React.Component {
 
     return (
       <div className={styles.nt}>
-        <div className={styles.nt__menu}>
-          <div
-            className={styles.nt__menuItem}
-            onClick={this.handleModeChange()}
-          >
-            Graph
-          </div>
-          <div
-            className={styles.nt__menuItem}
-            onClick={this.handleModeChange('waterfall')}
-          >
-            Waterfall
-          </div>
-        </div>
+        {this.renderMenu()}
+        {this.renderPathSelector()}
         {loading ? this.renderLoadingState() : this.renderGraph()}
       </div>
     )

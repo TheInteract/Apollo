@@ -16,6 +16,8 @@ export const mapActionsToLinks = session => {
 
   if (actions.length > 1) {
     for (let i = 0; i < actions.length - 1; i++) {
+      actions[i].type === 'focus' && console.log('focus')
+      actions[i].type === 'blur' && console.log('blur')
       links.push({
         source: actions[i].actionTypeId,
         target: actions[i + 1].actionTypeId
@@ -42,15 +44,22 @@ export const generateSortedNodes = (nodes, links) => _.flow([
 export const generateNodes = (sessions = []) => _.flow([
   sessions => _.map(sessions, mapActionsToNodes),
   nodes => _.flattenDeep(nodes),
+  nodes => _.filter(nodes, node => node.type !== 'focus' && node.type !== 'blur'),
   nodes => _.groupBy(nodes, node => node.id),
   nodes => _.map(Object.keys(nodes), nodeId => ({
     id: nodeId,
     count: nodes[nodeId].length,
-    ...nodes[nodeId][0]
+    ...nodes[nodeId][0],
   }))
 ])(sessions)
 
 export const generateLinks = (sessions = []) => _.flow([
+  sessions => _.map(sessions, session => ({
+    ...session,
+    actions: _.filter(session.actions, action => (
+      action.type !== 'focus' && action.type !== 'blur'
+    ))
+  })),
   sessions => _.map(sessions, mapActionsToLinks),
   links => _.flattenDeep(links),
   links => _.uniqWith(links, _.isEqual)

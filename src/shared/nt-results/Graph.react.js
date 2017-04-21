@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import styles from './Graph.styl'
+import { angleToPoints } from './Graph'
 
 const ARROW_WIDTH = 8
 const ARROW_HEIGHT = 10
@@ -31,13 +32,21 @@ class Graph extends React.Component {
     }
   }
 
+  // componentWillReceiveProps (nextProps) {
+  //   const updatedNodes = nextProps.nodes.map(nextNode => ({
+  //     ...(_.find(this.state.nodes, nextNode.id)),
+  //     ...nextNode
+  //   }))
+  //   console.log(nextProps)
+  //   this.setState({ nodes: updatedNodes })
+  // }
+
   componentWillMount () {
     this.force = d3.forceSimulation(this.state.nodes)
-      .force('charge', d3.forceManyBody().strength(-1000))
+      .force('charge', d3.forceManyBody().strength(-2000))
       .force('link', d3.forceLink()
         .id(d => d.id)
-        .distance(200)
-        .strength(0.5)
+        .strength(0.1)
         .links(this.state.links)
       )
       .force('center', d3.forceCenter()
@@ -109,21 +118,6 @@ class Graph extends React.Component {
 
   renderGradient = (id, { source, target }) => {
     const angle = Math.atan2(source.y - target.y, source.x - target.x)
-
-    function angleToPoints (angle) {
-      var segment = Math.floor(angle / Math.PI * 2) + 2
-      var diagonal = (1 / 2 * segment + 1 / 4) * Math.PI
-      var op = Math.cos(Math.abs(diagonal - angle)) * Math.sqrt(2)
-      var x = op * Math.cos(angle)
-      var y = op * Math.sin(angle)
-
-      return {
-        x1: x < 0 ? 1 : 0,
-        y1: y < 0 ? 1 : 0,
-        x2: x >= 0 ? x : x + 1,
-        y2: y >= 0 ? y : y + 1
-      }
-    }
 
     return (
       <linearGradient id={id} xlinkHref='#gradient' {...angleToPoints(angle)} />
