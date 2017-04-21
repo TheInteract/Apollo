@@ -3,44 +3,50 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import ArrowHeadMarker from './ArrowHeadMarker.react'
 import styles from './Graph.styl'
 import Link, { FADE as LINK_FADE, NORMAL as LINK_NORMAL } from './Link.react'
 import Node, { FADE as NODE_FADE, NORMAL as NODE_NORMAL } from './Node.react'
-
-const ARROW_WIDTH = 8
-const ARROW_HEIGHT = 10
-const ARROW_DY = ARROW_HEIGHT / 2
 
 class Graph extends React.Component {
   static propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    nodes: PropTypes.array.isRequired,
-    links: PropTypes.array.isRequired,
+    nodes: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+      fx: PropTypes.number,
+      fy: PropTypes.number,
+    })).isRequired,
+    links: PropTypes.arrayOf(PropTypes.shape({
+      source: PropTypes.string.isRequired,
+      target: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+    })).isRequired,
     paths: PropTypes.array.isRequired,
   }
 
   constructor (props) {
     super(props)
     this.state = {
-      nodes: this.props.nodes,
-      links: this.props.links,
+      nodes: _.cloneDeep(this.props.nodes),
+      links: _.cloneDeep(this.props.links),
       paths: this.props.paths,
       selectedNodeId: undefined,
       position: { x: 100, y: 0, k: 1 }
     }
   }
 
-  componentDidUpdate () {
-    this.force.restart()
-  }
-
   componentWillMount () {
     this.force = d3.forceSimulation(this.state.nodes)
-      .force('charge', d3.forceManyBody().strength(-2000))
+      .force('charge', d3.forceManyBody()
+        .strength(-2000)
+        .theta(0)
+      )
       .force('link', d3.forceLink()
         .id(d => d._id)
-        .strength(0.1)
         .links(this.state.links)
       )
       .force('center', d3.forceCenter()
@@ -88,28 +94,6 @@ class Graph extends React.Component {
   isSelected = id => (this.state.selectedNodeId &&
     this.state.selectedNodeId === id) || !this.state.selectedNodeId
 
-  renderLinearGradientRef = () => (
-    <linearGradient id='gradient'>
-      <stop className={styles.nt__gradientStart} offset='10%' />
-      <stop className={styles.nt__gradientEnd} offset='90%' />
-    </linearGradient>
-  )
-
-  renderArrowMarker = () => (
-    <marker
-      id='arrowHead'
-      viewBox={`0 ${-ARROW_DY} ${ARROW_WIDTH} ${ARROW_HEIGHT}`}
-      orient='auto'
-      markerWidth={ARROW_WIDTH}
-      markerHeight={ARROW_HEIGHT}
-    >
-      <path
-        className={styles.nt__arrowHead}
-        d={`M 0,${-ARROW_DY} L ${ARROW_WIDTH},0 L 0,${ARROW_DY} Z`}
-      />
-    </marker>
-  )
-
   renderPaths = () => {
     const line = d3.line()
       .x(d => _.find(this.state.nodes, { id: d }).x)
@@ -135,7 +119,6 @@ class Graph extends React.Component {
         key={`link-${index}`}
         id={index}
         {...link}
-        arrowWidth={ARROW_WIDTH}
         getNodeSize={this.getNodeSize}
         apparent={selected ? LINK_NORMAL : LINK_FADE}
       />
@@ -158,8 +141,11 @@ class Graph extends React.Component {
 
     return (
       <svg width='100%' height='100%' ref={c => { this.svg = c }}>
-        {this.renderLinearGradientRef()}
-        {this.renderArrowMarker()}
+        <linearGradient id='gradient'>
+          <stop className={styles.nt__gradientStart} offset='10%' />
+          <stop className={styles.nt__gradientEnd} offset='90%' />
+        </linearGradient>
+        <ArrowHeadMarker />
         <rect width='100%' height='100%' fill='none' />
         <g transform={`translate(${x},${y}) scale(${k})`}>
           {/* !this.state.selectedNodeId && this.renderPaths() */}

@@ -8,12 +8,11 @@ import { Loading } from '../nt-uikit'
 import Graph from './Graph.react'
 import styles from './ResultsByLoad.styl'
 import {
-  MIN_HEIGHT,
-  MIN_WIDTH,
-  generateLinks,
-  generateNodes,
   generatePaths,
 } from './ResultsByLoad'
+
+export const MIN_WIDTH = 900
+export const MIN_HEIGHT = 600
 
 const SESSIONS_QUERY = gql`
   query querySessions ($sessionTypeId: String!) {
@@ -24,6 +23,17 @@ const SESSIONS_QUERY = gql`
         type,
         data
       }
+    }
+    nodes (sessionTypeId: $sessionTypeId) {
+      _id,
+      type,
+      data,
+      count
+    }
+    links (sessionTypeId: $sessionTypeId) {
+      source,
+      target,
+      count
     }
   }
 `
@@ -38,7 +48,23 @@ const enhance = compose(
 
 class ResultsByLoad extends React.Component {
   static propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.shape({
+      sessions: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+      })).isRequired,
+      nodes: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        data: PropTypes.string.isRequired,
+        count: PropTypes.number.isRequired,
+      })),
+      links: PropTypes.arrayOf(PropTypes.shape({
+        source: PropTypes.string.isRequired,
+        target: PropTypes.string.isRequired,
+        count: PropTypes.number.isRequired,
+      })),
+      loading: PropTypes.bool.isRequired,
+    }).isRequired,
   }
 
   renderPathSelector = () => this.props.data.sessions ? (
@@ -66,8 +92,8 @@ class ResultsByLoad extends React.Component {
     <Graph
       width={MIN_WIDTH}
       height={MIN_HEIGHT}
-      nodes={generateNodes(this.props.data.sessions)}
-      links={generateLinks(this.props.data.sessions)}
+      nodes={this.props.data.nodes}
+      links={this.props.data.links}
       paths={generatePaths(this.props.data.sessions)}
     />
   )

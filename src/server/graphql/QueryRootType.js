@@ -6,7 +6,9 @@ import {
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
-import { FeatureType, ProductType, SessionType } from './types'
+import { generateLinks } from './LinkResolver'
+import { generateNodes } from './NodeResolver'
+import { FeatureType, LinkType, NodeType, ProductType, SessionType } from './types'
 
 export const validateId = function (id) {
   return id.match(/^[0-9a-fA-F]{24}$/)
@@ -53,6 +55,30 @@ const QueryRootType = new GraphQLObjectType({
           sessionTypeId: Mongodb.ObjectId(sessionTypeId)
         }) : []
     },
+    nodes: {
+      type: new GraphQLList(NodeType),
+      args: { sessionTypeId: { type: GraphQLString } },
+      resolve: async (_, { sessionTypeId }) => {
+        const sessions = validateId(sessionTypeId)
+        ? await Collections.find('session', {
+          sessionTypeId: Mongodb.ObjectId(sessionTypeId)
+        }) : []
+
+        return generateNodes(sessions)
+      }
+    },
+    links: {
+      type: new GraphQLList(LinkType),
+      args: { sessionTypeId: { type: GraphQLString } },
+      resolve: async (_, { sessionTypeId }) => {
+        const sessions = validateId(sessionTypeId)
+        ? await Collections.find('session', {
+          sessionTypeId: Mongodb.ObjectId(sessionTypeId)
+        }) : []
+
+        return generateLinks(sessions)
+      }
+    }
   })
 })
 

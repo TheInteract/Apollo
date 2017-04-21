@@ -27,6 +27,17 @@ class Node extends React.Component {
     onMouseLeave: _.noop()
   }
 
+  renderInfo = (info, dy, fontSize) => (
+    <text
+      y={this.props.height / 2}
+      dy={dy}
+      textAnchor='middle'
+      fontSize={fontSize}
+    >
+      {info}
+    </text>
+  )
+
   render () {
     const { type, data, width, height, x, y, apparent } = this.props
     const className = classNames(styles.nt, styles[`--${apparent}`])
@@ -41,8 +52,8 @@ class Node extends React.Component {
           onMouseEnter={this.props.onMouseEnter}
           onMouseLeave={this.props.onMouseLeave}
         />
-        <text y={height / 2} dy={18} textAnchor='middle'>{type}</text>
-        <text y={height / 2} dy={36} textAnchor='middle'>{data}</text>
+        {this.renderInfo(type, height * 0.3 + 4, height * 0.3 + 3)}
+        {this.renderInfo(data, height * 0.5 + 8, height * 0.2 + 3)}
       </g>
     )
   }

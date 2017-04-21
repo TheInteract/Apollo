@@ -1,16 +1,16 @@
 @require '../nt-design/colorsets'
 
+$start-color = rgba(c-red300, 0.5)
+$end-color = c-jewel200
+
 .nt
   &__gradientStart
-    stop-color c-red300
+    stop-color $start-color
 
   &__gradientEnd
-    stop-color c-jewel300
+    stop-color $end-color
 
   &__path
     stroke highlight
     stroke-width 2px
     fill none
-
-  &__arrowHead
-    fill c-jewel300
