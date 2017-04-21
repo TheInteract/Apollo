@@ -7,9 +7,6 @@ wds:
 api:
   host: localhost
   port: 3002
-ws: 
-  host: localhost
-  port: 8080
 mongo:
   protocol: mongodb
   host: localhost
