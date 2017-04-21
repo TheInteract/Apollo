@@ -1,11 +1,11 @@
-import classNames from 'classnames'
 import * as d3 from 'd3'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 
 import styles from './Graph.styl'
-import { angleToPoints } from './Graph'
+import Link, { FADE as LINK_FADE, NORMAL as LINK_NORMAL } from './Link.react'
+import Node, { FADE as NODE_FADE, NORMAL as NODE_NORMAL } from './Node.react'
 
 const ARROW_WIDTH = 8
 const ARROW_HEIGHT = 10
@@ -18,7 +18,6 @@ class Graph extends React.Component {
     nodes: PropTypes.array.isRequired,
     links: PropTypes.array.isRequired,
     paths: PropTypes.array.isRequired,
-    getCurveData: PropTypes.func.isRequired,
   }
 
   constructor (props) {
@@ -28,24 +27,19 @@ class Graph extends React.Component {
       links: this.props.links,
       paths: this.props.paths,
       selectedNodeId: undefined,
-      position: { x: 0, y: 0, k: 1 }
+      position: { x: 100, y: 0, k: 1 }
     }
   }
 
-  // componentWillReceiveProps (nextProps) {
-  //   const updatedNodes = nextProps.nodes.map(nextNode => ({
-  //     ...(_.find(this.state.nodes, nextNode.id)),
-  //     ...nextNode
-  //   }))
-  //   console.log(nextProps)
-  //   this.setState({ nodes: updatedNodes })
-  // }
+  componentDidUpdate () {
+    this.force.restart()
+  }
 
   componentWillMount () {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody().strength(-2000))
       .force('link', d3.forceLink()
-        .id(d => d.id)
+        .id(d => d._id)
         .strength(0.1)
         .links(this.state.links)
       )
@@ -62,7 +56,7 @@ class Graph extends React.Component {
     }))
 
     d3.select(this.svg).call(d3.zoom()
-      .scaleExtent([ 1 / 2, 4 ])
+      .scaleExtent([ 1 / 3, 2 ])
       .on('zoom', this.zoomed))
   }
 
@@ -91,13 +85,13 @@ class Graph extends React.Component {
     this.setState({ selectedNodeId: undefined })
   }
 
-  isSelected = id => this.state.selectedNodeId === id
+  isSelected = id => (this.state.selectedNodeId &&
+    this.state.selectedNodeId === id) || !this.state.selectedNodeId
 
   renderLinearGradientRef = () => (
     <linearGradient id='gradient'>
       <stop className={styles.nt__gradientStart} offset='10%' />
-      <stop className={styles.nt__gradientEnd} offset='50%' />
-      <stop className={styles.nt__gradientStart} offset='90%' />
+      <stop className={styles.nt__gradientEnd} offset='90%' />
     </linearGradient>
   )
 
@@ -115,14 +109,6 @@ class Graph extends React.Component {
       />
     </marker>
   )
-
-  renderGradient = (id, { source, target }) => {
-    const angle = Math.atan2(source.y - target.y, source.x - target.x)
-
-    return (
-      <linearGradient id={id} xlinkHref='#gradient' {...angleToPoints(angle)} />
-    )
-  }
 
   renderPaths = () => {
     const line = d3.line()
@@ -142,50 +128,30 @@ class Graph extends React.Component {
   }
 
   renderLinks = () => this.state.links.map((link, index) => {
-    const selected = this.isSelected(link.source.id) ||
-      this.isSelected(link.target.id)
-
-    const className = classNames(styles.nt__line, {
-      [styles['--selected']]: selected,
-      [styles['--not-selected']]: this.state.selectedNodeId && !selected,
-    })
-
+    const selected = this.isSelected(link.source._id) ||
+      this.isSelected(link.target._id)
     return (
-      <g key={`link-${index}`}>
-        {this.renderGradient(`gradient-${index}`, link)}
-        <path
-          className={className}
-          d={this.props.getCurveData(link, this.getNodeSize, ARROW_WIDTH)}
-          markerEnd='url(#arrowHead)'
-          stroke={`url(#gradient-${index})`}
-          data={link.target.id + ', ' + link.source.id}
-        />
-      </g>
+      <Link
+        key={`link-${index}`}
+        id={index}
+        {...link}
+        arrowWidth={ARROW_WIDTH}
+        getNodeSize={this.getNodeSize}
+        apparent={selected ? LINK_NORMAL : LINK_FADE}
+      />
     )
   })
 
-  renderNodes = () => this.state.nodes.map((node, index) => {
-    const className = classNames(styles.nt__node, {
-      [styles['--not-selected']]: this.state.selectedNodeId &&
-        !this.isSelected(node.id)
-    })
-    const translate = `translate(${node.x || 0},${node.y || 0})`
-    const { width, height } = this.getNodeSize(node)
-
-    return (
-      <g key={index} className={className} transform={translate}>
-        <rect
-          x={-(width / 2)}
-          y={-(height / 2)}
-          width={width}
-          height={height}
-          onMouseEnter={this.handleMouseEnterNode(node.id)}
-          onMouseLeave={this.handleMouseLeaveNode}
-        />
-        <text y={height / 2} dy={18} textAnchor='middle'>{node.type}</text>
-      </g>
-    )
-  })
+  renderNodes = () => this.state.nodes.map((node, index) => (
+    <Node
+      key={`node-${index}`}
+      {...node}
+      {...this.getNodeSize(node)}
+      onMouseEnter={this.handleMouseEnterNode(node._id)}
+      onMouseLeave={this.handleMouseLeaveNode}
+      apparent={!this.isSelected(node._id) ? NODE_FADE : NODE_NORMAL}
+    />
+  ))
 
   render () {
     const { x, y, k } = this.state.position

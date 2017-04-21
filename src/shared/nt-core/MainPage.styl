@@ -17,17 +17,18 @@ $vertical-padding = 15px
   position absolute
   top 0
   bottom 0
-  overflow-x hidden
-  overflow-y auto
   box-sizing border-box
+  overflow-y auto
 
 .sidebar
   left 0
   z-index 1
   width $side-bar-size
-  background-color c-gray700
-  box-shadow 1px 0 8px 0 rgba(c-gray900, 0.5)
+  background-color c-gray600
+  background linear-gradient(top, c-gray850, c-gray800, c-gray800, c-gray850)
+  box-shadow 2px 0 8px 0 rgba(c-gray800, 0.5)
   color c-gray200
+  overflow-x visible
 
 .content
   right 0
@@ -36,6 +37,7 @@ $vertical-padding = 15px
   justify-content center
   padding $vertical-padding $horizontal-padding
   background-color c-gray25
+  overflow-x hidden
 
 .name
   margin-bottom 15px
@@ -51,9 +53,9 @@ $vertical-padding = 15px
   transition background-color 0.1s ease, color 0.1s ease
 
   &:hover
-    background-color rgba(c-red400, 0.35)
+    background-color c-gray850
     color white
 
 .activeLink > .link
-  background-color c-red400
+  background-color c-gray900
   color white
