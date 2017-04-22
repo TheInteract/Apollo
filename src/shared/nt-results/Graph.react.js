@@ -50,12 +50,58 @@ class Graph extends React.Component {
     }
   }
 
+  componentWillReceiveProps (nextProps) {
+    const sameNode = _.isEqual(this.props.nodes, nextProps.nodes)
+    const sameLink = _.isEqual(this.props.links, nextProps.links)
+    const samePath = _.isEqual(this.props.paths, nextProps.paths)
+
+    if (sameNode && sameLink && samePath) return
+
+    const updatedNodes = _.map(nextProps.nodes, updatedNode => {
+      const node = _.find(this.state.nodes, [ '_id', updatedNode._id ]) || {}
+      return {
+        x: 0,
+        y: 0,
+        ...node,
+        ...updatedNode,
+      }
+    })
+
+    const updatedLinks = _.map(nextProps.links, updatedLink => {
+      const link = _.find(this.state.links, link => (
+        link.source._id === updatedLink.source &&
+          link.target._id === updatedLink.target
+      )) || {}
+      return {
+        ...link,
+        ...updatedLink,
+      }
+    })
+
+    console.log('n', updatedNodes)
+    console.log('l', updatedLinks)
+
+    this.setState({
+      nodes: updatedNodes,
+      links: updatedLinks,
+    })
+
+    this.force
+      .nodes(updatedNodes)
+      .force('link', d3.forceLink()
+        .id(d => d._id)
+        .links(updatedLinks)
+      )
+
+    this.force.alpha(1).restart()
+  }
+
   componentWillMount () {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody()
         .strength(-2000)
-        .distanceMin(200)
-        .distanceMax(600)
+        .distanceMin(300)
+        .distanceMax(800)
       )
       .force('link', d3.forceLink()
         .id(d => d._id)
@@ -74,7 +120,7 @@ class Graph extends React.Component {
     }))
 
     d3.select(this.svg).call(d3.zoom()
-      .scaleExtent([ 1 / 3, 3 ])
+      .scaleExtent([ 1 / 2, 3 ])
       .on('zoom', this.zoomed))
   }
 
