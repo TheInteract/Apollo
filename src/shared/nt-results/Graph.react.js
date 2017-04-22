@@ -5,8 +5,8 @@ import React from 'react'
 
 import ArrowHeadMarker from './ArrowHeadMarker.react'
 import styles from './Graph.styl'
-import Link, { FADE as LINK_FADE, NORMAL as LINK_NORMAL } from './Link.react'
-import Node, { FADE as NODE_FADE, NORMAL as NODE_NORMAL } from './Node.react'
+import Link from './Link.react'
+import Node from './Node.react'
 
 class Graph extends React.Component {
   static propTypes = {
@@ -25,7 +25,18 @@ class Graph extends React.Component {
       target: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })).isRequired,
-    paths: PropTypes.array.isRequired,
+    paths: PropTypes.PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      nodes: PropTypes.PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+      })).isRequired,
+    })).isRequired,
+    selectedPath: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      nodes: PropTypes.PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+      })).isRequired,
+    }),
   }
 
   constructor (props) {
@@ -33,7 +44,7 @@ class Graph extends React.Component {
     this.state = {
       nodes: _.cloneDeep(this.props.nodes),
       links: _.cloneDeep(this.props.links),
-      paths: this.props.paths,
+      paths: _.cloneDeep(this.props.paths),
       selectedNodeId: undefined,
       position: { x: 100, y: 0, k: 1 }
     }
@@ -92,39 +103,45 @@ class Graph extends React.Component {
     this.setState({ selectedNodeId: undefined })
   }
 
-  isSelected = id => (this.state.selectedNodeId &&
-    this.state.selectedNodeId === id) || !this.state.selectedNodeId
+  isNotSelectedNode = nodeId => this.state.selectedNodeId &&
+    this.state.selectedNodeId !== nodeId
+
+  isNotInSelectedPath = nodeId => this.props.selectedPath &&
+    !_.find(this.props.selectedPath.nodes, { _id: nodeId })
+
+  shouldNodeFade = nodeId => this.isNotSelectedNode(nodeId) ||
+    this.isNotInSelectedPath(nodeId)
+
+  shouldLinkFade = (sourceId, targetId) =>
+    (this.isNotSelectedNode(sourceId) && this.isNotSelectedNode(targetId)) ||
+      (this.isNotInSelectedPath(sourceId) || this.isNotInSelectedPath(targetId))
 
   renderPaths = () => {
     const line = d3.line()
-      .x(d => _.find(this.state.nodes, { id: d }).x)
-      .y(d => _.find(this.state.nodes, { id: d }).y)
+      .x(d => _.find(this.state.nodes, { _id: d._id }).x)
+      .y(d => _.find(this.state.nodes, { _id: d._id }).y)
       .curve(d3.curveCardinal.tension(0))
 
     return this.state.paths.map((path, index) => (
       <path
         key={`path-${index}`}
         className={styles.nt__path}
-        d={line(path)}
+        d={line(path.nodes)}
         strokeLinecap='round'
         fill='none'
       />
     ))
   }
 
-  renderLinks = () => this.state.links.map((link, index) => {
-    const selected = this.isSelected(link.source._id) ||
-      this.isSelected(link.target._id)
-    return (
-      <Link
-        key={`link-${index}`}
-        id={index}
-        {...link}
-        getNodeSize={this.getNodeSize}
-        apparent={selected ? LINK_NORMAL : LINK_FADE}
-      />
-    )
-  })
+  renderLinks = () => this.state.links.map((link, index) => (
+    <Link
+      key={`link-${index}`}
+      id={index}
+      {...link}
+      getNodeSize={this.getNodeSize}
+      fade={this.shouldLinkFade(link.source._id, link.target._id)}
+    />
+  ))
 
   renderNodes = () => this.state.nodes.map((node, index) => (
     <Node
@@ -133,7 +150,7 @@ class Graph extends React.Component {
       {...this.getNodeSize(node)}
       onMouseEnter={this.handleMouseEnterNode(node._id)}
       onMouseLeave={this.handleMouseLeaveNode}
-      apparent={!this.isSelected(node._id) ? NODE_FADE : NODE_NORMAL}
+      fade={this.shouldNodeFade(node._id)}
     />
   ))
 
@@ -149,7 +166,7 @@ class Graph extends React.Component {
         <ArrowHeadMarker />
         <rect width='100%' height='100%' fill='none' />
         <g transform={`translate(${x},${y}) scale(${k})`}>
-          {/* !this.state.selectedNodeId && this.renderPaths() */}
+          {/* this.renderPaths() */}
           {this.renderLinks()}
           {this.renderNodes()}
         </g>

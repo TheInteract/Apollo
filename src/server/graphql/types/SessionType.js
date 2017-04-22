@@ -6,7 +6,7 @@ import {
 } from 'graphql'
 import _ from 'lodash'
 
-import removeInteractClick from './removeInteractClick'
+import { removeInteractClick } from '../ResolveHelper'
 
 const ActionType = new GraphQLObjectType({
   name: 'Action',
@@ -25,7 +25,7 @@ const ActionType = new GraphQLObjectType({
 
 const SessionType = new GraphQLObjectType({
   name: 'Session',
-  description: 'Action type',
+  description: 'Session type',
   fields: () => ({
     _id: { type: new GraphQLNonNull(GraphQLString) },
     userId: { type: new GraphQLNonNull(GraphQLString) },

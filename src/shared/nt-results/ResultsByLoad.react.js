@@ -7,23 +7,12 @@ import { compose } from 'recompose'
 import { Loading } from '../nt-uikit'
 import Graph from './Graph.react'
 import styles from './ResultsByLoad.styl'
-import {
-  generatePaths,
-} from './ResultsByLoad'
 
 export const MIN_WIDTH = 900
 export const MIN_HEIGHT = 600
 
 const SESSIONS_QUERY = gql`
   query querySessions ($sessionTypeId: String!) {
-    sessions (sessionTypeId: $sessionTypeId) {
-      _id
-      actions {
-        _id,
-        type,
-        data
-      }
-    }
     nodes (sessionTypeId: $sessionTypeId) {
       _id,
       type,
@@ -33,6 +22,13 @@ const SESSIONS_QUERY = gql`
     links (sessionTypeId: $sessionTypeId) {
       source,
       target,
+      count
+    }
+    paths (sessionTypeId: $sessionTypeId) {
+      _id,
+      nodes {
+        _id,
+      },
       count
     }
   }
@@ -49,9 +45,6 @@ const enhance = compose(
 class ResultsByLoad extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      sessions: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-      })).isRequired,
       nodes: PropTypes.arrayOf(PropTypes.shape({
         _id: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired,
@@ -63,19 +56,48 @@ class ResultsByLoad extends React.Component {
         target: PropTypes.string.isRequired,
         count: PropTypes.number.isRequired,
       })),
+      paths: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        nodes: PropTypes.arrayOf(PropTypes.shape({
+          _id: PropTypes.string.isRequired,
+        })),
+        count: PropTypes.number.isRequired,
+      })),
       loading: PropTypes.bool.isRequired,
     }).isRequired,
   }
 
-  renderPathSelector = () => this.props.data.sessions ? (
+  constructor (props) {
+    super(props)
+    this.state = {
+      selectedNodeId: undefined,
+      selectedPath: undefined,
+    }
+  }
+
+  handleSelectPath = path => () => {
+    this.setState({
+      selectedPath: path,
+      selectedNodeId: undefined
+    })
+  }
+
+  handleDeselectPath = () => {
+    this.setState({ selectedPath: undefined })
+  }
+
+  renderPathSelector = () => this.props.data.paths ? (
     <div className={styles.nt__pathSelector}>
-      {this.props.data.sessions.map((sessions, index) => {
+      {this.props.data.paths.map((path, index) => {
         return (
           <div
             key={index}
             className={styles.nt__path}
+            onMouseEnter={this.handleSelectPath(path)}
+            onMouseLeave={this.handleDeselectPath}
+            style={{ height: path.count * 0.2 + 12 }}
           >
-            {sessions._id}
+            {path._id}
           </div>
         )
       })}
@@ -94,7 +116,8 @@ class ResultsByLoad extends React.Component {
       height={MIN_HEIGHT}
       nodes={this.props.data.nodes}
       links={this.props.data.links}
-      paths={generatePaths(this.props.data.sessions)}
+      paths={this.props.data.paths}
+      selectedPath={this.state.selectedPath}
     />
   )
 

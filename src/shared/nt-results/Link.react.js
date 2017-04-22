@@ -26,15 +26,6 @@ export const GET_DATA = {
         ${target.x - d + ARROW_WIDTH + strokeWidth}, ${target.y}
         ${target.x - targetWidth / 2 - (ARROW_WIDTH / 2 * strokeWidth)}, ${target.y}`
   },
-  // CURVE: (source, target, getNodeSize, arrowWidth) => {
-  //   const dx = target.x > source.x ? 1 : -1
-  //   const dy = target.y > source.y ? 1 : -1
-  //   return `M ${source.x - (getNodeSize(source).width / 2) * dx}, ${source.y}
-  //     C ${source.x + 50 * dx}, ${source.y}
-  //       ${target.x - 50 * dx}, ${target.y - 50 * dy}
-  //       ${target.x - (getNodeSize(target).width / 2 + arrowWidth) * dx},
-  //         ${target.y - (getNodeSize(target).height / 2 + arrowWidth) * dx}`
-  // },
   STEP: (source, target, getNodeSize, strokeWidth) => {
     const dx = target.x - source.x
     const dy = target.y - source.y
@@ -46,9 +37,6 @@ export const GET_DATA = {
         ${target.x + (dx >= 0 ? -tdx : tdx)}, ${target.y}`
   }
 }
-
-export const FADE = 'fade'
-export const NORMAL = 'normal'
 
 class Link extends React.Component {
   static propTypes = {
@@ -64,11 +52,8 @@ class Link extends React.Component {
       y: PropTypes.number.isRequired,
     }).isRequired,
     count: PropTypes.number.isRequired,
-    apparent: PropTypes.oneOf([ FADE, NORMAL ]).isRequired,
+    fade: PropTypes.bool,
     getNodeSize: PropTypes.func.isRequired,
-  }
-
-  static defaultProps = {
   }
 
   renderGradient = (source, target) => (
@@ -80,14 +65,17 @@ class Link extends React.Component {
   )
 
   render () {
-    const { index, source, target, count, apparent } = this.props
+    const { index, source, target, count, fade } = this.props
+    const className = classNames(styles.nt, {
+      [styles['--fade']]: fade
+    })
     const strokeWidth = count / 2
 
     return (
       <g>
         {this.renderGradient(source, target)}
         <path
-          className={classNames(styles.nt, styles[`--${apparent}`])}
+          className={className}
           d={GET_DATA.CURVE(source, target, this.props.getNodeSize, strokeWidth)}
           markerEnd='url(#arrowHead)'
           stroke={`url(#gradient-${index})`}

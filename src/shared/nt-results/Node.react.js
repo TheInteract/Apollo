@@ -5,9 +5,6 @@ import React from 'react'
 
 import styles from './Node.styl'
 
-export const FADE = 'fade'
-export const NORMAL = 'normal'
-
 class Node extends React.Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
@@ -16,13 +13,12 @@ class Node extends React.Component {
     height: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    apparent: PropTypes.oneOf([ NORMAL, FADE ]),
+    fade: PropTypes.bool,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
   }
 
   static defaultProps = {
-    apparent: NORMAL,
     onMouseEnter: _.noop(),
     onMouseLeave: _.noop()
   }
@@ -40,8 +36,10 @@ class Node extends React.Component {
   )
 
   render () {
-    const { type, data, width, height, x, y, apparent } = this.props
-    const className = classNames(styles.nt, styles[`--${apparent}`])
+    const { type, data, width, height, x, y, fade } = this.props
+    const className = classNames(styles.nt, {
+      [styles['--fade']]: fade
+    })
 
     return (
       <g className={className} transform={`translate(${x},${y})`}>
