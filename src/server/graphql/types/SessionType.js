@@ -5,20 +5,26 @@ import {
   GraphQLString,
 } from 'graphql'
 
+import { removeFocusAndBlur, removeInteractClick } from '../ResolveHelper'
+
 const ActionType = new GraphQLObjectType({
   name: 'Action',
   fields: () => ({
+    _id: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: _ => _.actionTypeId
+    },
     type: { type: new GraphQLNonNull(GraphQLString) },
-    actionTypeId: { type: new GraphQLNonNull(GraphQLString) },
-    url: { type: GraphQLString },
-    target: { type: GraphQLString },
-    endpoint: { type: GraphQLString },
+    data: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: _ => _.url || removeInteractClick(_.target) || _.endpoint
+    }
   })
 })
 
 const SessionType = new GraphQLObjectType({
   name: 'Session',
-  description: 'Action type',
+  description: 'Session type',
   fields: () => ({
     _id: { type: new GraphQLNonNull(GraphQLString) },
     userId: { type: new GraphQLNonNull(GraphQLString) },
@@ -26,7 +32,10 @@ const SessionType = new GraphQLObjectType({
     deviceCode: { type: new GraphQLNonNull(GraphQLString) },
     sessionTypeId: { type: new GraphQLNonNull(GraphQLString) },
     versions: { type: new GraphQLList(GraphQLString) },
-    actions: { type: new GraphQLList(ActionType) },
+    actions: {
+      type: new GraphQLList(ActionType),
+      resolve: removeFocusAndBlur
+    },
   })
 })
 

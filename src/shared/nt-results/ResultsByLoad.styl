@@ -1,30 +1,43 @@
 @require '../nt-design/colorsets'
 
 .nt
-  &__gradientStart
-    stop-color c-red300
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  overflow hidden
+  cursor grab
 
-  &__gradientEnd
-    stop-color c-gray700
+  &:active
+    cursor grabbing
+
+  &__loadingState
+    display flex
+    justify-content center
+    padding 15px 0
+    width 100%
+
+    &:hover
+      background-color c-teal400
+
+  &__pathSelector
+    position absolute
+    top 30px
+    right 20px
+    bottom 30px
+    overflow-y auto
+    padding-right 15px
 
   &__path
-    stroke highlight
-    stroke-width 2px
-    fill none
+    overflow hidden
+    padding 5px 20px
+    border-bottom 4px solid c-teal500
+    background-color c-teal400
+    color c-gray50
+    text-overflow ellipsis
+    font-size 12px
+    cursor pointer
 
-  &__line
-    fill none
-
-    &.\\--not-selected
-      opacity 0.15
-
-  &__arrow
-    fill c-gray700
-
-  &__node
-    rect
-      fill c-red500
-
-    &.\\--not-selected
-      rect
-        fill c-yellow500
+    &:hover
+      background-color c-teal500

@@ -1,0 +1,17 @@
+@require '../nt-design/colorsets'
+
+.nt
+  &__type
+    fill c-red500
+
+  &__data
+    fill c-red300
+
+  rect
+    cursor pointer
+    transition fill 0.1s ease
+    fill c-red400
+
+  &.\\--fade
+    rect
+      fill c-teal400

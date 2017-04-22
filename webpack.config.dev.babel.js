@@ -1,5 +1,6 @@
 import path from 'path'
 
+import autoprefixer from 'autoprefixer'
 import config from 'config'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import webpack from 'webpack'
@@ -53,6 +54,7 @@ export default {
               localIdentName: '[name]__[local]___[hash:base64:5]',
             },
           },
+          'postcss-loader',
           {
             loader: 'stylus-loader',
             options: {
@@ -79,5 +81,14 @@ export default {
       filename: '[name]-[contenthash].css',
       allChunks: true,
     }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.styl$/,
+      options: {
+        context: __dirname,
+        postcss: [
+          autoprefixer({ browsers: [ '> 5%', 'IE > 10', 'last 2 versions' ] })
+        ]
+      }
+    })
   ],
 }
