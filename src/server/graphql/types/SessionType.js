@@ -4,9 +4,8 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql'
-import _ from 'lodash'
 
-import { removeInteractClick } from '../ResolveHelper'
+import { removeFocusAndBlur, removeInteractClick } from '../ResolveHelper'
 
 const ActionType = new GraphQLObjectType({
   name: 'Action',
@@ -35,11 +34,7 @@ const SessionType = new GraphQLObjectType({
     versions: { type: new GraphQLList(GraphQLString) },
     actions: {
       type: new GraphQLList(ActionType),
-      resolve: ({ actions }) => {
-        return _.filter(actions, action => (
-          action.type !== 'focus' && action.type !== 'blur'
-        ))
-      }
+      resolve: removeFocusAndBlur
     },
   })
 })
