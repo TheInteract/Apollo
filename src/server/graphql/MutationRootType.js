@@ -7,7 +7,6 @@ import {
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
-import pubsub from '../subscriptions/pubsub'
 import { FeatureType, InputProportionType } from './types'
 
 const MutationRootType = new GraphQLObjectType({
@@ -27,7 +26,6 @@ const MutationRootType = new GraphQLObjectType({
           productId: Mongodb.ObjectId(productId),
           ...args
         })
-        pubsub.publish('featureAdded', addedFeature)
         return addedFeature
       }
     },
@@ -39,7 +37,6 @@ const MutationRootType = new GraphQLObjectType({
         const result = await Collections.update('feature', {
           _id: Mongodb.ObjectId(_id)
         }, { $set: { active: false } })
-        pubsub.publish('featureChanged', result.value)
         return result.value
       }
     }
