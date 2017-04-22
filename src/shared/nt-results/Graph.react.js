@@ -43,7 +43,8 @@ class Graph extends React.Component {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody()
         .strength(-2000)
-        .theta(0)
+        .distanceMin(200)
+        .distanceMax(600)
       )
       .force('link', d3.forceLink()
         .id(d => d._id)
@@ -62,7 +63,7 @@ class Graph extends React.Component {
     }))
 
     d3.select(this.svg).call(d3.zoom()
-      .scaleExtent([ 1 / 3, 2 ])
+      .scaleExtent([ 1 / 3, 3 ])
       .on('zoom', this.zoomed))
   }
 

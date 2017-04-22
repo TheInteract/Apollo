@@ -17,14 +17,14 @@ export const GET_DATA = {
       return `M ${source.x + sourceWidth / 2}, ${source.y}
         C ${source.x + d}, ${source.y}
           ${target.x}, ${target.y - d}
-          ${target.x}, ${target.y - targetHeight / 2 - (ARROW_WIDTH * strokeWidth)}`
+          ${target.x}, ${target.y - targetHeight / 2 - (ARROW_WIDTH / 2 * strokeWidth)}`
     }
 
     const d = 10 * strokeWidth + 100
     return `M ${source.x + sourceWidth / 2}, ${source.y}
       C ${source.x + d}, ${source.y}
         ${target.x - d + ARROW_WIDTH + strokeWidth}, ${target.y}
-        ${target.x - targetWidth / 2 - (ARROW_WIDTH * strokeWidth)}, ${target.y}`
+        ${target.x - targetWidth / 2 - (ARROW_WIDTH / 2 * strokeWidth)}, ${target.y}`
   },
   // CURVE: (source, target, getNodeSize, arrowWidth) => {
   //   const dx = target.x > source.x ? 1 : -1
@@ -38,7 +38,7 @@ export const GET_DATA = {
   STEP: (source, target, getNodeSize, strokeWidth) => {
     const dx = target.x - source.x
     const dy = target.y - source.y
-    const tdx = getNodeSize(target).width / 2 + ARROW_WIDTH + strokeWidth
+    const tdx = getNodeSize(target).width / 2 + ARROW_WIDTH / 2 + strokeWidth
     const tdy = getNodeSize(target).height / 2
     return `M ${source.x}, ${source.y + (dy >= 0 ? -tdy : tdy)}
       C ${source.x}, ${source.y + (dy || -80)}
@@ -81,7 +81,7 @@ class Link extends React.Component {
 
   render () {
     const { index, source, target, count, apparent } = this.props
-    const strokeWidth = count
+    const strokeWidth = count / 2
 
     return (
       <g>

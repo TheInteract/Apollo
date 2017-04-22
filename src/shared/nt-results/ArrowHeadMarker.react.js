@@ -11,6 +11,7 @@ class ArrowHeadMarker extends React.Component {
       <marker
         id='arrowHead'
         viewBox={`0 ${-(HEIGHT / 2)} ${WIDTH} ${HEIGHT}`}
+        refX={WIDTH / 2}
         orient='auto'
         markerWidth={WIDTH}
         markerHeight={HEIGHT}
