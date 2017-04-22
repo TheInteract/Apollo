@@ -25,8 +25,6 @@ app.use(proxy('/graphql', {
   target: `http://${config.api.host}:${config.api.port}/graphql`
 }))
 
-app.use(proxy('/ws', { target: `ws://${config.ws.host}:${config.ws.port}`, ws: true }))
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
