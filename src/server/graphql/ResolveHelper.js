@@ -52,7 +52,7 @@ export const generateLinks = (sessions = [], inputVersion) => _.flow([
 
 const mapSessionsToPaths = session => ({
   ...session,
-  actions: removeFocusAndBlur(session)
+  actions: removeFocusAndBlur(session.actions)
 })
 
 const reduceActionTypeIds = path => (
@@ -61,7 +61,7 @@ const reduceActionTypeIds = path => (
 
 export const generatePaths = (sessions = [], inputVersion) => _.flow([
   sessions => _.filter(sessions, filterByVersion(inputVersion)),
-  sessions => _.map(mapSessionsToPaths),
+  sessions => _.map(sessions, mapSessionsToPaths),
   paths => _.groupBy(paths, reduceActionTypeIds),
   paths => _.map(paths, path => ({ ...path[0], count: path.length })),
 ])(sessions)

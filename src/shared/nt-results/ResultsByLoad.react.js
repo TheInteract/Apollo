@@ -13,23 +13,25 @@ export const MIN_HEIGHT = 600
 
 const SESSIONS_QUERY = gql`
   query querySessions ($sessionTypeId: String!) {
-    nodes (sessionTypeId: $sessionTypeId) {
-      _id,
-      type,
-      data,
-      count
-    }
-    links (sessionTypeId: $sessionTypeId) {
-      source,
-      target,
-      count
-    }
-    paths (sessionTypeId: $sessionTypeId) {
-      _id,
+    graph (sessionTypeId: $sessionTypeId) {
       nodes {
         _id,
-      },
-      count
+        type,
+        data,
+        count
+      }
+      links {
+        source,
+        target,
+        count
+      }
+      paths {
+        _id,
+        nodes {
+          _id,
+        },
+        count
+      }
     }
   }
 `
@@ -46,24 +48,26 @@ const enhance = compose(
 class ResultsByLoad extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      nodes: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        data: PropTypes.string.isRequired,
-        count: PropTypes.number.isRequired,
-      })),
-      links: PropTypes.arrayOf(PropTypes.shape({
-        source: PropTypes.string.isRequired,
-        target: PropTypes.string.isRequired,
-        count: PropTypes.number.isRequired,
-      })),
-      paths: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string.isRequired,
+      graph: PropTypes.shape({
         nodes: PropTypes.arrayOf(PropTypes.shape({
           _id: PropTypes.string.isRequired,
-        })),
-        count: PropTypes.number.isRequired,
-      })),
+          type: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+          count: PropTypes.number.isRequired,
+        })).isRequired,
+        links: PropTypes.arrayOf(PropTypes.shape({
+          source: PropTypes.string.isRequired,
+          target: PropTypes.string.isRequired,
+          count: PropTypes.number.isRequired,
+        })).isRequired,
+        paths: PropTypes.arrayOf(PropTypes.shape({
+          _id: PropTypes.string.isRequired,
+          nodes: PropTypes.arrayOf(PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+          })),
+          count: PropTypes.number.isRequired,
+        })).isRequired,
+      }),
       loading: PropTypes.bool.isRequired,
     }).isRequired,
   }
@@ -87,9 +91,9 @@ class ResultsByLoad extends React.Component {
     this.setState({ selectedPath: undefined })
   }
 
-  renderPathSelector = () => this.props.data.paths ? (
+  renderPathSelector = () => this.props.data.graph.paths ? (
     <div className={styles.nt__pathSelector}>
-      {this.props.data.paths.map((path, index) => (
+      {this.props.data.graph.paths.map((path, index) => (
         <div
           key={index}
           className={styles.nt__path}
@@ -113,9 +117,9 @@ class ResultsByLoad extends React.Component {
     <Graph
       width={MIN_WIDTH}
       height={MIN_HEIGHT}
-      nodes={this.props.data.nodes}
-      links={this.props.data.links}
-      paths={this.props.data.paths}
+      nodes={this.props.data.graph.nodes}
+      links={this.props.data.graph.links}
+      paths={this.props.data.graph.paths}
       selectedPath={this.state.selectedPath}
     />
   )
