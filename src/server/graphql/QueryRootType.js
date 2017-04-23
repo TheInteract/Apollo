@@ -66,11 +66,14 @@ const QueryRootType = new GraphQLObjectType({
         sessionTypeId: { type: new GraphQLNonNull(GraphQLString) },
         inputVersion: { type: InputVersionType }
       },
-      resolve: async (root, { sessionTypeId, inputVersion }) => (
-        validateId(sessionTypeId) ? Collections.find('session', {
-          sessionTypeId: Mongodb.ObjectId(sessionTypeId)
-        }) : []
-      )
+      resolve: async (root, { sessionTypeId, inputVersion }) => ({
+        sessions: (validateId(sessionTypeId)
+          ? await Collections.find('session', {
+            sessionTypeId: Mongodb.ObjectId(sessionTypeId)
+          }) : []
+        ),
+        version: inputVersion
+      })
     }
   })
 })

@@ -1,75 +1,14 @@
-import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { graphql } from 'react-apollo'
-import { compose } from 'recompose'
 
-import { Loading } from '../nt-uikit'
 import Graph from './Graph.react'
 import styles from './ResultsByLoad.styl'
 
-export const MIN_WIDTH = 900
-export const MIN_HEIGHT = 600
-
-const SESSIONS_QUERY = gql`
-  query querySessions ($sessionTypeId: String!) {
-    graph (sessionTypeId: $sessionTypeId) {
-      nodes {
-        _id,
-        type,
-        data,
-        count
-      }
-      links {
-        source,
-        target,
-        count
-      }
-      paths {
-        _id,
-        nodes {
-          _id,
-        },
-        count
-      }
-    }
-  }
-`
-
-const enhance = compose(
-  graphql(SESSIONS_QUERY, {
-    options: ({ sessionTypeId, version }) => ({
-      variables: { sessionTypeId, version },
-      pollInterval: 2000
-    })
-  })
-)
-
 class ResultsByLoad extends React.Component {
   static propTypes = {
-    data: PropTypes.shape({
-      graph: PropTypes.shape({
-        nodes: PropTypes.arrayOf(PropTypes.shape({
-          _id: PropTypes.string.isRequired,
-          type: PropTypes.string.isRequired,
-          data: PropTypes.string.isRequired,
-          count: PropTypes.number.isRequired,
-        })).isRequired,
-        links: PropTypes.arrayOf(PropTypes.shape({
-          source: PropTypes.string.isRequired,
-          target: PropTypes.string.isRequired,
-          count: PropTypes.number.isRequired,
-        })).isRequired,
-        paths: PropTypes.arrayOf(PropTypes.shape({
-          _id: PropTypes.string.isRequired,
-          nodes: PropTypes.arrayOf(PropTypes.shape({
-            _id: PropTypes.string.isRequired,
-          })),
-          count: PropTypes.number.isRequired,
-        })).isRequired,
-      }),
-      loading: PropTypes.bool.isRequired,
-    }).isRequired,
+    nodes: PropTypes.array.isRequired,
+    links: PropTypes.array.isRequired,
+    paths: PropTypes.array.isRequired,
   }
 
   constructor (props) {
@@ -91,9 +30,9 @@ class ResultsByLoad extends React.Component {
     this.setState({ selectedPath: undefined })
   }
 
-  renderPathSelector = () => this.props.data.graph.paths ? (
+  renderPathSelector = () => this.props.paths ? (
     <div className={styles.nt__pathSelector}>
-      {this.props.data.graph.paths.map((path, index) => (
+      {this.props.paths.map((path, index) => (
         <div
           key={index}
           className={styles.nt__path}
@@ -107,33 +46,23 @@ class ResultsByLoad extends React.Component {
     </div>
   ) : null
 
-  renderLoadingState = () => (
-    <div className={styles.nt__loadingState}>
-      <Loading message='data fetching...' />
-    </div>
-  )
-
   renderGraph = () => (
     <Graph
-      width={MIN_WIDTH}
-      height={MIN_HEIGHT}
-      nodes={this.props.data.graph.nodes}
-      links={this.props.data.graph.links}
-      paths={this.props.data.graph.paths}
+      nodes={this.props.nodes}
+      links={this.props.links}
+      paths={this.props.paths}
       selectedPath={this.state.selectedPath}
     />
   )
 
   render () {
-    const loading = this.props.data.loading
-
     return (
       <div className={styles.nt}>
         {this.renderPathSelector()}
-        {loading ? this.renderLoadingState() : this.renderGraph()}
+        {this.renderGraph()}
       </div>
     )
   }
 }
 
-export default enhance(ResultsByLoad)
+export default ResultsByLoad

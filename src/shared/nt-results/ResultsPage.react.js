@@ -5,7 +5,7 @@ import React from 'react'
 import { Route } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import ResultsByLoad from './ResultsByLoad.react'
+import ResultsByLoadContainer from './ResultsByLoadContainer.react'
 import styles from './ResultsPage.styl'
 
 class ResultsPage extends React.Component {
@@ -37,11 +37,28 @@ class ResultsPage extends React.Component {
     </NavLink>
   )
 
+  renderResults = sessionTypeId => () => (
+    <div>
+      <div className={styles.nt__A}>
+        <ResultsByLoadContainer
+          sessionTypeId={sessionTypeId}
+          inputVersion={{ featureId: '58fc7dae9b5d92003e4d68de', name: 'A' }}
+        />
+      </div>
+      <div className={styles.nt__B}>
+        <ResultsByLoadContainer
+          sessionTypeId={sessionTypeId}
+          inputVersion={{ featureId: '58fc7dae9b5d92003e4d68de', name: 'B' }}
+        />
+      </div>
+    </div>
+  )
+
   renderSubRoutes = (sessionTypeId, Component) => (
     <Route
       key={sessionTypeId}
       path={`${this.props.match.url}/${sessionTypeId}`}
-      render={() => <ResultsByLoad sessionTypeId={sessionTypeId} />}
+      render={this.renderResults(sessionTypeId)}
     />
   )
 
