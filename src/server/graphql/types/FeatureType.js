@@ -39,7 +39,7 @@ const FeatureType = new GraphQLObjectType({
     name: { type: new GraphQLNonNull(GraphQLString) },
     proportion: {
       type: ProportionType,
-      resolve: (_) => _.proportion
+      resolve: root => root.proportion
     },
     count: {
       type: ProportionType,

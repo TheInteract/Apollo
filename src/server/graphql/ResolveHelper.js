@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-const removeFocusAndBlur = ({ actions }) => _.filter(actions, action => (
+const removeFocusAndBlur = actions => _.filter(actions, action => (
   action.type !== 'focus' && action.type !== 'blur'
 ))
 
@@ -9,8 +9,18 @@ export const removeInteractClick = target => {
   return target.replace('[interact-click="', '').replace('"]', '')
 }
 
-export const generateNodes = (sessions = []) => _.flow([
-  sessions => _.map(sessions, removeFocusAndBlur),
+const filterByVersion = inputVersion => session => (
+  !inputVersion || _.find(session.versions, version => (
+    version.featureId.toString() === inputVersion.featureId &&
+      version.name === inputVersion.name)
+  )
+)
+
+const mapSessionToNodes = ({ actions }) => removeFocusAndBlur(actions)
+
+export const generateNodes = (sessions = [], inputVersion) => _.flow([
+  sessions => _.filter(sessions, filterByVersion(inputVersion)),
+  sessions => _.map(sessions, mapSessionToNodes),
   nodes => _.flattenDeep(nodes),
   nodes => _.groupBy(nodes, node => node.actionTypeId),
   nodes => _.map(Object.keys(nodes), nodeKey => ({
@@ -20,7 +30,7 @@ export const generateNodes = (sessions = []) => _.flow([
 ])(sessions)
 
 export const mapActionsToLinks = session => {
-  const actions = removeFocusAndBlur(session)
+  const actions = removeFocusAndBlur(session.actions)
   const links = []
 
   if (actions.length > 1) {
@@ -35,7 +45,8 @@ export const mapActionsToLinks = session => {
   return links
 }
 
-export const generateLinks = (sessions = []) => _.flow([
+export const generateLinks = (sessions = [], inputVersion) => _.flow([
+  sessions => _.filter(sessions, filterByVersion(inputVersion)),
   sessions => _.map(sessions, mapActionsToLinks),
   links => _.flattenDeep(links),
   links => _.groupBy(links, link => link.source + link.target),
@@ -45,12 +56,11 @@ export const generateLinks = (sessions = []) => _.flow([
   })),
 ])(sessions)
 
-export const generatePaths = (sessions = []) => _.flow([
+export const generatePaths = (sessions = [], inputVersion) => _.flow([
+  sessions => _.filter(sessions, filterByVersion(inputVersion)),
   sessions => _.map(sessions, session => ({
     ...session,
-    actions: _.filter(session.actions, action => (
-      action.type !== 'focus' && action.type !== 'blur'
-    ))
+    actions: removeFocusAndBlur(session.actions)
   })),
   paths => _.groupBy(paths, path => (
     _.reduce(path.actions, (prev, action) => prev + action.actionTypeId, '')

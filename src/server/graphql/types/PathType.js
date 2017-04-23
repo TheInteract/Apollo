@@ -15,7 +15,7 @@ const PathType = new GraphQLObjectType({
     _id: { type: new GraphQLNonNull(GraphQLString) },
     nodes: {
       type: new GraphQLList(NodeType),
-      resolve: _ => _.actions
+      resolve: root => root.actions
     },
     count: { type: new GraphQLNonNull(GraphQLInt) },
   })

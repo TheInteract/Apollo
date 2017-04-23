@@ -21,7 +21,7 @@ const MutationRootType = new GraphQLObjectType({
         proportion: { type: InputProportionType },
         active: { type: GraphQLBoolean, defaultValue: true },
       },
-      resolve: async (_, { productId, ...args }) => {
+      resolve: async (root, { productId, ...args }) => {
         const addedFeature = await Collections.insertOne('feature', {
           productId: Mongodb.ObjectId(productId),
           ...args
@@ -33,7 +33,7 @@ const MutationRootType = new GraphQLObjectType({
       type: FeatureType,
       description: 'Close a feature',
       args: { _id: { type: GraphQLString } },
-      resolve: async (_, { _id }) => {
+      resolve: async (root, { _id }) => {
         const result = await Collections.update('feature', {
           _id: Mongodb.ObjectId(_id)
         }, { $set: { active: false } })

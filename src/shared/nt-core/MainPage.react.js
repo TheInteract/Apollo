@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 
 import FeaturesPage from '../nt-features/FeaturesPage.react'
 import HomePage from '../nt-home/HomePage.react'
-import ResultsPage from '../nt-results/ResultsPage.react'
+import ResultsPageContainer from '../nt-results/ResultsPageContainer.react'
 import styles from './MainPage.styl'
 
 class MainPage extends React.Component {
@@ -31,7 +31,7 @@ class MainPage extends React.Component {
     <NavLink
       to={`${this.props.match.url}${path}`}
       activeClassName={styles.activeLink}
-      exact
+      exact={path === ''}
     >
       <div className={styles.link}>
         <i className='fa fa-home' aria-hidden='true' />
@@ -63,7 +63,7 @@ class MainPage extends React.Component {
         <div className={styles.content}>
           <Route exact path={this.props.match.url} component={HomePage} />
           {this.renderSubRoutes('features', FeaturesPage)}
-          {this.renderSubRoutes('results', ResultsPage)}
+          {this.renderSubRoutes('results', ResultsPageContainer)}
         </div>
       </div>
     )

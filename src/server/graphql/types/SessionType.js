@@ -13,12 +13,12 @@ const ActionType = new GraphQLObjectType({
   fields: () => ({
     _id: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: _ => _.actionTypeId
+      resolve: root => root.actionTypeId
     },
     type: { type: new GraphQLNonNull(GraphQLString) },
     data: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: _ => _.url || removeInteractClick(_.target) || _.endpoint
+      resolve: root => root.url || removeInteractClick(root.target) || root.endpoint
     }
   })
 })
