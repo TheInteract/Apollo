@@ -58,7 +58,7 @@ class Graph extends React.Component {
     if (sameNode && sameLink && samePath) return
 
     const updatedNodes = _.map(nextProps.nodes, updatedNode => {
-      const node = _.find(this.state.nodes, [ '_id', updatedNode._id ]) || {}
+      const node = _.find(this.state.nodes, [ '_id', updatedNode._id ])
       return {
         x: 0,
         y: 0,
@@ -71,7 +71,7 @@ class Graph extends React.Component {
       const link = _.find(this.state.links, link => (
         link.source._id === updatedLink.source &&
           link.target._id === updatedLink.target
-      )) || {}
+      ))
       return {
         ...link,
         ...updatedLink,
