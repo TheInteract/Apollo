@@ -96,7 +96,6 @@ class Graph extends React.Component {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody()
         .strength(-2000)
-        .distanceMax(600)
       )
       .force('link', d3.forceLink()
         .id(d => d._id)
