@@ -23,10 +23,7 @@ export const generateNodes = (sessions = [], inputVersion) => _.flow([
   sessions => _.map(sessions, mapSessionToNodes),
   nodes => _.flattenDeep(nodes),
   nodes => _.groupBy(nodes, node => node.actionTypeId),
-  nodes => _.map(Object.keys(nodes), nodeKey => ({
-    ...nodes[nodeKey][0],
-    count: nodes[nodeKey].length,
-  }))
+  nodes => _.map(nodes, node => ({ ...node[0], count: node.length }))
 ])(sessions)
 
 export const mapActionsToLinks = session => {
@@ -50,10 +47,7 @@ export const generateLinks = (sessions = [], inputVersion) => _.flow([
   sessions => _.map(sessions, mapActionsToLinks),
   links => _.flattenDeep(links),
   links => _.groupBy(links, link => link.source + link.target),
-  links => _.map(Object.keys(links), linkKey => ({
-    ...links[linkKey][0],
-    count: links[linkKey].length,
-  })),
+  links => _.map(links, link => ({ ...link[0], count: link.length })),
 ])(sessions)
 
 export const generatePaths = (sessions = [], inputVersion) => _.flow([

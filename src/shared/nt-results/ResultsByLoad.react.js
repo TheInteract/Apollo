@@ -37,7 +37,7 @@ const SESSIONS_QUERY = gql`
 const enhance = compose(
   graphql(SESSIONS_QUERY, {
     options: ({ sessionTypeId, version }) => ({
-      variables: { sessionTypeId: sessionTypeId, version: version },
+      variables: { sessionTypeId, version },
       pollInterval: 2000
     })
   })
@@ -89,19 +89,17 @@ class ResultsByLoad extends React.Component {
 
   renderPathSelector = () => this.props.data.paths ? (
     <div className={styles.nt__pathSelector}>
-      {this.props.data.paths.map((path, index) => {
-        return (
-          <div
-            key={index}
-            className={styles.nt__path}
-            onMouseEnter={this.handleSelectPath(path)}
-            onMouseLeave={this.handleDeselectPath}
-            style={{ height: path.count * 0.2 + 12 }}
-          >
-            {path._id}
-          </div>
-        )
-      })}
+      {this.props.data.paths.map((path, index) => (
+        <div
+          key={index}
+          className={styles.nt__path}
+          onMouseEnter={this.handleSelectPath(path)}
+          onMouseLeave={this.handleDeselectPath}
+          style={{ height: path.count * 0.2 + 12 }}
+        >
+          {path._id}
+        </div>
+      ))}
     </div>
   ) : null
 
