@@ -4,7 +4,6 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql'
-import _ from 'lodash'
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
@@ -60,7 +59,7 @@ const QueryRootType = new GraphQLObjectType({
     sessionTypes: {
       type: new GraphQLList(SessionTypeType),
       args: { productId: { type: new GraphQLNonNull(GraphQLString) } },
-      resolve: async (root_, { productId }) => validateId(productId)
+      resolve: async (root, { productId }) => validateId(productId)
         ? Collections.find('sessionType', {
           productId: Mongodb.ObjectId(productId)
         }) : []
@@ -68,7 +67,7 @@ const QueryRootType = new GraphQLObjectType({
     sessions: {
       type: new GraphQLList(SessionType),
       args: { sessionTypeId: { type: new GraphQLNonNull(GraphQLString) } },
-      resolve: async (root_, { sessionTypeId }) => validateId(sessionTypeId)
+      resolve: async (root, { sessionTypeId }) => validateId(sessionTypeId)
         ? Collections.find('session', {
           sessionTypeId: Mongodb.ObjectId(sessionTypeId)
         }) : []
