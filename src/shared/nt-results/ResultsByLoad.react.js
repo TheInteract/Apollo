@@ -36,8 +36,8 @@ const SESSIONS_QUERY = gql`
 
 const enhance = compose(
   graphql(SESSIONS_QUERY, {
-    options: ({ sessionTypeId }) => ({
-      variables: { sessionTypeId },
+    options: ({ sessionTypeId, version }) => ({
+      variables: { sessionTypeId, version },
       pollInterval: 2000
     })
   })
