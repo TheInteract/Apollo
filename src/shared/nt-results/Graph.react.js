@@ -78,9 +78,6 @@ class Graph extends React.Component {
       }
     })
 
-    console.log('n', updatedNodes)
-    console.log('l', updatedLinks)
-
     this.setState({
       nodes: updatedNodes,
       links: updatedLinks,
