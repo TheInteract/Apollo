@@ -21,7 +21,7 @@ class ProductListPage extends React.Component {
 
   renderLoadingState = () => (
     <div className={styles.nt__loadingState}>
-      <Loading message='data fetching...' />
+      <Loading size='medium' />
     </div>
   )
 

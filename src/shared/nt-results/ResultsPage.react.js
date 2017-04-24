@@ -68,7 +68,7 @@ class ResultsPage extends React.Component {
         <div className={styles.nt__nav}>
           {this.renderLink('setting', 'cog')}
           {this.props.sessionTypes.map(sessionType => (
-            this.renderLink(url.parse(sessionType.url).path, '', `/${sessionType._id}`)
+            this.renderLink(url.parse(sessionType.url).path, 'tag', `/${sessionType._id}`)
           ))}
           {this.props.features.map(feature => (
             <div

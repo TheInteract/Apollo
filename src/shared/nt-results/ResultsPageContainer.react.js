@@ -7,6 +7,7 @@ import { compose } from 'recompose'
 
 import { Loading } from '../nt-uikit'
 import ResultsPage from './ResultsPage.react'
+import styles from './ResultsPageContainer.styl'
 
 const queryProduct = gql`
   query getSessionTypes($productId: String!) {
@@ -51,7 +52,9 @@ class ResultsPageContainer extends React.Component {
   render () {
     const { match, data } = this.props
     return this.props.data.loading ? (
-      <Loading message='data fetching...' />
+      <div className={styles.nt}>
+        <Loading />
+      </div>
     ) : (
       <ResultsPage
         match={match}

@@ -61,7 +61,7 @@ class FeaturesPage extends React.Component {
 
   renderLoadingState = () => (
     <div className={styles.nt__loadingState}>
-      <Loading message='data fetching...' />
+      <Loading message='...data fetching...' />
     </div>
   )
 

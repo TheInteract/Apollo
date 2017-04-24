@@ -1,9 +1,11 @@
 @require '../nt-design/colorsets'
 
 $size = 80px
+$medium-size = 50px
 $small-size = 18px
-$border-size = 5px
-$small-border-size = 3px
+$border-size = 3px
+$medium-border-size = 2px
+$small-border-size = 2px
 $duration = 800ms
 
 @keyframes spinAround
@@ -19,16 +21,25 @@ $duration = 800ms
   &__loading
     &:before
       display block
+      box-sizing border-box
       margin 10px
       width $size
       height $size
-      border-top $border-size + 20 solid c-jewel300
-      border-right $border-size + 8 solid c-red300
-      border-left $border-size + 8 solid c-teal300
+      border-top $border-size solid c-jewel300
+      border-right $border-size solid c-red300
+      border-bottom $border-size transparent
+      border-left $border-size solid c-teal300
       border-radius 50%
       content ''
       animation spinAround $duration infinite linear
       pointer-events none
+
+  &.\\--medium &
+    &__loading:before
+      margin 0
+      width $medium-size
+      height $medium-size
+      border-width $medium-border-size
 
   &.\\--small &
     &__loading:before
@@ -39,3 +50,4 @@ $duration = 800ms
 
   &__message
     margin-top 20px
+    color c-gray500

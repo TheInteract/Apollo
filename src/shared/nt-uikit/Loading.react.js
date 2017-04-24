@@ -7,7 +7,7 @@ import styles from './Loading.styl'
 class Loading extends React.Component {
   static propTypes = {
     message: PropTypes.string,
-    size: PropTypes.oneOf([ 'small', 'big' ]),
+    size: PropTypes.oneOf([ 'small', 'medium', 'big' ]),
   }
 
   static defaultProps = {
