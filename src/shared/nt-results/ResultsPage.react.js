@@ -1,5 +1,6 @@
 import url from 'url'
 
+import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Route } from 'react-router'
@@ -27,8 +28,11 @@ class ResultsPage extends React.Component {
 
   state = { selectedFeatureId: undefined }
 
-  handleSelectFeature = featureId => () => {
-    this.setState({ selectedFeatureId: featureId })
+  toggleSelectFeature = featureId => () => {
+    this.setState({
+      selectedFeatureId: this.state.selectedFeatureId === featureId
+        ? undefined : featureId
+    })
   }
 
   renderSetting = () => <div />
@@ -72,9 +76,11 @@ class ResultsPage extends React.Component {
           ))}
           {this.props.features.map(feature => (
             <div
-              className={styles.nt__link}
+              className={classNames(styles.nt__filter, {
+                [styles['--active']]: this.state.selectedFeatureId === feature._id
+              })}
               key={feature._id}
-              onClick={this.handleSelectFeature(feature._id)}
+              onClick={this.toggleSelectFeature(feature._id)}
             >
               {feature.name}
             </div>

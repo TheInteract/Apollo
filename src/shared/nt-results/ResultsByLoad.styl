@@ -21,23 +21,21 @@
     position absolute
     top 80px
     right 10px
-    bottom 30px
-    overflow-y auto
-    padding-right 15px
-    pointer-events none
+    max-height calc(100% - 110px)
     z-index 1
+    overflow-y auto
+    padding-right 12px
 
   &__path
     overflow hidden
     padding 5px 20px
+    width 30px
     border-bottom 4px solid c-teal500
     background-color c-teal400
     color c-gray50
     text-overflow ellipsis
     font-size 12px
     cursor pointer
-    pointer-events all
-    width 30px
 
     &:hover
       background-color c-teal500

@@ -9,10 +9,10 @@ export const removeInteractClick = target => {
   return target.replace('[interact-click="', '').replace('"]', '')
 }
 
-const filterByVersion = inputVersion => session => (
-  !inputVersion || _.find(session.versions, version => (
-    version.featureId.toString() === inputVersion.featureId &&
-      version.name === inputVersion.name)
+const filterByVersion = ({ featureId, name }) => session => (
+  !featureId || _.find(session.versions, version => (
+    version.featureId.toString() === featureId &&
+      version.name === name)
   )
 )
 

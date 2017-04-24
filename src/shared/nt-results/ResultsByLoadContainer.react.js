@@ -13,6 +13,26 @@ import GraphPropType from './GraphPropType'
 
 const SESSIONS_QUERY = gql`
   query querySessions ($sessionTypeId: String!, $featureId: String) {
+    overallGraph: graph (sessionTypeId: $sessionTypeId) {
+      nodes {
+        _id,
+        type,
+        data,
+        count
+      }
+      links {
+        source,
+        target,
+        count
+      }
+      paths {
+        _id,
+        nodes {
+          _id,
+        },
+        count
+      }
+    }
     graphA: graph (sessionTypeId: $sessionTypeId, featureId: $featureId, name: "A") {
       nodes {
         _id,
@@ -68,10 +88,12 @@ const enhance = compose(
 class ResultsByLoadContainer extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
+      overallGraph: GraphPropType,
       graphA: GraphPropType,
       graphB: GraphPropType,
       loading: PropTypes.bool.isRequired,
     }).isRequired,
+    featureId: PropTypes.string,
   }
 
   constructor (props) {
@@ -97,30 +119,37 @@ class ResultsByLoadContainer extends React.Component {
     })
   }
 
-  renderResults = (version, style, width) => (
-    <div className={styles[`nt__${version}`]} style={{ [style]: `${this.state.x}px` }}>
+  renderResults = (graph, styleName, style) => (
+    <div className={styles[styleName]} style={style}>
       {this.props.data.loading ? (
         <Loading />
       ) : (
         <ResultsByLoad
-          nodes={_.cloneDeep(this.props.data[`graph${version}`].nodes)}
-          links={_.cloneDeep(this.props.data[`graph${version}`].links)}
-          paths={_.cloneDeep(this.props.data[`graph${version}`].paths)}
+          nodes={_.cloneDeep(this.props.data[graph].nodes)}
+          links={_.cloneDeep(this.props.data[graph].links)}
+          paths={_.cloneDeep(this.props.data[graph].paths)}
         />
       )}
     </div>
   )
 
+  renderABGraphs = () => ([
+    this.renderResults('graphA', 'nt__A', { width: `${this.state.x}px` }),
+    <div
+      key='divider'
+      className={styles.nt__divider}
+      style={{ transform: `translateX(${this.state.x}px)` }}
+      ref={c => { this.divider = c }}
+    />,
+    this.renderResults('graphB', 'nt__B', { left: `${this.state.x}px` }),
+  ])
+
+  renderOverallGraph = () => this.renderResults('overallGraph', 'nt__overall')
+
   render () {
     return (
       <div ref={c => { this.container = c }}>
-        {this.renderResults('A', 'width')}
-        <div
-          className={styles.nt__divider}
-          style={{ transform: `translateX(${this.state.x}px)` }}
-          ref={c => { this.divider = c }}
-        />
-        {this.renderResults('B', 'left')}
+        {this.props.featureId ? this.renderABGraphs() : this.renderOverallGraph()}
       </div>
     )
   }
