@@ -19,6 +19,16 @@ class ResultsPage extends React.Component {
       _id: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
     })).isRequired,
+    features: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }
+
+  state = { selectedFeatureId: undefined }
+
+  handleSelectFeature = featureId => () => {
+    this.setState({ selectedFeatureId: featureId })
   }
 
   renderSetting = () => <div />
@@ -31,7 +41,6 @@ class ResultsPage extends React.Component {
       exact
     >
       <div className={styles.nt__link}>
-        <i className='fa fa-home' aria-hidden='true' />
         {content}
       </div>
     </NavLink>
@@ -40,7 +49,7 @@ class ResultsPage extends React.Component {
   renderResults = sessionTypeId => () => (
     <ResultsByLoadContainer
       sessionTypeId={sessionTypeId}
-      featureId='58fc7dae9b5d92003e4d68de'
+      featureId={this.state.selectedFeatureId}
     />
   )
 
@@ -57,8 +66,19 @@ class ResultsPage extends React.Component {
       <div className={styles.nt}>
         <div className={styles.nt__sidebar}>
           {this.renderLink('setting')}
+          Sessions
           {this.props.sessionTypes.map(sessionType => (
             this.renderLink(url.parse(sessionType.url).path, `/${sessionType._id}`)
+          ))}
+          Features
+          {this.props.features.map(feature => (
+            <div
+              className={styles.nt__link}
+              key={feature._id}
+              onClick={this.handleSelectFeature(feature._id)}
+            >
+              {feature.name}
+            </div>
           ))}
         </div>
         <div className={styles.nt__content}>

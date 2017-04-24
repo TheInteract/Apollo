@@ -13,7 +13,7 @@ class ProductListPage extends React.Component {
           _id: PropTypes.string.isRequired,
           name: PropTypes.string.isRequired
         })
-      ).isRequired,
+      ),
       loading: PropTypes.bool,
       error: PropTypes.bool
     }).isRequired

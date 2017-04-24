@@ -38,7 +38,6 @@ class MainPageContainer extends React.Component {
         name: PropTypes.string.isRequired,
       }),
       loading: PropTypes.bool,
-      error: PropTypes.bool
     })
   }
 

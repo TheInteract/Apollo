@@ -1,6 +1,6 @@
 @require '../nt-design/colorsets'
 
-$sidebar-size = 200px
+$sidebar-size = 80px
 
 .nt
   &__sidebar
@@ -12,8 +12,8 @@ $sidebar-size = 200px
     overflow-y auto
     padding 90px 0
     width $sidebar-size
-    background-color c-gray100
-    box-shadow 1px 0 5px 0 rgba(c-gray200, 0.35)
+    background-color c-gray800
+    color c-gray300
 
   &__link
     overflow-x hidden
@@ -24,10 +24,11 @@ $sidebar-size = 200px
     transition background-color 0.1s ease color 0.1s ease
 
     &:hover
-      background-color c-gray150
+      color c-gray200
 
   &__activeLink > &__link
-    background-color c-gray200
+    background-color c-gray850
+    color c-gray200
 
   &__content
     position absolute

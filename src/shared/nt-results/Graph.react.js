@@ -50,7 +50,6 @@ class Graph extends React.Component {
     const sameNode = _.isEqual(this.props.nodes, nextProps.nodes)
     const sameLink = _.isEqual(this.props.links, nextProps.links)
     const samePath = _.isEqual(this.props.paths, nextProps.paths)
-    console.log(sameNode, sameLink, samePath)
 
     if (sameNode && sameLink && samePath) return
 
@@ -86,6 +85,10 @@ class Graph extends React.Component {
         .id(d => d._id)
         .links(updatedLinks)
       )
+      .force('center', d3.forceCenter()
+        .x(this.graph.offsetWidth / 3)
+        .y(this.graph.offsetHeight / 2)
+      )
 
     this.force.alpha(1).restart()
   }
@@ -100,7 +103,7 @@ class Graph extends React.Component {
         .links(this.state.links)
       )
       .force('center', d3.forceCenter()
-        .x(this.graph.offsetWidth / 3)
+        .x(this.graph.offsetWidth / 2)
         .y(this.graph.offsetHeight / 2)
       )
 
@@ -145,12 +148,28 @@ class Graph extends React.Component {
   isNotInSelectedPath = nodeId => this.props.selectedPath &&
     !_.find(this.props.selectedPath.nodes, { _id: nodeId })
 
+  isLinkNotInSelectedPath = (sourceId, targetId) => {
+    if (!this.props.selectedPath) return false
+
+    const nodes = this.props.selectedPath.nodes
+
+    if (nodes.length > 1) {
+      for (let i = 0; i < nodes.length - 1; i++) {
+        if (nodes[i]._id === sourceId && nodes[i + 1]._id === targetId) {
+          return false
+        }
+      }
+    }
+
+    return true
+  }
+
   shouldNodeFade = nodeId => this.isNotSelectedNode(nodeId) ||
     this.isNotInSelectedPath(nodeId)
 
   shouldLinkFade = (sourceId, targetId) =>
     (this.isNotSelectedNode(sourceId) && this.isNotSelectedNode(targetId)) ||
-      (this.isNotInSelectedPath(sourceId) || this.isNotInSelectedPath(targetId))
+      this.isLinkNotInSelectedPath(sourceId, targetId)
 
   renderPaths = () => {
     const line = d3.line()

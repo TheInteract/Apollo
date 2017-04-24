@@ -31,9 +31,8 @@ ProductListPageContainer.propTypes = {
         _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired
       })
-    ).isRequired,
+    ),
     loading: PropTypes.bool,
-    error: PropTypes.bool
   })
 }
 

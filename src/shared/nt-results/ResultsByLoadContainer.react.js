@@ -68,8 +68,8 @@ const enhance = compose(
 class ResultsByLoadContainer extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      graphA: GraphPropType.isRequired,
-      graphB: GraphPropType.isRequired,
+      graphA: GraphPropType,
+      graphB: GraphPropType,
       loading: PropTypes.bool.isRequired,
     }).isRequired,
   }
@@ -84,37 +84,41 @@ class ResultsByLoadContainer extends React.Component {
       .on('drag', this.dragged)
     )
 
-    this.setState({ x: this.container.clientWidth / 2 })
+    if (this.container) {
+      this.setState({ x: this.container.clientWidth / 2 })
+    }
   }
 
   dragged = () => {
-    this.setState({ x: d3.event.x < 0 ? 0 : d3.event.x })
+    const x = d3.event.x
+    this.setState({
+      x: x < 0 ? 0 : x > this.container.clientWidth
+        ? this.container.clientWidth : x
+    })
   }
 
+  renderResults = (version, style, width) => this.props.data.loading ? (
+    <Loading message='data fetching...' />
+  ) : (
+    <div className={styles[`nt__${version}`]} style={{ [style]: `${this.state.x}px` }}>
+      <ResultsByLoad
+        nodes={_.cloneDeep(this.props.data[`graph${version}`].nodes)}
+        links={_.cloneDeep(this.props.data[`graph${version}`].links)}
+        paths={_.cloneDeep(this.props.data[`graph${version}`].paths)}
+      />
+    </div>
+  )
+
   render () {
-    return this.props.data.loading ? (
-      <Loading message='data fetching...' />
-    ) : (
+    return (
       <div ref={c => { this.container = c }}>
-        <div className={styles.nt__A} style={{ width: `${this.state.x}px` }}>
-          <ResultsByLoad
-            nodes={_.cloneDeep(this.props.data.graphA.nodes)}
-            links={_.cloneDeep(this.props.data.graphA.links)}
-            paths={_.cloneDeep(this.props.data.graphA.paths)}
-          />
-        </div>
+        {this.renderResults('A', 'width')}
         <div
           className={styles.nt__divider}
           style={{ transform: `translateX(${this.state.x}px)` }}
           ref={c => { this.divider = c }}
         />
-        <div className={styles.nt__B} style={{ left: `${this.state.x}px` }}>
-          <ResultsByLoad
-            nodes={_.cloneDeep(this.props.data.graphB.nodes)}
-            links={_.cloneDeep(this.props.data.graphB.links)}
-            paths={_.cloneDeep(this.props.data.graphB.paths)}
-          />
-        </div>
+        {this.renderResults('B', 'left')}
       </div>
     )
   }
