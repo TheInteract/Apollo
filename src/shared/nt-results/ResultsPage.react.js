@@ -5,7 +5,7 @@ import React from 'react'
 import { Route } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import ResultsByLoad from './ResultsByLoad.react'
+import ResultsByLoadContainer from './ResultsByLoadContainer.react'
 import styles from './ResultsPage.styl'
 
 class ResultsPage extends React.Component {
@@ -19,11 +19,21 @@ class ResultsPage extends React.Component {
       _id: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
     })).isRequired,
+    features: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }
+
+  state = { selectedFeatureId: undefined }
+
+  handleSelectFeature = featureId => () => {
+    this.setState({ selectedFeatureId: featureId })
   }
 
   renderSetting = () => <div />
 
-  renderLink = (content, path = '') => (
+  renderLink = (content, iconName, path = '') => (
     <NavLink
       key={path}
       to={`${this.props.match.url}${path}`}
@@ -31,27 +41,43 @@ class ResultsPage extends React.Component {
       exact
     >
       <div className={styles.nt__link}>
-        <i className='fa fa-home' aria-hidden='true' />
-        {content}
+        <i className={`fa fa-${iconName}`} aria-hidden='true' />
+        <span>{content}</span>
       </div>
     </NavLink>
+  )
+
+  renderResults = sessionTypeId => () => (
+    <ResultsByLoadContainer
+      sessionTypeId={sessionTypeId}
+      featureId={this.state.selectedFeatureId}
+    />
   )
 
   renderSubRoutes = (sessionTypeId, Component) => (
     <Route
       key={sessionTypeId}
       path={`${this.props.match.url}/${sessionTypeId}`}
-      render={() => <ResultsByLoad sessionTypeId={sessionTypeId} />}
+      render={this.renderResults(sessionTypeId)}
     />
   )
 
   render () {
     return (
       <div className={styles.nt}>
-        <div className={styles.nt__sidebar}>
-          {this.renderLink('setting')}
+        <div className={styles.nt__nav}>
+          {this.renderLink('setting', 'cog')}
           {this.props.sessionTypes.map(sessionType => (
-            this.renderLink(url.parse(sessionType.url).path, `/${sessionType._id}`)
+            this.renderLink(url.parse(sessionType.url).path, 'tag', `/${sessionType._id}`)
+          ))}
+          {this.props.features.map(feature => (
+            <div
+              className={styles.nt__link}
+              key={feature._id}
+              onClick={this.handleSelectFeature(feature._id)}
+            >
+              {feature.name}
+            </div>
           ))}
         </div>
         <div className={styles.nt__content}>

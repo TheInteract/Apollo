@@ -1,7 +1,7 @@
 @require '../nt-design/colorsets'
 @require '../nt-styles/global'
 
-$side-bar-size = 90px
+$side-bar-size = 180px
 $horizontal-padding = 30px
 $vertical-padding = 15px
 
@@ -17,46 +17,56 @@ $vertical-padding = 15px
   position absolute
   top 0
   bottom 0
-  box-sizing border-box
   overflow-y auto
+  box-sizing border-box
 
 .sidebar
   left 0
   z-index 1
-  width $side-bar-size
-  background-color c-gray600
-  background linear-gradient(to top, c-gray850, c-gray800, c-gray800, c-gray850)
-  box-shadow 1px 0 5px 0 rgba(c-gray900, 0.5)
-  color c-gray200
-  overflow-x visible
   z-index 2
+  overflow-x visible
+  width $side-bar-size
+  background-color c-gray850
+  border-right 2px solid c-gray900
+  color c-gray200
 
 .content
   right 0
   left $side-bar-size
   display flex
   justify-content center
-  padding $vertical-padding $horizontal-padding
-  background-color c-gray25
   overflow-x hidden
+  padding $vertical-padding $horizontal-padding
 
 .name
-  margin-bottom 15px
+  margin-bottom 5px
   padding 25px 15px
-  border-bottom 2px dashed c-gray500
+  background-color c-gray900
+  border-bottom 2px solid c-gray950
   color white
   font-size 20px
 
 .link
   box-sizing border-box
-  padding 10px 15px
+  box-sizing border-box
+  padding 15px
   width 100%
-  transition background-color 0.1s ease, color 0.1s ease
+  font-size 14px
+  transition background-color 0.1s ease color 0.1s ease
+  border-left 5px solid transparent
 
   &:hover
     background-color c-gray850
     color white
 
+  > span
+    margin-left 8px
+
+  > i
+    font-size 16px
+    width 18px
+
 .activeLink > .link
+  border-left 5px solid c-teal500
   background-color c-gray900
   color white

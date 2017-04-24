@@ -46,6 +46,8 @@ class Node extends React.Component {
         <rect
           x={-(width / 2)}
           y={-(height / 2)}
+          rx={width / 5}
+          ry={width / 5}
           width={width}
           height={height}
           onMouseEnter={this.props.onMouseEnter}

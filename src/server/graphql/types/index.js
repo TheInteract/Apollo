@@ -1,4 +1,5 @@
 import FeatureType from './FeatureType'
+import GraphType from './GraphType'
 import InputProportionType from './InputProportionType'
 import InputVersionType from './InputVersionType'
 import LinkType from './LinkType'
@@ -10,6 +11,7 @@ import SessionTypeType from './SessionTypeType'
 
 export {
   FeatureType,
+  GraphType,
   InputProportionType,
   InputVersionType,
   LinkType,

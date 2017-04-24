@@ -1,22 +1,17 @@
 import {
+  GraphQLBoolean,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql'
-import _ from 'lodash'
 import Mongodb from 'mongodb'
 
 import * as Collections from '../mongodb/Collections'
-import { generateLinks, generateNodes, generatePaths } from './ResolveHelper'
 import {
   FeatureType,
-  InputVersionType,
-  LinkType,
-  NodeType,
-  PathType,
+  GraphType,
   ProductType,
-  SessionType,
   SessionTypeType,
 } from './types'
 
@@ -51,73 +46,40 @@ const QueryRootType = new GraphQLObjectType({
     },
     features: {
       type: new GraphQLList(FeatureType),
-      args: { productId: { type: new GraphQLNonNull(GraphQLString) } },
-      resolve: async (root, { productId }) => validateId(productId)
+      args: {
+        productId: { type: new GraphQLNonNull(GraphQLString) },
+        active: { type: GraphQLBoolean }
+      },
+      resolve: async (root, { productId, active }) => validateId(productId)
         ? Collections.find('feature', {
-          productId: Mongodb.ObjectId(productId)
+          productId: Mongodb.ObjectId(productId),
+          ...(active !== undefined ? { active } : {})
         }, { _id: -1 }) : []
     },
     sessionTypes: {
       type: new GraphQLList(SessionTypeType),
       args: { productId: { type: new GraphQLNonNull(GraphQLString) } },
-      resolve: async (root_, { productId }) => validateId(productId)
+      resolve: async (root, { productId }) => validateId(productId)
         ? Collections.find('sessionType', {
           productId: Mongodb.ObjectId(productId)
         }) : []
     },
-    sessions: {
-      type: new GraphQLList(SessionType),
-      args: { sessionTypeId: { type: new GraphQLNonNull(GraphQLString) } },
-      resolve: async (root_, { sessionTypeId }) => validateId(sessionTypeId)
-        ? Collections.find('session', {
-          sessionTypeId: Mongodb.ObjectId(sessionTypeId)
-        }) : []
-    },
-    nodes: {
-      type: new GraphQLList(NodeType),
+    graph: {
+      type: GraphType,
       args: {
         sessionTypeId: { type: new GraphQLNonNull(GraphQLString) },
-        inputVersion: { type: InputVersionType }
+        featureId: { type: GraphQLString },
+        name: { type: GraphQLString }
       },
-      resolve: async (root, { sessionTypeId, inputVersion }) => {
-        const sessions = validateId(sessionTypeId)
+      resolve: async (root, { sessionTypeId, featureId, name }) => ({
+        sessions: (validateId(sessionTypeId)
           ? await Collections.find('session', {
             sessionTypeId: Mongodb.ObjectId(sessionTypeId)
           }) : []
-
-        return generateNodes(sessions, inputVersion)
-      }
-    },
-    links: {
-      type: new GraphQLList(LinkType),
-      args: {
-        sessionTypeId: { type: new GraphQLNonNull(GraphQLString) },
-        inputVersion: { type: InputVersionType }
-      },
-      resolve: async (root, { sessionTypeId, inputVersion }) => {
-        const sessions = validateId(sessionTypeId)
-          ? await Collections.find('session', {
-            sessionTypeId: Mongodb.ObjectId(sessionTypeId)
-          }) : []
-
-        return generateLinks(sessions, inputVersion)
-      }
-    },
-    paths: {
-      type: new GraphQLList(PathType),
-      args: {
-        sessionTypeId: { type: new GraphQLNonNull(GraphQLString) },
-        inputVersion: { type: InputVersionType }
-      },
-      resolve: async (root, { sessionTypeId, inputVersion }) => {
-        const sessions = validateId(sessionTypeId)
-          ? await Collections.find('session', {
-            sessionTypeId: Mongodb.ObjectId(sessionTypeId)
-          }) : []
-
-        return generatePaths(sessions, inputVersion)
-      }
-    },
+        ),
+        version: { featureId, name }
+      })
+    }
   })
 })
 

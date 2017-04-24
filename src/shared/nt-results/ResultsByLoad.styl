@@ -7,10 +7,6 @@
   bottom 0
   left 0
   overflow hidden
-  cursor grab
-
-  &:active
-    cursor grabbing
 
   &__loadingState
     display flex
@@ -23,11 +19,13 @@
 
   &__pathSelector
     position absolute
-    top 30px
-    right 20px
+    top 80px
+    right 10px
     bottom 30px
     overflow-y auto
     padding-right 15px
+    pointer-events none
+    z-index 1
 
   &__path
     overflow hidden
@@ -38,6 +36,8 @@
     text-overflow ellipsis
     font-size 12px
     cursor pointer
+    pointer-events all
+    width 30px
 
     &:hover
       background-color c-teal500

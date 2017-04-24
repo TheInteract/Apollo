@@ -7,6 +7,7 @@ import { compose } from 'recompose'
 
 import { Loading } from '../nt-uikit'
 import MainPage from './MainPage.react'
+import styles from './MainPageContainer.styl'
 import NoMatch from './NoMatch.react'
 
 const queryProduct = gql`
@@ -38,7 +39,6 @@ class MainPageContainer extends React.Component {
         name: PropTypes.string.isRequired,
       }),
       loading: PropTypes.bool,
-      error: PropTypes.bool
     })
   }
 
@@ -51,7 +51,9 @@ class MainPageContainer extends React.Component {
   )
 
   renderLoadingScreen = () => (
-    <Loading />
+    <div className={styles.nt}>
+      <Loading />
+    </div>
   )
 
   render () {

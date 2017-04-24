@@ -10,15 +10,11 @@ import Node from './Node.react'
 
 class Graph extends React.Component {
   static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     nodes: PropTypes.arrayOf(PropTypes.shape({
       _id: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       data: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
-      fx: PropTypes.number,
-      fy: PropTypes.number,
     })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
       source: PropTypes.string.isRequired,
@@ -42,9 +38,9 @@ class Graph extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      nodes: _.cloneDeep(this.props.nodes),
-      links: _.cloneDeep(this.props.links),
-      paths: _.cloneDeep(this.props.paths),
+      nodes: this.props.nodes,
+      links: this.props.links,
+      paths: this.props.paths,
       selectedNodeId: undefined,
       position: { x: 100, y: 0, k: 1 }
     }
@@ -89,34 +85,34 @@ class Graph extends React.Component {
         .id(d => d._id)
         .links(updatedLinks)
       )
+      .force('center', d3.forceCenter()
+        .x(this.graph.offsetWidth / 3)
+        .y(this.graph.offsetHeight / 2)
+      )
 
     this.force.alpha(1).restart()
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.force = d3.forceSimulation(this.state.nodes)
       .force('charge', d3.forceManyBody()
         .strength(-2000)
-        .distanceMin(300)
-        .distanceMax(800)
       )
       .force('link', d3.forceLink()
         .id(d => d._id)
         .links(this.state.links)
       )
       .force('center', d3.forceCenter()
-        .x(this.props.width / 2)
-        .y(this.props.height / 2)
+        .x(this.graph.offsetWidth / 2)
+        .y(this.graph.offsetHeight / 2)
       )
-  }
 
-  componentDidMount () {
     this.force.on('tick', () => this.setState({
       links: this.state.links,
       nodes: this.state.nodes
     }))
 
-    d3.select(this.svg).call(d3.zoom()
+    d3.select(this.graph).call(d3.zoom()
       .scaleExtent([ 1 / 2, 3 ])
       .on('zoom', this.zoomed))
   }
@@ -152,12 +148,28 @@ class Graph extends React.Component {
   isNotInSelectedPath = nodeId => this.props.selectedPath &&
     !_.find(this.props.selectedPath.nodes, { _id: nodeId })
 
+  isLinkNotInSelectedPath = (sourceId, targetId) => {
+    if (!this.props.selectedPath) return false
+
+    const nodes = this.props.selectedPath.nodes
+
+    if (nodes.length > 1) {
+      for (let i = 0; i < nodes.length - 1; i++) {
+        if (nodes[i]._id === sourceId && nodes[i + 1]._id === targetId) {
+          return false
+        }
+      }
+    }
+
+    return true
+  }
+
   shouldNodeFade = nodeId => this.isNotSelectedNode(nodeId) ||
     this.isNotInSelectedPath(nodeId)
 
   shouldLinkFade = (sourceId, targetId) =>
     (this.isNotSelectedNode(sourceId) && this.isNotSelectedNode(targetId)) ||
-      (this.isNotInSelectedPath(sourceId) || this.isNotInSelectedPath(targetId))
+      this.isLinkNotInSelectedPath(sourceId, targetId)
 
   renderPaths = () => {
     const line = d3.line()
@@ -201,19 +213,20 @@ class Graph extends React.Component {
     const { x, y, k } = this.state.position
 
     return (
-      <svg width='100%' height='100%' ref={c => { this.svg = c }}>
-        <linearGradient id='gradient'>
-          <stop className={styles.nt__gradientStart} offset='10%' />
-          <stop className={styles.nt__gradientEnd} offset='90%' />
-        </linearGradient>
-        <ArrowHeadMarker />
-        <rect width='100%' height='100%' fill='none' />
-        <g transform={`translate(${x},${y}) scale(${k})`}>
-          {/* this.renderPaths() */}
-          {this.renderLinks()}
-          {this.renderNodes()}
-        </g>
-      </svg>
+      <div className={styles.nt} ref={c => { this.graph = c }}>
+        <svg width='100%' height='100%'>
+          <linearGradient id='gradient'>
+            <stop className={styles.nt__gradientStart} offset='10%' />
+            <stop className={styles.nt__gradientEnd} offset='90%' />
+          </linearGradient>
+          <ArrowHeadMarker />
+          <g transform={`translate(${x},${y}) scale(${k})`}>
+            {this.force && this.renderPaths()}
+            {this.force && this.renderLinks()}
+            {this.force && this.renderNodes()}
+          </g>
+        </svg>
+      </div>
     )
   }
 }

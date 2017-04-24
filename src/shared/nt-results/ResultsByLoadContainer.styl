@@ -1,0 +1,31 @@
+@require '../nt-design/colorsets'
+
+.nt
+  &__A, &__B
+    position absolute
+    top 0
+    bottom 0
+    display flex
+    justify-content center
+    align-items center
+
+  &__A
+    left 0
+    width 50%
+
+  &__B
+    right 0
+    left 50%
+
+  &__divider
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    z-index 2
+    margin-left -5px
+    width 10px
+    background c-gray25
+    background linear-gradient(to top, transparent, c-gray25, c-gray25, transparent)
+    cursor grabbing
+    fill c-gray200

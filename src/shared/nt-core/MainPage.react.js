@@ -27,15 +27,15 @@ class MainPage extends React.Component {
     </div>
   )
 
-  renderLink = (content, path = '') => (
+  renderLink = (content, iconName, path = '') => (
     <NavLink
       to={`${this.props.match.url}${path}`}
       activeClassName={styles.activeLink}
       exact={path === ''}
     >
       <div className={styles.link}>
-        <i className='fa fa-home' aria-hidden='true' />
-        {content}
+        <i className={`fa fa-${iconName}`} aria-hidden='true' />
+        <span>{content}</span>
       </div>
     </NavLink>
   )
@@ -56,9 +56,9 @@ class MainPage extends React.Component {
       <div className={styles.layout}>
         <div className={styles.sidebar}>
           {this.renderName()}
-          {this.renderLink('Home')}
-          {this.renderLink('Features', '/features')}
-          {this.renderLink('Results', '/results')}
+          {this.renderLink('Home', 'home')}
+          {this.renderLink('Features', 'flask', '/features')}
+          {this.renderLink('Results', 'line-chart', '/results')}
         </div>
         <div className={styles.content}>
           <Route exact path={this.props.match.url} component={HomePage} />

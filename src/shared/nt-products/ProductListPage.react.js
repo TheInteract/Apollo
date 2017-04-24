@@ -13,7 +13,7 @@ class ProductListPage extends React.Component {
           _id: PropTypes.string.isRequired,
           name: PropTypes.string.isRequired
         })
-      ).isRequired,
+      ),
       loading: PropTypes.bool,
       error: PropTypes.bool
     }).isRequired
@@ -21,7 +21,7 @@ class ProductListPage extends React.Component {
 
   renderLoadingState = () => (
     <div className={styles.nt__loadingState}>
-      <Loading message='data fetching...' />
+      <Loading size='medium' />
     </div>
   )
 
