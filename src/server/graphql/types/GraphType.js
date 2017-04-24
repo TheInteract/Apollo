@@ -6,7 +6,7 @@ import {
 } from 'graphql'
 
 import { generateLinks, generateNodes, generatePaths } from '../ResolveHelper'
-import { InputVersionType, LinkType, NodeType, PathType } from '.'
+import { LinkType, NodeType, PathType } from '.'
 
 const GraphType = new GraphQLObjectType({
   name: 'Graph',

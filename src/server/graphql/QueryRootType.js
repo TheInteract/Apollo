@@ -10,7 +10,6 @@ import * as Collections from '../mongodb/Collections'
 import {
   FeatureType,
   GraphType,
-  InputVersionType,
   ProductType,
   SessionTypeType,
 } from './types'
@@ -64,15 +63,16 @@ const QueryRootType = new GraphQLObjectType({
       type: GraphType,
       args: {
         sessionTypeId: { type: new GraphQLNonNull(GraphQLString) },
-        inputVersion: { type: InputVersionType }
+        featureId: { type: GraphQLString },
+        name: { type: GraphQLString }
       },
-      resolve: async (root, { sessionTypeId, inputVersion }) => ({
+      resolve: async (root, { sessionTypeId, featureId, name }) => ({
         sessions: (validateId(sessionTypeId)
           ? await Collections.find('session', {
             sessionTypeId: Mongodb.ObjectId(sessionTypeId)
           }) : []
         ),
-        version: inputVersion
+        version: { featureId, name }
       })
     }
   })

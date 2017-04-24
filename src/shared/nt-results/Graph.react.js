@@ -15,8 +15,6 @@ class Graph extends React.Component {
       type: PropTypes.string.isRequired,
       data: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
-      fx: PropTypes.number,
-      fy: PropTypes.number,
     })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
       source: PropTypes.string.isRequired,
@@ -111,7 +109,7 @@ class Graph extends React.Component {
       nodes: this.state.nodes
     }))
 
-    d3.select(this.svg).call(d3.zoom()
+    d3.select(this.graph).call(d3.zoom()
       .scaleExtent([ 1 / 2, 3 ])
       .on('zoom', this.zoomed))
   }
@@ -197,15 +195,14 @@ class Graph extends React.Component {
 
     return (
       <div className={styles.nt} ref={c => { this.graph = c }}>
-        <svg width='100%' height='100%' ref={c => { this.svg = c }}>
+        <svg width='100%' height='100%'>
           <linearGradient id='gradient'>
             <stop className={styles.nt__gradientStart} offset='10%' />
             <stop className={styles.nt__gradientEnd} offset='90%' />
           </linearGradient>
           <ArrowHeadMarker />
-          <rect width='100%' height='100%' fill='none' />
           <g transform={`translate(${x},${y}) scale(${k})`}>
-            {/* this.force && this.renderPaths() */}
+            {this.force && this.renderPaths()}
             {this.force && this.renderLinks()}
             {this.force && this.renderNodes()}
           </g>

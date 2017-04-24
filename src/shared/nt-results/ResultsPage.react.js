@@ -38,20 +38,10 @@ class ResultsPage extends React.Component {
   )
 
   renderResults = sessionTypeId => () => (
-    <div>
-      <div className={styles.nt__A}>
-        <ResultsByLoadContainer
-          sessionTypeId={sessionTypeId}
-          inputVersion={{ featureId: '58fc7dae9b5d92003e4d68de', name: 'A' }}
-        />
-      </div>
-      <div className={styles.nt__B}>
-        <ResultsByLoadContainer
-          sessionTypeId={sessionTypeId}
-          inputVersion={{ featureId: '58fc7dae9b5d92003e4d68de', name: 'B' }}
-        />
-      </div>
-    </div>
+    <ResultsByLoadContainer
+      sessionTypeId={sessionTypeId}
+      featureId='58fc7dae9b5d92003e4d68de'
+    />
   )
 
   renderSubRoutes = (sessionTypeId, Component) => (
