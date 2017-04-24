@@ -1,4 +1,5 @@
 import {
+  GraphQLBoolean,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -45,10 +46,14 @@ const QueryRootType = new GraphQLObjectType({
     },
     features: {
       type: new GraphQLList(FeatureType),
-      args: { productId: { type: new GraphQLNonNull(GraphQLString) } },
-      resolve: async (root, { productId }) => validateId(productId)
+      args: {
+        productId: { type: new GraphQLNonNull(GraphQLString) },
+        active: { type: GraphQLBoolean }
+      },
+      resolve: async (root, { productId, active }) => validateId(productId)
         ? Collections.find('feature', {
-          productId: Mongodb.ObjectId(productId)
+          productId: Mongodb.ObjectId(productId),
+          ...(active !== undefined ? { active } : {})
         }, { _id: -1 }) : []
     },
     sessionTypes: {

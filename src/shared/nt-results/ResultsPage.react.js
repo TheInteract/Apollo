@@ -33,7 +33,7 @@ class ResultsPage extends React.Component {
 
   renderSetting = () => <div />
 
-  renderLink = (content, path = '') => (
+  renderLink = (content, iconName, path = '') => (
     <NavLink
       key={path}
       to={`${this.props.match.url}${path}`}
@@ -41,7 +41,8 @@ class ResultsPage extends React.Component {
       exact
     >
       <div className={styles.nt__link}>
-        {content}
+        <i className={`fa fa-${iconName}`} aria-hidden='true' />
+        <span>{content}</span>
       </div>
     </NavLink>
   )
@@ -64,13 +65,11 @@ class ResultsPage extends React.Component {
   render () {
     return (
       <div className={styles.nt}>
-        <div className={styles.nt__sidebar}>
-          {this.renderLink('setting')}
-          Sessions
+        <div className={styles.nt__nav}>
+          {this.renderLink('setting', 'cog')}
           {this.props.sessionTypes.map(sessionType => (
-            this.renderLink(url.parse(sessionType.url).path, `/${sessionType._id}`)
+            this.renderLink(url.parse(sessionType.url).path, '', `/${sessionType._id}`)
           ))}
-          Features
           {this.props.features.map(feature => (
             <div
               className={styles.nt__link}

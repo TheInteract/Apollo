@@ -5,6 +5,9 @@
     position absolute
     top 0
     bottom 0
+    display flex
+    justify-content center
+    align-items center
 
   &__A
     left 0
@@ -16,14 +19,13 @@
 
   &__divider
     position absolute
-    fill c-gray200
-    background-color c-gray25
     top 0
-    left 0
     bottom 0
-    width 10px
-    margin-left -5px
+    left 0
     z-index 2
+    margin-left -5px
+    width 10px
+    background c-gray25
+    background linear-gradient(to top, transparent, c-gray25, c-gray25, transparent)
     cursor grabbing
-    border-left 1px solid c-gray50
-    border-right 1px solid c-gray50
+    fill c-gray200

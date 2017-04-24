@@ -97,15 +97,17 @@ class ResultsByLoadContainer extends React.Component {
     })
   }
 
-  renderResults = (version, style, width) => this.props.data.loading ? (
-    <Loading message='data fetching...' />
-  ) : (
+  renderResults = (version, style, width) => (
     <div className={styles[`nt__${version}`]} style={{ [style]: `${this.state.x}px` }}>
-      <ResultsByLoad
-        nodes={_.cloneDeep(this.props.data[`graph${version}`].nodes)}
-        links={_.cloneDeep(this.props.data[`graph${version}`].links)}
-        paths={_.cloneDeep(this.props.data[`graph${version}`].paths)}
-      />
+      {this.props.data.loading ? (
+        <Loading />
+      ) : (
+        <ResultsByLoad
+          nodes={_.cloneDeep(this.props.data[`graph${version}`].nodes)}
+          links={_.cloneDeep(this.props.data[`graph${version}`].links)}
+          paths={_.cloneDeep(this.props.data[`graph${version}`].paths)}
+        />
+      )}
     </div>
   )
 

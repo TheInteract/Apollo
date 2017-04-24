@@ -14,7 +14,7 @@ const queryProduct = gql`
       _id
       url
     }
-    features (productId: $productId) {
+    features (productId: $productId, active: true) {
       _id,
       name
     }
