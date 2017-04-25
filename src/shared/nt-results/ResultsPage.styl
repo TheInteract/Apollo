@@ -1,6 +1,6 @@
 @require '../nt-design/colorsets'
 
-$nav-size = 50px
+$nav-size = 80px
 
 .nt
   &__nav
@@ -11,11 +11,11 @@ $nav-size = 50px
     z-index 2
     display flex
     overflow hidden
-    padding 0 20px
+    box-sizing border-box
+    padding 0 20px 5px
     height $nav-size
-    border-bottom 1px solid rgba(white, 0.6)
-    background linear-gradient(to bottom, rgba(white, 0.9), rgba(white, 0.5))
-    background-color rgba(white, 0.5)
+    background rgba(white, 0.5)
+    background linear-gradient(to bottom, rgba(white, 0.9), transparent)
     color c-gray500
 
   &__content
@@ -35,11 +35,11 @@ $nav-size = 50px
     padding 10px 15px
     min-width 80px
     height 100%
+    color c-gray500
     font-size 14px
     line-height 14px
     cursor pointer
     transition background-color 0.1s ease color 0.1s ease
-    color c-gray500
 
     &:hover
       color c-gray700
@@ -48,10 +48,9 @@ $nav-size = 50px
       margin-right 5px
       font-size 16px
 
-  &__activeLink > &__link,
-  &__filter.\\--active
+  &__activeLink > &__link, &__filter.\--active
     color c-gray700
-    font-weight 600  
+    font-weight 600
 
   &__A, &__B
     position absolute

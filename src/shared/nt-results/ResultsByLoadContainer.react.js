@@ -102,10 +102,6 @@ class ResultsByLoadContainer extends React.Component {
   }
 
   componentDidMount () {
-    d3.select(this.divider).call(d3.drag()
-      .on('drag', this.dragged)
-    )
-
     if (this.container) {
       this.setState({ x: this.container.clientWidth / 2 })
     }
@@ -120,7 +116,7 @@ class ResultsByLoadContainer extends React.Component {
   }
 
   renderResults = (graph, styleName, style) => (
-    <div className={styles[styleName]} style={style}>
+    <div key={graph} className={styles[styleName]} style={style}>
       {this.props.data.loading ? (
         <Loading key='loading' />
       ) : (
@@ -140,7 +136,8 @@ class ResultsByLoadContainer extends React.Component {
       key='divider'
       className={styles.nt__divider}
       style={{ transform: `translateX(${this.state.x}px)` }}
-      ref={c => { this.divider = c }}
+      onClick={() => { console.log('click') }}
+      ref={c => { d3.select(c).call(d3.drag().on('drag', this.dragged)) }}
     />,
     this.renderResults('graphB', 'nt__B', { left: `${this.state.x}px` }),
   ])
