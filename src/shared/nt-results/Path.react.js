@@ -34,7 +34,7 @@ class Path extends React.Component {
           className={styles.nt}
           d={line(this.props.path.nodes)}
           stroke={`url(#gradient)`}
-          strokeWidth={this.props.path.count * 2}
+          strokeWidth={this.props.path.count * 2 - 1}
           strokeLinecap='round'
           fill='none'
         />

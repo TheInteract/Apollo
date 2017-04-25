@@ -35,7 +35,7 @@ $nav-size = 80px
     box-sizing border-box
     padding 10px 15px
     height 100%
-    color c-gray500
+    color c-gray700
     font-size 14px
     line-height 14px
     cursor pointer
@@ -43,14 +43,14 @@ $nav-size = 80px
     pointer-events all
 
     &:hover
-      color c-gray700
+      color c-teal500
 
     > i
       margin-right 5px
       font-size 16px
 
   &__activeLink > &__link, &__filter.\--active
-    color c-gray700
+    color c-teal500
     font-weight 600
 
   &__divider
@@ -60,6 +60,7 @@ $nav-size = 80px
     height 100%
     background rgba(c-gray900, 0.2)
     background linear-gradient(to top, transparent, c-gray25, transparent)
+    z-index 3
 
   &__A, &__B
     position absolute

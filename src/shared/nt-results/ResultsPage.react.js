@@ -54,8 +54,20 @@ class ResultsPage extends React.Component {
 
   renderResults = sessionTypeId => () => this.state.selectedFeatureId ? (
     <ResultsFilterByAB
-      sessionTypeId={sessionTypeId}
-      featureId={this.state.selectedFeatureId}
+      resultA={(
+        <ResultsByLoadContainer
+          sessionTypeId={sessionTypeId}
+          featureId={this.state.selectedFeatureId}
+          versionName='A'
+        />
+      )}
+      resultB={(
+        <ResultsByLoadContainer
+          sessionTypeId={sessionTypeId}
+          featureId={this.state.selectedFeatureId}
+          versionName='B'
+        />
+      )}
     />
   ) : (
     <ResultsByLoadContainer sessionTypeId={sessionTypeId} />
@@ -87,6 +99,7 @@ class ResultsPage extends React.Component {
               key={feature._id}
               onClick={this.toggleSelectFeature(feature._id)}
             >
+              <i className='fa fa-flask' aria-hidden='true' />
               {feature.name}
             </div>
           ))}

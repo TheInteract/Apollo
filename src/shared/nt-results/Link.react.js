@@ -7,31 +7,25 @@ import LinearGradient from './LinearGradient.react'
 import styles from './Link.styl'
 
 export const GET_DATA = {
-  CURVE: (source, target, getNodeSize, strokeWidth) => {
-    const sourceWidth = getNodeSize(source).width
-    const targetWidth = getNodeSize(target).width
-    const targetHeight = getNodeSize(target).height
-
+  CURVE: (source, target, strokeWidth) => {
     if (source.x === target.x && source.y === target.y) {
-      const d = 5 * strokeWidth + 25
-      return `M ${source.x + sourceWidth / 2}, ${source.y}
-        C ${source.x + d}, ${source.y}
-          ${target.x}, ${target.y - d}
-          ${target.x}, ${target.y - targetHeight / 2 - (ARROW_WIDTH / 2 * strokeWidth)}`
+      return `M ${source.x + source.size / 2}, ${source.y}
+        C ${source.x + source.size * 1.5}, ${source.y}
+          ${target.x}, ${target.y - target.size * 1.5}
+          ${target.x}, ${target.y - target.size / 2 - (ARROW_WIDTH / 2 * strokeWidth)}`
     }
 
     const d = 10 * strokeWidth + 100
-    return `M ${source.x + sourceWidth / 2}, ${source.y}
+    return `M ${source.x + source.size / 2}, ${source.y}
       C ${source.x + d}, ${source.y}
         ${target.x - d + ARROW_WIDTH + strokeWidth}, ${target.y}
-        ${target.x - targetWidth / 2 - (ARROW_WIDTH / 2 * strokeWidth)}, ${target.y}`
+        ${target.x - target.size / 2 - (ARROW_WIDTH / 2 * strokeWidth)}, ${target.y}`
   },
-  STEP: (source, target, getNodeSize, strokeWidth) => {
+  STEP: (source, target, strokeWidth) => {
     const dx = target.x - source.x
     const dy = target.y - source.y
-    const tdx = getNodeSize(target).width / 2 + ARROW_WIDTH / 2 + strokeWidth
-    const tdy = getNodeSize(target).height / 2
-    return `M ${source.x}, ${source.y + (dy >= 0 ? -tdy : tdy)}
+    const tdx = ARROW_WIDTH / 2 + strokeWidth
+    return `M ${source.x}, ${source.y}
       C ${source.x}, ${source.y + (dy || -80)}
         ${target.x - (dx || 80)}, ${target.y}
         ${target.x + (dx >= 0 ? -tdx : tdx)}, ${target.y}`
@@ -45,51 +39,60 @@ class Link extends React.Component {
       _id: PropTypes.string.isRequired,
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired,
+      inputCount: PropTypes.number.isRequired,
+      outputCount: PropTypes.number.isRequired,
     }).isRequired,
     target: PropTypes.shape({
       _id: PropTypes.string.isRequired,
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired,
+      inputCount: PropTypes.number.isRequired,
+      outputCount: PropTypes.number.isRequired,
     }).isRequired,
+    totalInputCount: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,
     fade: PropTypes.bool,
-    getNodeSize: PropTypes.func.isRequired,
-  }
-
-  calculateAngle = (source, target) => {
-    if (source._id === target._id) return 1
-    return Math.atan2(source.y - target.y, source.x - target.x)
   }
 
   renderGradient = (source, target) => (
     <LinearGradient
       id={`gradient-${this.props.index}`}
       xlinkHref='#gradient'
-      angle={this.calculateAngle(source, target)}
+      angle={Math.atan2(source.y - target.y, source.x - target.x)}
     />
   )
 
   render () {
-    const { index, source, target, count, fade } = this.props
+    const { index, source, target, count, totalInputCount, fade } = this.props
     const className = classNames(styles.nt, {
       [styles['--fade']]: fade
     })
-    const strokeWidth = count / 2
+
+    const strokeWidth = source._id === target._id ? 1
+      : count / totalInputCount * 20
 
     return (
-      <g>
+      <g className={className}>
         {this.renderGradient(source, target)}
         <path
-          className={className}
-          d={GET_DATA.CURVE(source, target, this.props.getNodeSize, strokeWidth)}
+          d={GET_DATA.CURVE(source, target, strokeWidth)}
           markerEnd='url(#arrowHead)'
           stroke={`url(#gradient-${index})`}
           strokeWidth={strokeWidth}
+          strokeLinecap='round'
           data={target._id + ', ' + source._id}
         />
       </g>
     )
   }
 }
+
+// <text
+//   dx={source.x + (target.x - source.x) / 2}
+//   dy={source.y + (target.y - source.y) / 2}
+//   textAnchor='middle'
+// >
+//   {count}
+// </text>
 
 export default Link

@@ -1,8 +1,10 @@
 @require '../nt-design/colorsets'
 
 .nt
-  transition opacity 0.1s ease
-  fill none
+  path
+    transition opacity 0.1s ease
+    fill none
 
   &.\\--fade
-    opacity 0
+    path, text
+      opacity 0
