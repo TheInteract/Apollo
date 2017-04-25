@@ -59,15 +59,16 @@ class ResultsByLoadContainer extends React.Component {
 
   calculateTotalInputCount = nodes => _.find(nodes, { type: 'load' }).count
 
-  withInputOutputCount = nodes => nodes.map(node => {
+  getNodeWithInputOutputCount = nodes => nodes.map(node => {
+    const { nodes, links } = this.props.data.graph
     const inputCount = node.type === 'load' ? node.count
-      : _.reduce(this.props.data.graph.links, (prev, link) => {
+      : _.reduce(links, (prev, link) => {
         if (link.target === node._id && link.source !== node._id) {
           return prev + link.count
         }
         return prev
       }, 0)
-    const outputCount = _.reduce(this.props.data.graph.links, (prev, link) => {
+    const outputCount = _.reduce(links, (prev, link) => {
       if (link.source === node._id && link.target !== node._id) {
         return prev + link.count
       }
@@ -86,16 +87,17 @@ class ResultsByLoadContainer extends React.Component {
   })
 
   render () {
+    const data = this.props.data
     return (
       <div className={styles.nt}>
         {this.props.data.loading ? (
           <Loading key='loading' />
         ) : (
           <ResultsByLoad
-            nodes={this.withInputOutputCount(this.props.data.graph.nodes)}
-            links={_.cloneDeep(this.props.data.graph.links)}
-            paths={_.cloneDeep(this.props.data.graph.paths)}
-            totalInputCount={this.calculateTotalInputCount(this.props.data.graph.nodes)}
+            nodes={this.getNodeWithInputOutputCount()}
+            links={_.cloneDeep(data.graph.links)}
+            paths={_.cloneDeep(data.graph.paths)}
+            totalInputCount={this.calculateTotalInputCount(data.graph.nodes)}
           />
         )}
       </div>

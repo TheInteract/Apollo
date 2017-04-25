@@ -86,12 +86,4 @@ class Link extends React.Component {
   }
 }
 
-// <text
-//   dx={source.x + (target.x - source.x) / 2}
-//   dy={source.y + (target.y - source.y) / 2}
-//   textAnchor='middle'
-// >
-//   {count}
-// </text>
-
 export default Link
