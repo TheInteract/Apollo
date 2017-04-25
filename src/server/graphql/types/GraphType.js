@@ -12,6 +12,7 @@ const GraphType = new GraphQLObjectType({
   name: 'Graph',
   description: 'Graph type',
   fields: () => ({
+    _id: { type: new GraphQLNonNull(GraphQLString) },
     nodes: {
       type: new GraphQLList(NodeType),
       resolve: ({ sessions, version }) => generateNodes(sessions, version)
@@ -24,15 +25,9 @@ const GraphType = new GraphQLObjectType({
       type: new GraphQLList(PathType),
       resolve: ({ sessions, version }) => generatePaths(sessions, version)
     },
-    version: {
-      type: new GraphQLObjectType({
-        name: 'Version',
-        fields: () => ({
-          featureId: { type: new GraphQLNonNull(GraphQLString) },
-          name: { type: new GraphQLNonNull(GraphQLString) },
-        })
-      }),
-      resolve: root => root.version
+    v: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: root => root.version.name
     }
   })
 })

@@ -56,11 +56,16 @@ class Link extends React.Component {
     getNodeSize: PropTypes.func.isRequired,
   }
 
+  calculateAngle = (source, target) => {
+    if (source._id === target._id) return 1
+    return Math.atan2(source.y - target.y, source.x - target.x)
+  }
+
   renderGradient = (source, target) => (
     <LinearGradient
       id={`gradient-${this.props.index}`}
       xlinkHref='#gradient'
-      angle={Math.atan2(source.y - target.y, source.x - target.x)}
+      angle={this.calculateAngle(source, target)}
     />
   )
 

@@ -1,4 +1,3 @@
-import * as d3 from 'd3'
 import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -12,58 +11,21 @@ import styles from './ResultsByLoadContainer.styl'
 import GraphPropType from './GraphPropType'
 
 const SESSIONS_QUERY = gql`
-  query querySessions ($sessionTypeId: String!, $featureId: String) {
-    overallGraph: graph (sessionTypeId: $sessionTypeId) {
+  query querySessions ($sessionTypeId: String!, $featureId: String, $versionName: String) {
+    graph (sessionTypeId: $sessionTypeId, featureId: $featureId, versionName: $versionName) {
       nodes {
         _id,
         type,
         data,
-        count
+        count,
+        v
       }
       links {
+        _id,
         source,
         target,
-        count
-      }
-      paths {
-        _id,
-        nodes {
-          _id,
-        },
-        count
-      }
-    }
-    graphA: graph (sessionTypeId: $sessionTypeId, featureId: $featureId, name: "A") {
-      nodes {
-        _id,
-        type,
-        data,
-        count
-      }
-      links {
-        source,
-        target,
-        count
-      }
-      paths {
-        _id,
-        nodes {
-          _id,
-        },
-        count
-      }
-    }
-    graphB: graph (sessionTypeId: $sessionTypeId, featureId: $featureId, name: "B") {
-      nodes {
-        _id,
-        type,
-        data,
-        count
-      }
-      links {
-        source,
-        target,
-        count
+        count,
+        v
       }
       paths {
         _id,
@@ -78,8 +40,8 @@ const SESSIONS_QUERY = gql`
 
 const enhance = compose(
   graphql(SESSIONS_QUERY, {
-    options: ({ sessionTypeId, featureId }) => ({
-      variables: { sessionTypeId, featureId },
+    options: ({ sessionTypeId, featureId, versionName }) => ({
+      variables: { sessionTypeId, featureId, versionName },
       pollInterval: 2000
     })
   })
@@ -88,65 +50,23 @@ const enhance = compose(
 class ResultsByLoadContainer extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      overallGraph: GraphPropType,
-      graphA: GraphPropType,
-      graphB: GraphPropType,
+      graph: GraphPropType,
       loading: PropTypes.bool.isRequired,
     }).isRequired,
-    featureId: PropTypes.string,
   }
-
-  constructor (props) {
-    super(props)
-    this.state = { x: 0 }
-  }
-
-  componentDidMount () {
-    if (this.container) {
-      this.setState({ x: this.container.clientWidth / 2 })
-    }
-  }
-
-  dragged = () => {
-    const x = d3.event.x
-    this.setState({
-      x: x < 0 ? 0 : x > this.container.clientWidth
-        ? this.container.clientWidth : x
-    })
-  }
-
-  renderResults = (graph, styleName, style) => (
-    <div key={graph} className={styles[styleName]} style={style}>
-      {this.props.data.loading ? (
-        <Loading key='loading' />
-      ) : (
-        <ResultsByLoad
-          key={graph}
-          nodes={_.cloneDeep(this.props.data[graph].nodes)}
-          links={_.cloneDeep(this.props.data[graph].links)}
-          paths={_.cloneDeep(this.props.data[graph].paths)}
-        />
-      )}
-    </div>
-  )
-
-  renderABGraphs = () => ([
-    this.renderResults('graphA', 'nt__A', { width: `${this.state.x}px` }),
-    <div
-      key='divider'
-      className={styles.nt__divider}
-      style={{ transform: `translateX(${this.state.x}px)` }}
-      ref={c => { d3.select(c).call(d3.drag().on('drag', this.dragged)) }}
-    />,
-    this.renderResults('graphB', 'nt__B', { left: `${this.state.x}px` }),
-  ])
-
-  renderOverallGraph = () => this.renderResults('overallGraph', 'nt__overall')
 
   render () {
     return (
-      <div ref={c => { this.container = c }}>
-        {this.props.featureId ? this.renderABGraphs() : this.renderOverallGraph()}
+      <div className={styles.nt} ref={c => { this.container = c }}>
+        {this.props.data.loading ? (
+          <Loading key='loading' />
+        ) : (
+          <ResultsByLoad
+            nodes={_.cloneDeep(this.props.data.graph.nodes)}
+            links={_.cloneDeep(this.props.data.graph.links)}
+            paths={_.cloneDeep(this.props.data.graph.paths)}
+          />
+        )}
       </div>
     )
   }

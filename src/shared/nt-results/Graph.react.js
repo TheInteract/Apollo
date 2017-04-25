@@ -199,11 +199,28 @@ class Graph extends React.Component {
     />
   ))
 
+  countInput = node => node.type === 'load'
+    ? node.count : _.reduce(this.state.links, (prev, link) => {
+      if (link.target._id === node._id && link.source._id !== node._id) {
+        return prev + link.count
+      }
+      return prev
+    }, 0)
+
+  countOutPut = node => _.reduce(this.state.links, (prev, link) => {
+    if (link.source._id === node._id && link.target._id !== node._id) {
+      return prev + link.count
+    }
+    return prev
+  }, 0)
+
   renderNodes = () => this.state.nodes.map((node, index) => (
     <Node
       key={`node-${index}`}
       {...node}
       {...this.getNodeSize(node)}
+      inputCount={this.countInput(node)}
+      outputCount={this.countOutPut(node)}
       onMouseEnter={this.handleMouseEnterNode(node._id)}
       onMouseLeave={this.handleMouseLeaveNode}
       fade={this.shouldNodeFade(node._id)}

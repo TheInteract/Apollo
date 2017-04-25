@@ -1,7 +1,6 @@
 import FeatureType from './FeatureType'
 import GraphType from './GraphType'
 import InputProportionType from './InputProportionType'
-import InputVersionType from './InputVersionType'
 import LinkType from './LinkType'
 import NodeType from './NodeType'
 import PathType from './PathType'
@@ -13,7 +12,6 @@ export {
   FeatureType,
   GraphType,
   InputProportionType,
-  InputVersionType,
   LinkType,
   NodeType,
   PathType,

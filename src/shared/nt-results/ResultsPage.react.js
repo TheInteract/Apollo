@@ -7,6 +7,7 @@ import { Route } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import ResultsByLoadContainer from './ResultsByLoadContainer.react'
+import ResultsFilterByAB from './ResultsFilterByAB.react'
 import styles from './ResultsPage.styl'
 
 class ResultsPage extends React.Component {
@@ -51,11 +52,13 @@ class ResultsPage extends React.Component {
     </NavLink>
   )
 
-  renderResults = sessionTypeId => () => (
-    <ResultsByLoadContainer
+  renderResults = sessionTypeId => () => this.state.selectedFeatureId ? (
+    <ResultsFilterByAB
       sessionTypeId={sessionTypeId}
       featureId={this.state.selectedFeatureId}
     />
+  ) : (
+    <ResultsByLoadContainer sessionTypeId={sessionTypeId} />
   )
 
   renderSubRoutes = (sessionTypeId, Component) => (
@@ -71,9 +74,11 @@ class ResultsPage extends React.Component {
       <div className={styles.nt}>
         <div className={styles.nt__nav}>
           {this.renderLink('setting', 'cog')}
+          <div className={styles.nt__divider} />
           {this.props.sessionTypes.map(sessionType => (
             this.renderLink(url.parse(sessionType.url).path, 'tag', `/${sessionType._id}`)
           ))}
+          <div className={styles.nt__divider} />
           {this.props.features.map(feature => (
             <div
               className={classNames(styles.nt__filter, {

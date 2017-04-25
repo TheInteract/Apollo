@@ -1,5 +1,3 @@
-import url from 'url'
-
 import React from 'react'
 import {
   ApolloClient,
@@ -21,7 +19,12 @@ const networkInterface = createNetworkInterface({
 const client = new ApolloClient({
   networkInterface: networkInterface,
   ssrForceFetchDelay: 100,
-  dataIdFromObject: o => o._id
+  dataIdFromObject: obj => {
+    let key = ''
+    if (obj._id) key += obj._id
+    if (obj.v) key += obj.v
+    return key
+  }
 })
 
 const store = createStore(client, window.__PRELOADED_STATE__)

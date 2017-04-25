@@ -17,6 +17,7 @@ $nav-size = 80px
     background rgba(white, 0.5)
     background linear-gradient(to bottom, rgba(white, 0.9), transparent)
     color c-gray500
+    pointer-events none
 
   &__content
     position absolute
@@ -33,13 +34,13 @@ $nav-size = 80px
     overflow-x hidden
     box-sizing border-box
     padding 10px 15px
-    min-width 80px
     height 100%
     color c-gray500
     font-size 14px
     line-height 14px
     cursor pointer
     transition background-color 0.1s ease color 0.1s ease
+    pointer-events all
 
     &:hover
       color c-gray700
@@ -51,6 +52,14 @@ $nav-size = 80px
   &__activeLink > &__link, &__filter.\--active
     color c-gray700
     font-weight 600
+
+  &__divider
+    box-sizing border-box
+    margin 0 20px
+    width 1px
+    height 100%
+    background rgba(c-gray900, 0.2)
+    background linear-gradient(to top, transparent, c-gray25, transparent)
 
   &__A, &__B
     position absolute
