@@ -60,7 +60,7 @@ class ResultsByLoadContainer extends React.Component {
   calculateTotalInputCount = nodes => _.find(nodes, { type: 'load' }).count
 
   getNodeWithInputOutputCount = nodes => nodes.map(node => {
-    const { nodes, links } = this.props.data.graph
+    const links = this.props.data.graph.links
     const inputCount = node.type === 'load' ? node.count
       : _.reduce(links, (prev, link) => {
         if (link.target === node._id && link.source !== node._id) {
@@ -94,7 +94,7 @@ class ResultsByLoadContainer extends React.Component {
           <Loading key='loading' />
         ) : (
           <ResultsByLoad
-            nodes={this.getNodeWithInputOutputCount()}
+            nodes={this.getNodeWithInputOutputCount(data.graph.nodes)}
             links={_.cloneDeep(data.graph.links)}
             paths={_.cloneDeep(data.graph.paths)}
             totalInputCount={this.calculateTotalInputCount(data.graph.nodes)}
