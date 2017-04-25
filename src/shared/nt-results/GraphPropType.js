@@ -8,8 +8,14 @@ const GraphPropType = PropTypes.shape({
     count: PropTypes.number.isRequired,
   })).isRequired,
   links: PropTypes.arrayOf(PropTypes.shape({
-    source: PropTypes.string.isRequired,
-    target: PropTypes.string.isRequired,
+    source: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]).isRequired,
+    target: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]).isRequired,
     count: PropTypes.number.isRequired,
   })).isRequired,
   paths: PropTypes.arrayOf(PropTypes.shape({

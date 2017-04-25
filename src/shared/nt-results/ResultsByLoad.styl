@@ -17,22 +17,44 @@
     &:hover
       background-color c-teal400
 
+  &__linkTypeSelector
+    position absolute
+    right 30px
+    bottom 30px
+    z-index 2
+    display flex
+    justify-content center
+    align-items center
+    overflow hidden
+    width 50px
+    height 50px
+    border-radius 50%
+    background-color c-teal100
+    color c-teal500
+    cursor pointer
+
+    &:hover
+      background-color c-teal75
+      color c-teal400
+
   &__pathSelector
     position absolute
     top 80px
-    right 10px
-    max-height calc(100% - 110px)
+    right 13px
     z-index 1
     overflow-y auto
     padding-right 12px
+    max-height calc(100% - 150px)
 
   &__path
     overflow hidden
     padding 5px 20px
-    width 30px
-    border-bottom 4px solid c-teal500
+    width 20px
+    margin-bottom 2px
+    border-bottom 2px solid c-teal500
     background-color c-teal400
     color c-gray50
+    text-align center
     text-overflow ellipsis
     font-size 12px
     cursor pointer

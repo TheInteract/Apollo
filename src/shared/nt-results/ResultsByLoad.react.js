@@ -30,6 +30,16 @@ class ResultsByLoad extends React.Component {
     this.setState({ selectedPath: undefined })
   }
 
+  toggleLinkType = () => {
+    this.setState({ path: !this.state.path })
+  }
+
+  renderLineType = () => (
+    <div className={styles.nt__linkTypeSelector} onClick={this.toggleLinkType}>
+      <i className='fa fa-magic' />
+    </div>
+  )
+
   renderPathSelector = () => this.props.paths ? (
     <div className={styles.nt__pathSelector}>
       {this.props.paths.map((path, index) => (
@@ -40,7 +50,7 @@ class ResultsByLoad extends React.Component {
           onMouseLeave={this.handleDeselectPath}
           style={{ height: path.count * 0.2 + 12 }}
         >
-          {path._id}
+          {path.count}
         </div>
       ))}
     </div>
@@ -52,6 +62,7 @@ class ResultsByLoad extends React.Component {
       links={this.props.links}
       paths={this.props.paths}
       selectedPath={this.state.selectedPath}
+      linkType={this.state.path ? 'path' : 'link'}
     />
   )
 
@@ -59,6 +70,7 @@ class ResultsByLoad extends React.Component {
     return (
       <div className={styles.nt}>
         {this.renderPathSelector()}
+        {this.renderLineType()}
         {this.renderGraph()}
       </div>
     )

@@ -122,9 +122,10 @@ class ResultsByLoadContainer extends React.Component {
   renderResults = (graph, styleName, style) => (
     <div className={styles[styleName]} style={style}>
       {this.props.data.loading ? (
-        <Loading />
+        <Loading key='loading' />
       ) : (
         <ResultsByLoad
+          key={graph}
           nodes={_.cloneDeep(this.props.data[graph].nodes)}
           links={_.cloneDeep(this.props.data[graph].links)}
           paths={_.cloneDeep(this.props.data[graph].paths)}
