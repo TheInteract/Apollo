@@ -9,6 +9,8 @@ class Node extends React.Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     data: PropTypes.string.isRequired,
+    inputCount: PropTypes.number.isRequired,
+    outputCount: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
@@ -36,7 +38,7 @@ class Node extends React.Component {
   )
 
   render () {
-    const { type, data, width, height, x, y, fade } = this.props
+    const { type, data, inputCount, outputCount, width, height, x, y, fade } = this.props
     const className = classNames(styles.nt, {
       [styles['--fade']]: fade
     })
@@ -55,6 +57,7 @@ class Node extends React.Component {
         />
         {this.renderInfo('type', type, height * 0.3 + 4, height * 0.3 + 3)}
         {this.renderInfo('data', data, height * 0.5 + 8, height * 0.2 + 3)}
+        {this.renderInfo('data', 'input:' + inputCount + ', output: ' + outputCount, height * 0.8 + 12, height * 0.1 + 3)}
       </g>
     )
   }

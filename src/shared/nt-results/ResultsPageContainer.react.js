@@ -58,7 +58,7 @@ class ResultsPageContainer extends React.Component {
     ) : (
       <ResultsPage
         match={match}
-        sessionTypes={data.sessionTypes}
+        sessionTypes={data.sessionTypes || []}
         features={data.features}
       />
     )

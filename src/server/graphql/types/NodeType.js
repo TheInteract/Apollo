@@ -21,6 +21,7 @@ const NodeType = new GraphQLObjectType({
       resolve: root => root.url || removeInteractClick(root.target) || root.endpoint
     },
     count: { type: GraphQLInt },
+    v: { type: GraphQLString }
   })
 })
 

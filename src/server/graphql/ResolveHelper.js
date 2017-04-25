@@ -18,12 +18,16 @@ const filterByVersion = ({ featureId, name }) => session => (
 
 const mapSessionToNodes = ({ actions }) => removeFocusAndBlur(actions)
 
-export const generateNodes = (sessions = [], inputVersion) => _.flow([
-  sessions => _.filter(sessions, filterByVersion(inputVersion)),
+export const generateNodes = (sessions = [], version) => _.flow([
+  sessions => _.filter(sessions, filterByVersion(version)),
   sessions => _.map(sessions, mapSessionToNodes),
   nodes => _.flattenDeep(nodes),
   nodes => _.groupBy(nodes, node => node.actionTypeId),
-  nodes => _.map(nodes, node => ({ ...node[0], count: node.length }))
+  nodes => _.map(nodes, node => ({
+    ...node[0],
+    count: node.length,
+    v: version.name
+  }))
 ])(sessions)
 
 export const mapActionsToLinks = session => {
@@ -42,12 +46,17 @@ export const mapActionsToLinks = session => {
   return links
 }
 
-export const generateLinks = (sessions = [], inputVersion) => _.flow([
-  sessions => _.filter(sessions, filterByVersion(inputVersion)),
+export const generateLinks = (sessions = [], version) => _.flow([
+  sessions => _.filter(sessions, filterByVersion(version)),
   sessions => _.map(sessions, mapActionsToLinks),
   links => _.flattenDeep(links),
-  links => _.groupBy(links, link => link.source + link.target),
-  links => _.map(links, link => ({ ...link[0], count: link.length })),
+  links => _.groupBy(links, link => link.source + ', ' + link.target),
+  links => _.map(links, (link, key) => ({
+    ...link[0],
+    _id: key,
+    count: link.length,
+    v: version.name
+  })),
 ])(sessions)
 
 const mapSessionsToPaths = session => ({
@@ -59,8 +68,8 @@ const reduceActionTypeIds = path => (
   _.reduce(path.actions, (ids, action) => ids + action.actionTypeId, '')
 )
 
-export const generatePaths = (sessions = [], inputVersion) => _.flow([
-  sessions => _.filter(sessions, filterByVersion(inputVersion)),
+export const generatePaths = (sessions = [], version) => _.flow([
+  sessions => _.filter(sessions, filterByVersion(version)),
   sessions => _.map(sessions, mapSessionsToPaths),
   paths => _.groupBy(paths, reduceActionTypeIds),
   paths => _.map(paths, path => ({ ...path[0], count: path.length })),
