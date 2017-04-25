@@ -1,0 +1,29 @@
+@require '../nt-design/colorsets.styl'
+@font-face
+  font-weight normal
+  font-style normal
+  font-family 'Luna'
+  src url('../../../assets/fonts/Luna.ttf.woff') format('woff'), url('../../../assets/fonts/Luna.ttf.svg#Luna') format('svg'), url('../../../assets/fonts/Luna.ttf.eot'), url('../../../assets/fonts/Luna.ttf.eot?#iefix') format('embedded-opentype')
+
+.nt
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  font-family 'Luna'
+
+  &__title
+    position relative
+    font-size 70px
+    padding 50px
+
+  &__subtitle
+    position absolute
+    right 160px
+    bottom -10px
+    font-size 50px
+    color m-teal0
+
+  &__right
+    text-align right
