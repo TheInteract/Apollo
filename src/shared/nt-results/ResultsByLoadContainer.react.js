@@ -136,7 +136,6 @@ class ResultsByLoadContainer extends React.Component {
       key='divider'
       className={styles.nt__divider}
       style={{ transform: `translateX(${this.state.x}px)` }}
-      onClick={() => { console.log('click') }}
       ref={c => { d3.select(c).call(d3.drag().on('drag', this.dragged)) }}
     />,
     this.renderResults('graphB', 'nt__B', { left: `${this.state.x}px` }),
