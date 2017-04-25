@@ -90,7 +90,7 @@ class ResultsByLoadContainer extends React.Component {
     const data = this.props.data
     return (
       <div className={styles.nt}>
-        {this.props.data.loading ? (
+        {data.loading ? (
           <Loading key='loading' />
         ) : (
           <ResultsByLoad
