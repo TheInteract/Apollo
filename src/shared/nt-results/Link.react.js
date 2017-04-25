@@ -10,15 +10,15 @@ export const GET_DATA = {
   CURVE: (source, target, strokeWidth) => {
     if (source.x === target.x && source.y === target.y) {
       return `M ${source.x + source.size / 2}, ${source.y}
-        C ${source.x + source.size * 1.5}, ${source.y}
-          ${target.x}, ${target.y - target.size * 1.5}
+        C ${source.x + source.size + strokeWidth * ARROW_WIDTH}, ${source.y}
+          ${target.x}, ${target.y - target.size / 2 - (ARROW_WIDTH * strokeWidth) * 2 - 20}
           ${target.x}, ${target.y - target.size / 2 - (ARROW_WIDTH / 2 * strokeWidth)}`
     }
 
     const d = 10 * strokeWidth + 100
     return `M ${source.x + source.size / 2}, ${source.y}
       C ${source.x + d}, ${source.y}
-        ${target.x - d + ARROW_WIDTH + strokeWidth}, ${target.y}
+        ${target.x - d - ARROW_WIDTH - strokeWidth}, ${target.y}
         ${target.x - target.size / 2 - (ARROW_WIDTH / 2 * strokeWidth)}, ${target.y}`
   },
   STEP: (source, target, strokeWidth) => {
@@ -68,8 +68,7 @@ class Link extends React.Component {
       [styles['--fade']]: fade
     })
 
-    const strokeWidth = source._id === target._id ? 1
-      : count / totalInputCount * 20
+    const strokeWidth = count / totalInputCount * 20
 
     return (
       <g className={className}>

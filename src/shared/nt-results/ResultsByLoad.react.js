@@ -51,6 +51,7 @@ class ResultsByLoad extends React.Component {
 
   renderPathSelector = () => this.props.paths ? (
     <div className={styles.nt__pathSelector}>
+      <div className={styles.nt__pathSelectorHeader}> Unique Sessions</div>
       {this.props.paths.map((path, index) => (
         <div
           key={index}
