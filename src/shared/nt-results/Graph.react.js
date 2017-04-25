@@ -7,6 +7,7 @@ import ArrowHeadMarker from './ArrowHeadMarker.react'
 import styles from './Graph.styl'
 import Link from './Link.react'
 import Node from './Node.react'
+import Path from './Path.react'
 
 class Graph extends React.Component {
   static propTypes = {
@@ -17,8 +18,14 @@ class Graph extends React.Component {
       count: PropTypes.number.isRequired,
     })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
-      source: PropTypes.string.isRequired,
-      target: PropTypes.string.isRequired,
+      source: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]).isRequired,
+      target: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]).isRequired,
       count: PropTypes.number.isRequired,
     })).isRequired,
     paths: PropTypes.PropTypes.arrayOf(PropTypes.shape({
@@ -26,6 +33,7 @@ class Graph extends React.Component {
       nodes: PropTypes.PropTypes.arrayOf(PropTypes.shape({
         _id: PropTypes.string.isRequired,
       })).isRequired,
+      count: PropTypes.number.isRequired,
     })).isRequired,
     selectedPath: PropTypes.shape({
       _id: PropTypes.string.isRequired,
@@ -33,6 +41,7 @@ class Graph extends React.Component {
         _id: PropTypes.string.isRequired,
       })).isRequired,
     }),
+    linkType: PropTypes.oneOf([ 'path', 'link' ])
   }
 
   constructor (props) {
@@ -171,22 +180,14 @@ class Graph extends React.Component {
     (this.isNotSelectedNode(sourceId) && this.isNotSelectedNode(targetId)) ||
       this.isLinkNotInSelectedPath(sourceId, targetId)
 
-  renderPaths = () => {
-    const line = d3.line()
-      .x(d => _.find(this.state.nodes, { _id: d._id }).x)
-      .y(d => _.find(this.state.nodes, { _id: d._id }).y)
-      .curve(d3.curveCardinal.tension(0))
-
-    return this.state.paths.map((path, index) => (
-      <path
-        key={`path-${index}`}
-        className={styles.nt__path}
-        d={line(path.nodes)}
-        strokeLinecap='round'
-        fill='none'
-      />
-    ))
-  }
+  renderPaths = () => this.props.paths.map((path, index) => (
+    <Path
+      key={`path-${index}`}
+      path={path}
+      findNode={nodeId => _.find(this.state.nodes, { _id: nodeId })}
+      fade={this.props.selectedPath && this.props.selectedPath._id !== path._id}
+    />
+  ))
 
   renderLinks = () => this.state.links.map((link, index) => (
     <Link
@@ -221,8 +222,8 @@ class Graph extends React.Component {
           </linearGradient>
           <ArrowHeadMarker />
           <g transform={`translate(${x},${y}) scale(${k})`}>
-            {this.force && this.renderPaths()}
-            {this.force && this.renderLinks()}
+            {this.force && this.props.linkType === 'path' && this.renderPaths()}
+            {this.force && this.props.linkType === 'link' && this.renderLinks()}
             {this.force && this.renderNodes()}
           </g>
         </svg>
