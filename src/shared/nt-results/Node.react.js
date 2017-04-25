@@ -24,6 +24,17 @@ class Node extends React.Component {
     onMouseLeave: _.noop()
   }
 
+  getIconName = type => {
+    switch (type) {
+      case 'load':
+        return 'lightbulb-o'
+      case 'APICall':
+        return 'rocket'
+      case 'click':
+        return 'mouse-pointer'
+    }
+  }
+
   renderInfo = (type, info, dy, fontSize) => (
     <text
       className={styles[`nt__${type}`]}
@@ -55,7 +66,9 @@ class Node extends React.Component {
           className={styles.nt__core}
           r={4}
           strokeWidth={size / 2}
-        />
+        >
+          <i className={`fa fa-${this.getIconName(type)}`} aria-hidden='true' />
+        </circle>
         {this.renderInfo('type', type, size, size / 3 + 3)}
         {this.renderInfo('data', data, size * 1.2 + 5, size / 4 + 3)}
         {this.renderInfo('data', 'input:' + inputCount + ', output: ' + outputCount, size * 1.4 + 10, size / 4 + 3)}

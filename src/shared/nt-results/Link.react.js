@@ -34,7 +34,7 @@ export const GET_DATA = {
 
 class Link extends React.Component {
   static propTypes = {
-    index: PropTypes.number.isRequired,
+    _id: PropTypes.string.isRequired,
     source: PropTypes.shape({
       _id: PropTypes.string.isRequired,
       x: PropTypes.number.isRequired,
@@ -56,14 +56,14 @@ class Link extends React.Component {
 
   renderGradient = (source, target) => (
     <LinearGradient
-      id={`gradient-${this.props.index}`}
+      id={`gradient-${this.props._id}`}
       xlinkHref='#gradient'
       angle={Math.atan2(source.y - target.y, source.x - target.x)}
     />
   )
 
   render () {
-    const { index, source, target, count, totalInputCount, fade } = this.props
+    const { _id, source, target, count, totalInputCount, fade } = this.props
     const className = classNames(styles.nt, {
       [styles['--fade']]: fade
     })
@@ -77,7 +77,7 @@ class Link extends React.Component {
         <path
           d={GET_DATA.CURVE(source, target, strokeWidth)}
           markerEnd='url(#arrowHead)'
-          stroke={`url(#gradient-${index})`}
+          stroke={`url(#gradient-${_id})`}
           strokeWidth={strokeWidth}
           strokeLinecap='round'
           data={target._id + ', ' + source._id}

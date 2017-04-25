@@ -19,6 +19,7 @@ class Graph extends React.Component {
       outputCount: PropTypes.number.isRequired,
     })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
       source: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object,
@@ -179,7 +180,6 @@ class Graph extends React.Component {
   renderLinks = () => this.state.links.map((link, index) => (
     <Link
       key={`link-${index}`}
-      id={index}
       {...link}
       totalInputCount={this.props.totalInputCount}
       fade={this.shouldLinkFade(link.source._id, link.target._id)}
