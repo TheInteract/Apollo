@@ -68,7 +68,8 @@ class Link extends React.Component {
       [styles['--fade']]: fade
     })
 
-    const strokeWidth = count / totalInputCount * 20
+    let strokeWidth = count / totalInputCount * 10
+    strokeWidth = strokeWidth > 20 ? 20 : strokeWidth
 
     return (
       <g className={className}>
