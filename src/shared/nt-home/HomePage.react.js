@@ -12,6 +12,45 @@ export default () => {
         <div className={styles.nt__subtitle}>
           today
         </div>
+      </div>
+      <div className={styles.nt__description}>
+        <div className={styles.nt__item}>
+          <i className='fa fa-bullseye' />
+          <div className={styles.nt__content}>
+            <h1>
+              Behavior Tracking
+            </h1>
+            <span>Track user’s behaviour in every session of your product</span>
+          </div>
+        </div>
+        <div className={styles.nt__item}>
+          <i className='fa fa-lightbulb-o' />
+          <div className={styles.nt__content}>
+            <h1>
+              Feature Toggle
+            </h1>
+            <span>Turn off features anytime when something is not going well</span>
+          </div>
+        </div>
+        <div className={styles.nt__item}>
+          <i className='fa fa-users' />
+          <div className={styles.nt__content}>
+            <h1>
+              User Distribution
+            </h1>
+            <span>Distribute the access to different version of feature</span>
+          </div>
+        </div>
+        <div className={styles.nt__item}>
+          <i className='fa fa-bar-chart' />
+          <div className={styles.nt__content}>
+            <h1>
+              Behavior Visualization
+            </h1>
+            <span>Visualize the data in real time</span>
+          </div>
+        </div>
+      </div>
       <svg className={styles.nt__curve}>
         <defs>
           <linearGradient id='grad' x1='-10%' y1='-50%' x2='100%' y2='50%' gradientTransform='rotate(-81)'>
