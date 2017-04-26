@@ -42,6 +42,10 @@ export default {
         }
       },
       {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader'
+      },
+      {
         test: /\.styl$/,
         include: path.resolve(__dirname, 'src'),
         use: [
