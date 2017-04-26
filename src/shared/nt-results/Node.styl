@@ -7,11 +7,14 @@
   &__data
     fill c-red300
 
-  rect
+  &__core
+    fill c-gray25
+    pointer-events none
+
+  &__area
     cursor pointer
     transition fill 0.1s ease
-    fill c-red400
+    fill rgba(c-red500, 0.75)
 
-  &.\\--fade
-    rect
-      fill rgba(c-jewel500, 0.5)
+  &.\\--fade &__area
+    fill rgba(c-jewel500, 0.5)

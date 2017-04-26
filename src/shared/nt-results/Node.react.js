@@ -9,10 +9,9 @@ class Node extends React.Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     data: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
     inputCount: PropTypes.number.isRequired,
     outputCount: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     fade: PropTypes.bool,
@@ -25,12 +24,24 @@ class Node extends React.Component {
     onMouseLeave: _.noop()
   }
 
+  getIconName = type => {
+    switch (type) {
+      case 'load':
+        return 'lightbulb-o'
+      case 'APICall':
+        return 'rocket'
+      case 'click':
+        return 'mouse-pointer'
+    }
+  }
+
   renderInfo = (type, info, dy, fontSize) => (
     <text
       className={styles[`nt__${type}`]}
-      y={this.props.height / 2}
+      y={0}
       dy={dy}
       textAnchor='middle'
+      alignmentBaseline='central'
       fontSize={fontSize}
     >
       {info}
@@ -38,26 +49,29 @@ class Node extends React.Component {
   )
 
   render () {
-    const { type, data, inputCount, outputCount, width, height, x, y, fade } = this.props
+    const { type, data, size, inputCount, outputCount, x, y, fade } = this.props
     const className = classNames(styles.nt, {
       [styles['--fade']]: fade
     })
 
     return (
       <g className={className} transform={`translate(${x},${y})`}>
-        <rect
-          x={-(width / 2)}
-          y={-(height / 2)}
-          rx={width / 5}
-          ry={width / 5}
-          width={width}
-          height={height}
+        <circle
+          r={size / 2}
+          className={styles.nt__area}
           onMouseEnter={this.props.onMouseEnter}
           onMouseLeave={this.props.onMouseLeave}
         />
-        {this.renderInfo('type', type, height * 0.3 + 4, height * 0.3 + 3)}
-        {this.renderInfo('data', data, height * 0.5 + 8, height * 0.2 + 3)}
-        {this.renderInfo('data', 'input:' + inputCount + ', output: ' + outputCount, height * 0.8 + 12, height * 0.1 + 3)}
+        <circle
+          className={styles.nt__core}
+          r={4}
+          strokeWidth={size / 2}
+        >
+          <i className={`fa fa-${this.getIconName(type)}`} aria-hidden='true' />
+        </circle>
+        {this.renderInfo('type', type, size, size / 3 + 3)}
+        {this.renderInfo('data', data, size * 1.2 + 5, size / 4 + 3)}
+        {this.renderInfo('data', 'input:' + inputCount + ', output: ' + outputCount, size * 1.4 + 10, size / 4 + 3)}
       </g>
     )
   }

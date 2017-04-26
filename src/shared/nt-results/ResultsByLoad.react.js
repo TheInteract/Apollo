@@ -9,6 +9,7 @@ class ResultsByLoad extends React.Component {
     nodes: PropTypes.array.isRequired,
     links: PropTypes.array.isRequired,
     paths: PropTypes.array.isRequired,
+    totalInputCount: PropTypes.number.isRequired,
   }
 
   constructor (props) {
@@ -19,20 +20,28 @@ class ResultsByLoad extends React.Component {
     }
   }
 
-  handleSelectPath = path => () => {
+  handlePathSelect = path => () => {
     this.setState({
       selectedPath: path,
       selectedNodeId: undefined
     })
   }
 
-  handleDeselectPath = () => {
+  handlePathDeselect = () => {
     this.setState({ selectedPath: undefined })
+  }
+
+  handleNodeSelect = nodeId => () => {
+    this.setState({ selectedNodeId: nodeId })
   }
 
   toggleLinkType = () => {
     this.setState({ path: !this.state.path })
   }
+
+  renderInfoPanel = () => (
+    <div className={styles.nt__infoPanel} />
+  )
 
   renderLineType = () => (
     <div className={styles.nt__linkTypeSelector} onClick={this.toggleLinkType}>
@@ -42,12 +51,13 @@ class ResultsByLoad extends React.Component {
 
   renderPathSelector = () => this.props.paths ? (
     <div className={styles.nt__pathSelector}>
+      <div className={styles.nt__pathSelectorHeader}> Unique Sessions</div>
       {this.props.paths.map((path, index) => (
         <div
           key={index}
           className={styles.nt__path}
-          onMouseEnter={this.handleSelectPath(path)}
-          onMouseLeave={this.handleDeselectPath}
+          onMouseEnter={this.handlePathSelect(path)}
+          onMouseLeave={this.handlePathDeselect}
           style={{ height: path.count * 0.2 + 12 }}
         >
           {path.count}
@@ -61,7 +71,10 @@ class ResultsByLoad extends React.Component {
       nodes={this.props.nodes}
       links={this.props.links}
       paths={this.props.paths}
+      totalInputCount={this.props.totalInputCount}
       selectedPath={this.state.selectedPath}
+      selectedNodeId={this.state.selectedNodeId}
+      onNodeHover={this.handleNodeSelect}
       linkType={this.state.path ? 'path' : 'link'}
     />
   )

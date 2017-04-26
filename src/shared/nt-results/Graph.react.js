@@ -15,9 +15,11 @@ class Graph extends React.Component {
       _id: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       data: PropTypes.string.isRequired,
-      count: PropTypes.number.isRequired,
+      inputCount: PropTypes.number.isRequired,
+      outputCount: PropTypes.number.isRequired,
     })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
       source: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object,
@@ -35,12 +37,15 @@ class Graph extends React.Component {
       })).isRequired,
       count: PropTypes.number.isRequired,
     })).isRequired,
+    totalInputCount: PropTypes.number.isRequired,
     selectedPath: PropTypes.shape({
       _id: PropTypes.string.isRequired,
       nodes: PropTypes.PropTypes.arrayOf(PropTypes.shape({
         _id: PropTypes.string.isRequired,
       })).isRequired,
     }),
+    selectedNodeId: PropTypes.string,
+    onNodeHover: PropTypes.func.isRequired,
     linkType: PropTypes.oneOf([ 'path', 'link' ])
   }
 
@@ -50,7 +55,6 @@ class Graph extends React.Component {
       nodes: this.props.nodes,
       links: this.props.links,
       paths: this.props.paths,
-      selectedNodeId: undefined,
       position: { x: 100, y: 0, k: 1 }
     }
   }
@@ -135,24 +139,8 @@ class Graph extends React.Component {
     this.force.stop()
   }
 
-  getNodeSize = node => {
-    const max = _.maxBy(this.state.nodes, node => node.count).count + 1
-    const width = node.count / max * 16 + 10
-    const height = node.count / max * 20 + 16
-
-    return { width, height }
-  }
-
-  handleMouseEnterNode = id => () => {
-    this.setState({ selectedNodeId: id })
-  }
-
-  handleMouseLeaveNode = () => {
-    this.setState({ selectedNodeId: undefined })
-  }
-
-  isNotSelectedNode = nodeId => this.state.selectedNodeId &&
-    this.state.selectedNodeId !== nodeId
+  isNotSelectedNode = nodeId => this.props.selectedNodeId &&
+    this.props.selectedNodeId !== nodeId
 
   isNotInSelectedPath = nodeId => this.props.selectedPath &&
     !_.find(this.props.selectedPath.nodes, { _id: nodeId })
@@ -192,37 +180,18 @@ class Graph extends React.Component {
   renderLinks = () => this.state.links.map((link, index) => (
     <Link
       key={`link-${index}`}
-      id={index}
       {...link}
-      getNodeSize={this.getNodeSize}
+      totalInputCount={this.props.totalInputCount}
       fade={this.shouldLinkFade(link.source._id, link.target._id)}
     />
   ))
-
-  countInput = node => node.type === 'load'
-    ? node.count : _.reduce(this.state.links, (prev, link) => {
-      if (link.target._id === node._id && link.source._id !== node._id) {
-        return prev + link.count
-      }
-      return prev
-    }, 0)
-
-  countOutPut = node => _.reduce(this.state.links, (prev, link) => {
-    if (link.source._id === node._id && link.target._id !== node._id) {
-      return prev + link.count
-    }
-    return prev
-  }, 0)
 
   renderNodes = () => this.state.nodes.map((node, index) => (
     <Node
       key={`node-${index}`}
       {...node}
-      {...this.getNodeSize(node)}
-      inputCount={this.countInput(node)}
-      outputCount={this.countOutPut(node)}
-      onMouseEnter={this.handleMouseEnterNode(node._id)}
-      onMouseLeave={this.handleMouseLeaveNode}
+      onMouseEnter={this.props.onNodeHover(node._id)}
+      onMouseLeave={this.props.onNodeHover()}
       fade={this.shouldNodeFade(node._id)}
     />
   ))

@@ -50,7 +50,7 @@ export const generateLinks = (sessions = [], version) => _.flow([
   sessions => _.filter(sessions, filterByVersion(version)),
   sessions => _.map(sessions, mapActionsToLinks),
   links => _.flattenDeep(links),
-  links => _.groupBy(links, link => link.source + ', ' + link.target),
+  links => _.groupBy(links, link => link.source + ',' + link.target),
   links => _.map(links, (link, key) => ({
     ...link[0],
     _id: key,
